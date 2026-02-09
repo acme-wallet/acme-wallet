@@ -1,7 +1,9 @@
 import { randomUUID } from "crypto";
 import { User } from "../../domain/entities/user.entity";
-import IUserRepository from "../../domain/repositories/user.repository";
+import { IUserRepository } from "src/users/domain/repositories/user.repository";
+import { Injectable } from "@nestjs/common";
 
+@Injectable()
 export default class CreateUserUseCase {
     constructor(private readonly userRepository: IUserRepository) {}
 

@@ -1,5 +1,5 @@
 import { User } from "../entities/user.entity";
 
-export default interface IUserRepository {
-    save(user: User): Promise<string>;
+export abstract class IUserRepository {
+    abstract save(user: User): Promise<{ id: string  }>;
 }

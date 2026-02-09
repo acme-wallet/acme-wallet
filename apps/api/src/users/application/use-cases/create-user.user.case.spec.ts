@@ -1,4 +1,3 @@
-
 import { MemoryDBRepository } from "src/users/infra/repositories/memory-db.repository";
 import CreateUserUseCase from "./create-user.use-case";
 
