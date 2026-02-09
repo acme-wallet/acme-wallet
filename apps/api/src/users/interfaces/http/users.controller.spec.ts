@@ -1,9 +1,9 @@
 import { INestApplication } from "@nestjs/common"
 import { MemoryDBRepository } from "src/users/infra/repositories/memory-db.repository";
 import { Test, TestingModule } from "@nestjs/testing";
-import { UsersModule } from "../users.module";
 import { IUserRepository } from "src/users/domain/repositories/user.repository";
 import request from 'supertest';
+import { UsersModule } from "src/users/users.module";
 
 describe('UserController (Integration)', () => {
     let app: INestApplication;
@@ -33,6 +33,18 @@ describe('UserController (Integration)', () => {
         expect(response.body).toHaveProperty('id')
         expect(userRepository.items.length).toBe(1)
     })
+
+    it('/users (POST) - should return 400 if email is invalid', async () => {
+    const response = await (request as any)(app.getHttpServer())
+        .post('/users')
+        .send({
+        name: 'Jo',
+        email: 'email-invalido',
+        });
+
+        expect(response.status).toBe(400);
+        expect(response.body.message).toBeDefined(); 
+    });
 
     afterAll(async () => {
         await app.close();
