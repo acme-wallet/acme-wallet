@@ -1,12 +1,14 @@
 import { Injectable } from "@nestjs/common";
 import { User } from "src/users/domain/entities/user.entity";
 import { IUserRepository } from "src/users/domain/repositories/user.repository";
-import { prisma } from "@repo/db";
+import { PrismaService } from "src/prisma/prisma.service";
 
 @Injectable()
 export class UserPrismaRepository implements IUserRepository {
+    constructor(private readonly prismaService: PrismaService) {}
+
     async save(user: User): Promise<{ id: string; }> {
-        const result = await prisma.user.create({
+        const output = await this.prismaService.prisma.user.create({
             data: {
                 id: user.id,
                 name: user.name,
@@ -15,7 +17,7 @@ export class UserPrismaRepository implements IUserRepository {
         });
 
         return {
-            id: result.id,
+            id: output.id,
         };
     }
 }
