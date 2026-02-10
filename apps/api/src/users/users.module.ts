@@ -3,6 +3,7 @@ import CreateUserUseCase from './application/use-cases/create-user.use-case';
 import { IUserRepository } from './domain/repositories/user.repository';
 import { MemoryDBRepository } from './infra/repositories/memory-db.repository';
 import { UsersController } from './interfaces/http/users.controller';
+import { UserPrismaRepository } from './infra/repositories/user-prisma.repository';
 
 @Module({
   controllers: [UsersController],
@@ -10,7 +11,7 @@ import { UsersController } from './interfaces/http/users.controller';
     CreateUserUseCase,
     {
       provide: IUserRepository,
-      useClass: MemoryDBRepository,
+      useClass: UserPrismaRepository,
     }
   ],
 })
