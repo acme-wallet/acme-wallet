@@ -10,7 +10,11 @@ export class UsersController {
   @Post()
   @UsePipes(ZodValidationPipe)
   create(@Body() body: CreateUserDto) {
-    return this.createUseCase.execute(body.name, body.email);
+    const input = {
+      name: body.name,
+      email: body.email,
+    }
+    return this.createUseCase.execute(input);
   }
 
 }

@@ -33,7 +33,7 @@ describe("UserPrismaRepository", () => {
     prismaMock.prisma.user.create.mockResolvedValue({ id: "u1" });
 
     const input = new User("Ana", "ana@acme.com");
-    const output = await repo.save(input);
+    const output = await repo.create(input);
 
     expect(prismaMock.prisma.user.create).toHaveBeenCalledWith({
       data: { id: input.id, name: "Ana", email: "ana@acme.com" },

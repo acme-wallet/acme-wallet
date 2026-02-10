@@ -8,9 +8,14 @@ describe('Create User Use Case', () => {
         const sut = new CreateUserUseCase(userRepository);
 
         // Execução (Act)
-        const result = await sut.execute('Leandro Amaral', 'leandro.amaral@conecthus.org.br');
+        const input = {
+            name: 'Leandro Amaral',
+            email: 'leandro.amaral@conecthus.org.br'
+        }
+        const output = await sut.execute(input);
 
         // Verificação (Assert)
+        expect(output).toHaveProperty('id');
         expect(userRepository.items.length).toBe(1);
         expect(userRepository.items[0].name).toBe('Leandro Amaral');
     })
