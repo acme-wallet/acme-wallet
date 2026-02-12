@@ -1,4 +1,4 @@
-# @acme/eslint-config
+# @acme/lint-config
 
 Configurações compartilhadas de ESLint para o monorepo.
 
@@ -11,7 +11,7 @@ Configurações compartilhadas de ESLint para o monorepo.
 ## Instalação
 
 ```bash
-pnpm add @acme/eslint-config --workspace
+pnpm add @acme/lint-config --workspace
 ```
 
 ## Uso
@@ -20,7 +20,7 @@ pnpm add @acme/eslint-config --workspace
 
 ```js
 // eslint.config.mjs
-import { nestjs } from '@acme/eslint-config';
+import { nestjs } from '@acme/lint-config';
 
 export default nestjs(import.meta.dirname);
 ```
@@ -29,7 +29,7 @@ export default nestjs(import.meta.dirname);
 
 ```js
 // eslint.config.js
-import { react } from '@acme/eslint-config';
+import { react } from '@acme/lint-config';
 
 export default react;
 ```
@@ -57,7 +57,7 @@ Cada configuração adiciona suas regras específicas:
 Você pode adicionar regras específicas do seu app:
 
 ```js
-import { nestjs } from '@acme/eslint-config';
+import { nestjs } from '@acme/lint-config';
 
 export default [
   ...nestjs(import.meta.dirname),
