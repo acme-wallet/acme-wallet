@@ -1,3 +1,7 @@
 packages:
   - 'apps/*'
   - 'packages/*'
+
+catalog:
+  '@types/node': '^22.10.7'
+  typescript: '^5.7.3'
