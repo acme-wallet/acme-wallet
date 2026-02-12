@@ -1,0 +1,18 @@
+# Dependencies
+node_modules
+
+# Build outputs
+dist
+build
+.next
+.turbo
+
+# Test coverage
+coverage
+
+# Generated files
+generated
+
+# Lock files
+*.lock
+pnpm-lock.yaml

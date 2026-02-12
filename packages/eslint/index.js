@@ -5,12 +5,13 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
+import prettierConfig from './prettier.config.js';
 
 /**
  * Regras compartilhadas entre todos os projetos
  */
 const sharedRules = {
-  'prettier/prettier': ['error', { endOfLine: 'auto' }],
+  'prettier/prettier': ['error', prettierConfig],
 };
 
 /**
@@ -88,3 +89,5 @@ export default {
   nestjs,
   react,
 };
+
+export { default as prettierConfig } from './prettier.config.js';
