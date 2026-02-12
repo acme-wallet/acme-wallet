@@ -1,6 +1,6 @@
 import { Test } from "@nestjs/testing";
 import { PrismaClient } from "@repo/db";
-import { DeepMockProxy, mockDeep } from "jest-mock-extended";
+import { DeepMockProxy, mockDeep } from "vitest-mock-extended";
 import { PrismaService } from "src/prisma/prisma.service";
 import { User } from "src/users/domain/entities/user.entity";
 import { UserPrismaRepository } from "src/users/infra/repositories/user-prisma.repository";
@@ -43,7 +43,7 @@ describe("UserPrismaRepository", () => {
         email: input.email,
       }),
     });
-  
+
     expect(output).toEqual({ id: "u1" });
   });
 });

@@ -4,7 +4,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { IUserRepository } from "src/users/domain/repositories/user.repository";
 import request from 'supertest';
 import { UsersModule } from "src/users/users.module";
-import { MockProxy, mock } from "jest-mock-extended";
+import { MockProxy, mock } from "vitest-mock-extended";
 
 describe('UserController (Integration)', () => {
     let app: INestApplication;
@@ -15,16 +15,16 @@ describe('UserController (Integration)', () => {
         const moduleFixture: TestingModule = await Test.createTestingModule({
             imports: [UsersModule]
         })
-        .overrideProvider(IUserRepository)
-        .useValue(userRepository)
-        .compile()
+            .overrideProvider(IUserRepository)
+            .useValue(userRepository)
+            .compile()
 
         app = moduleFixture.createNestApplication();
         await app.init();
     });
 
     beforeEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     it('/users (POST) - should create a user', async () => {
@@ -34,10 +34,10 @@ describe('UserController (Integration)', () => {
         //     ...payload
         // });
 
-        const response = await  request(app.getHttpServer())
+        const response = await request(app.getHttpServer())
             .post('/users')
             .send(payload)
-        
+
         expect(response.status).toBe(201)
         expect(response.body).toEqual(expect.objectContaining({
             id: expect.any(String)
@@ -52,10 +52,10 @@ describe('UserController (Integration)', () => {
 
         expect(response.status).toBe(400);
         expect(response.body).toEqual(
-        expect.objectContaining({
-            message: "Validation failed",
-            errors: expect.arrayContaining([
-                expect.objectContaining({
+            expect.objectContaining({
+                message: "Validation failed",
+                errors: expect.arrayContaining([
+                    expect.objectContaining({
                         path: ['email'],
                         message: "E-mail inválido"
                     })

@@ -1,6 +1,6 @@
 import CreateUserUseCase from "./create-user.use-case";
 import { IUserRepository } from "src/users/domain/repositories/user.repository";
-import { mock, MockProxy } from 'jest-mock-extended';
+import { mock, MockProxy } from 'vitest-mock-extended';
 
 describe('Create User Use Case', () => {
     let userRepository: MockProxy<IUserRepository>;
