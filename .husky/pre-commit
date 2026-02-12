@@ -1,0 +1,2 @@
+pnpm dlx lint-staged
+pnpm turbo run typecheck --filter=...[HEAD^1]
