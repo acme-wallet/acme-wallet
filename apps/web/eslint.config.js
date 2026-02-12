@@ -1,3 +1,3 @@
-import { react } from "@acme/lint-config";
+import { react } from '@acme/lint-config';
 
 export default react;

@@ -5,7 +5,7 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export default class CreateUserUseCase {
-  constructor(private readonly userRepository: IUserRepository) { }
+  constructor(private readonly userRepository: IUserRepository) {}
 
   async execute(input: Input): Promise<Output> {
     const id = randomUUID();
