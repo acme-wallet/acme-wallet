@@ -5,4 +5,9 @@ export const CreateUserSchema = z.object({
   email: z.email('E-mail inválido'),
 });
 
-export type CreateUserType = z.infer<typeof CreateUserSchema>;
+export const CreateUserResponseSchema = z.object({
+   id: z.string()
+});
+
+export type CreateUserInput = z.infer<typeof CreateUserSchema>;
+export type CreateUserOutput = z.infer<typeof CreateUserResponseSchema>;

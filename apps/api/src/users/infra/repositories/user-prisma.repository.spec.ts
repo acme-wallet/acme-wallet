@@ -28,21 +28,25 @@ describe('UserPrismaRepository', () => {
   it('saves a user and returns id', async () => {
     const input = new User('Ana', 'ana@acme.com');
 
+    // Mocka o retorno do banco, após a criação
     prismaMock.user.create.mockResolvedValue({
-      id: 'u1',
+      id: input.id,
       name: input.name,
       email: input.email,
       createdAt: new Date(),
     });
+
     const output = await repo.create(input);
 
+    // Valida se os dados corretos foram passados para o banco
     expect(prismaMock.user.create).toHaveBeenCalledWith({
-      data: expect.objectContaining({
+      data: {
+        id: input.id,
         name: input.name,
         email: input.email,
-      }),
+      },
     });
 
-    expect(output).toEqual({ id: 'u1' });
+    expect(output.id).toBe(input.id);
   });
 });

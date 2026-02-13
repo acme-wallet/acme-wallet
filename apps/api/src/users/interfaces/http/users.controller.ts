@@ -1,7 +1,10 @@
 import { Controller, Post, Body, UsePipes } from '@nestjs/common';
 import { ZodValidationPipe } from 'nestjs-zod';
 import CreateUserUseCase from 'src/users/application/use-cases/create-user.use-case';
-import { CreateUserDto } from '../dto/user/create-user.dto';
+import {
+  CreateUserRequest,
+  CreateUserResponse,
+} from '../dto/user/create-user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -9,7 +12,7 @@ export class UsersController {
 
   @Post()
   @UsePipes(ZodValidationPipe)
-  create(@Body() body: CreateUserDto) {
+  create(@Body() body: CreateUserRequest): Promise<CreateUserResponse> {
     const input = {
       name: body.name,
       email: body.email,
