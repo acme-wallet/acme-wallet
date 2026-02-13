@@ -4,7 +4,7 @@ import { IUserRepository } from '../../domain/repositories/user.repository';
 
 @Injectable()
 export default class GetUsersUseCase {
-  constructor(private readonly userRepository: IUserRepository) {}
+  constructor(private readonly userRepository: IUserRepository) { }
 
   async execute(input: {
     name?: string;
