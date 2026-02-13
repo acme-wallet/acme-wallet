@@ -2,7 +2,8 @@
   "name": "@repo/schemas",
   "version": "0.0.0",
   "scripts": {
-    "build": "tsc -p tsconfig.json"
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

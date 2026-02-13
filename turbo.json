@@ -32,7 +32,8 @@
       "cache": false
     },
     "lint": {},
-    "test": {
+    "test": {},
+    "typecheck": {
       "dependsOn": [
         "^build"
       ]
