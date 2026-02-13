@@ -15,7 +15,9 @@
       ]
     },
     "dev": {
-      "dependsOn": ["^dev"],
+      "dependsOn": [
+        "^dev"
+      ],
       "cache": false,
       "persistent": true
     },
@@ -29,6 +31,9 @@
       "cache": false
     },
     "db:studio": {
+      "cache": false
+    },
+    "clean": {
       "cache": false
     },
     "lint": {},

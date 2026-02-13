@@ -7,7 +7,8 @@
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
     "db:studio": "pnpm dlx prisma studio",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist node_modules .turbo"
   },
   "devDependencies": {
     "@types/node": "catalog:",

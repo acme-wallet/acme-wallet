@@ -12,6 +12,7 @@
     "format": "prettier --write .",
     "db:studio": "pnpm --filter @repo/db db:studio",
     "typecheck": "turbo typecheck",
+    "clean": "turbo clean && rm -rf node_modules .turbo && pnpm install && pnpm build",
     "prepare": "husky"
   },
   "lint-staged": {
