@@ -49,4 +49,54 @@ describe('UserPrismaRepository', () => {
 
     expect(output.id).toBe(input.id);
   });
+
+  it('should find all users', async () => {
+    const user = new User('Ana', 'ana@acme.com');
+    // @ts-expect-error mock types
+    prismaMock.user.findMany.mockResolvedValue([
+      {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        createdAt: new Date(),
+      },
+    ]);
+
+    const result = await repo.findAll();
+
+    expect(result).toHaveLength(1);
+    expect(result[0].name).toBe('Ana');
+    expect(prismaMock.user.findMany).toHaveBeenCalledWith({
+      where: {
+        name: {
+          contains: undefined,
+        },
+      },
+    });
+  });
+
+  it('should find users by name', async () => {
+    const user = new User('Ana', 'ana@acme.com');
+    // @ts-expect-error mock types
+    prismaMock.user.findMany.mockResolvedValue([
+      {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        createdAt: new Date(),
+      },
+    ]);
+
+    const result = await repo.findAll('Ana');
+
+    expect(result).toHaveLength(1);
+    expect(result[0].name).toBe('Ana');
+    expect(prismaMock.user.findMany).toHaveBeenCalledWith({
+      where: {
+        name: {
+          contains: 'Ana',
+        },
+      },
+    });
+  });
 });

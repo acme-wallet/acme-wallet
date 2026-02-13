@@ -5,7 +5,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class UserPrismaRepository implements IUserRepository {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) { }
 
   async create(user: User): Promise<{ id: string }> {
     const output = await this.prismaService.prisma.user.create({
@@ -19,5 +19,17 @@ export class UserPrismaRepository implements IUserRepository {
     return {
       id: output.id,
     };
+  }
+
+  async findAll(name?: string): Promise<User[]> {
+    const users = await this.prismaService.prisma.user.findMany({
+      where: {
+        name: {
+          contains: name,
+        },
+      },
+    });
+
+    return users.map((user) => new User(user.name, user.email, user.id));
   }
 }
