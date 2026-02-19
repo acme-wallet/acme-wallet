@@ -10,11 +10,13 @@ export default defineConfig({
         },
     },
     test: {
-        include: ['test/**/*.integration-spec.ts'],
+        include: ['test/**/*.integration.spec.ts'],
         globals: true,
         environment: 'node',
         testTimeout: 60_000,
         hookTimeout: 60_000,
+        globalSetup: './test/global-setup.ts',
+        fileParallelism: false,
     },
     plugins: [swc.vite()],
 });
