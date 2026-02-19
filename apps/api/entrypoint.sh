@@ -5,7 +5,7 @@ set -e
 # Executa as migrações a partir do package @repo/db
 echo "Running database migrations..."
 cd /app/packages/database
-npx prisma migrate deploy
+npx --no-install prisma migrate deploy
 
 # Inicia a aplicação
 echo "Starting application..."
