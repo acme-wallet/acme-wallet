@@ -1,12 +1,16 @@
-import { Injectable, OnModuleDestroy } from '@nestjs/common';
+import { Inject, Injectable, OnModuleDestroy, Optional } from '@nestjs/common';
 import { prisma, PrismaClient } from '@repo/db';
+
+export const PRISMA_CLIENT = Symbol("PRISMA_CLIENT")
 
 @Injectable()
 export class PrismaService implements OnModuleDestroy {
   readonly prisma: PrismaClient;
 
-  constructor() {
-    this.prisma = prisma;
+  constructor(
+    @Optional() @Inject(PRISMA_CLIENT) client?: PrismaClient
+  ) {
+    this.prisma = client ?? prisma;
   }
 
   async onModuleDestroy() {
