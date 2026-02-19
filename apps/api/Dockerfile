@@ -53,7 +53,7 @@ COPY packages/schemas/package.json packages/schemas/package.json
 COPY packages/lint-config/package.json packages/lint-config/package.json
 
 # Install ONLY production dependencies (--ignore-scripts skips husky prepare)
-RUN pnpm install --frozen-lockfile --ignore-scripts
+RUN pnpm install --prod --no-frozen-lockfile --ignore-scripts
 
 # Stage 2: Build the application
 FROM node:22-slim AS build

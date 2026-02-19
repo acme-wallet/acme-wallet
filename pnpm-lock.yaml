@@ -54,6 +54,12 @@ importers:
       '@nestjs/platform-express':
         specifier: ^11.0.1
         version: 11.1.13(@nestjs/common@11.1.13(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.13)
+      '@repo/db':
+        specifier: workspace:*
+        version: link:../../packages/database
+      '@repo/schemas':
+        specifier: workspace:*
+        version: link:../../packages/schemas
       dotenv:
         specifier: ^17.2.4
         version: 17.2.4
@@ -85,12 +91,6 @@ importers:
       '@nestjs/testing':
         specifier: ^11.0.1
         version: 11.1.13(@nestjs/common@11.1.13(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.13)(@nestjs/platform-express@11.1.13)
-      '@repo/db':
-        specifier: workspace:*
-        version: link:../../packages/database
-      '@repo/schemas':
-        specifier: workspace:*
-        version: link:../../packages/schemas
       '@types/express':
         specifier: ^5.0.0
         version: 5.0.6
@@ -227,6 +227,9 @@ importers:
       pg:
         specifier: ^8.18.0
         version: 8.18.0
+      prisma:
+        specifier: ^7.3.0
+        version: 7.3.0(@types/react@19.2.13)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)
     devDependencies:
       '@types/node':
         specifier: ^22.10.7
@@ -234,9 +237,6 @@ importers:
       '@types/pg':
         specifier: ^8.16.0
         version: 8.16.0
-      prisma:
-        specifier: ^7.3.0
-        version: 7.3.0(@types/react@19.2.13)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)
       typescript:
         specifier: 'catalog:'
         version: 5.9.3

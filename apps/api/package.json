@@ -30,7 +30,9 @@
     "dotenv": "^17.2.4",
     "nestjs-zod": "^5.1.1",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "@repo/db": "workspace:*",
+    "@repo/schemas": "workspace:*"
   },
   "devDependencies": {
     "@acme/lint-config": "workspace:*",
@@ -39,8 +41,6 @@
     "@nestjs/cli": "^11.0.0",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.1",
-    "@repo/db": "workspace:*",
-    "@repo/schemas": "workspace:*",
     "@types/express": "^5.0.0",
     "@types/jest": "^30.0.0",
     "@types/node": "catalog:",
