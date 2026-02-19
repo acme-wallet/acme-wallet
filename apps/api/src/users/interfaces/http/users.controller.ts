@@ -13,7 +13,7 @@ export class UsersController {
   constructor(
     private readonly createUseCase: CreateUserUseCase,
     private readonly getUsersUseCase: GetUsersUseCase,
-  ) { }
+  ) {}
 
   @Post()
   @UsePipes(ZodValidationPipe)

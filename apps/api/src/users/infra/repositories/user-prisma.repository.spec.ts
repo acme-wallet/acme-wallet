@@ -52,7 +52,6 @@ describe('UserPrismaRepository', () => {
 
   it('should find all users', async () => {
     const user = new User('Ana', 'ana@acme.com');
-    // @ts-expect-error mock types
     prismaMock.user.findMany.mockResolvedValue([
       {
         id: user.id,
@@ -77,7 +76,6 @@ describe('UserPrismaRepository', () => {
 
   it('should find users by name', async () => {
     const user = new User('Ana', 'ana@acme.com');
-    // @ts-expect-error mock types
     prismaMock.user.findMany.mockResolvedValue([
       {
         id: user.id,

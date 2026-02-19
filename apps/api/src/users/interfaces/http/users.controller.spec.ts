@@ -1,4 +1,5 @@
 import { INestApplication } from '@nestjs/common';
+import { GetUsersResponse } from 'src/users/interfaces/dto/user/get-users.dto';
 import { Test, TestingModule } from '@nestjs/testing';
 import { IUserRepository } from 'src/users/domain/repositories/user.repository';
 import request from 'supertest';
@@ -6,6 +7,7 @@ import { UsersModule } from 'src/users/users.module';
 import { MockProxy, mock } from 'vitest-mock-extended';
 import { CreateUserResponseSchema, CreateUserOutput } from '@repo/schemas';
 import { Server } from 'http';
+import { User } from 'src/users/domain/entities/user.entity';
 
 describe('UserController (Integration)', () => {
   let app: INestApplication;
@@ -58,34 +60,21 @@ describe('UserController (Integration)', () => {
     const validationResult = CreateUserResponseSchema.safeParse(response.body);
 
     expect(validationResult.success).toBe(false);
-    expect(validationResult.success).toBe(false);
     expect(validationResult.error).toBeDefined();
   });
 
   it('/users (GET) - should return a list of users', async () => {
-    const user = {
-      _id: '123',
-      _name: 'Leandro',
-      _email: 'leandro@email.com',
-      get id() {
-        return this._id;
-      },
-      get name() {
-        return this._name;
-      },
-      get email() {
-        return this._email;
-      },
-    };
-    // @ts-expect-error mock types
+    const user = new User('Leandro', 'leandro@email.com', '123');
     userRepository.findAll.mockResolvedValue([user]);
 
     const response = await request(app.getHttpServer() as Server)
       .get('/users')
       .expect(200);
 
-    expect(response.body).toHaveLength(1);
-    expect(response.body[0]).toEqual({
+    const body = response.body as GetUsersResponse[];
+
+    expect(body).toHaveLength(1);
+    expect(body[0]).toEqual({
       id: '123',
       name: 'Leandro',
       email: 'leandro@email.com',
@@ -94,29 +83,17 @@ describe('UserController (Integration)', () => {
   });
 
   it('/users (GET) - should return filtered users', async () => {
-    const user = {
-      _id: '123',
-      _name: 'Leandro',
-      _email: 'leandro@email.com',
-      get id() {
-        return this._id;
-      },
-      get name() {
-        return this._name;
-      },
-      get email() {
-        return this._email;
-      },
-    };
-    // @ts-expect-error mock types
+    const user = new User('Leandro', 'leandro@email.com', '123');
     userRepository.findAll.mockResolvedValue([user]);
 
     const response = await request(app.getHttpServer() as Server)
       .get('/users?name=Leandro')
       .expect(200);
 
-    expect(response.body).toHaveLength(1);
-    expect(response.body[0]).toEqual({
+    const body = response.body as GetUsersResponse[];
+
+    expect(body).toHaveLength(1);
+    expect(body[0]).toEqual({
       id: '123',
       name: 'Leandro',
       email: 'leandro@email.com',
