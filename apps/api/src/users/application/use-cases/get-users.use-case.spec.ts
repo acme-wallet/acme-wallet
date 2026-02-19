@@ -20,7 +20,7 @@ describe('Get Users Use Case', () => {
 
     expect(result).toHaveLength(1);
     expect(result[0].name).toBe('Leandro');
-    expect(userRepository.findAll).toHaveBeenCalledWith(undefined);
+    expect(userRepository.findAll).toHaveBeenCalledWith({});
   });
 
   it('should be able to get users by name', async () => {

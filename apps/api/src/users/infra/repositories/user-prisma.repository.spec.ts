@@ -70,6 +70,12 @@ describe('UserPrismaRepository', () => {
         name: {
           contains: undefined,
         },
+        email: {
+          contains: undefined,
+        },
+        id: {
+          equals: undefined,
+        },
       },
     });
   });
