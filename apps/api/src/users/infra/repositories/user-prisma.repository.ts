@@ -20,4 +20,26 @@ export class UserPrismaRepository implements IUserRepository {
       id: output.id,
     };
   }
+
+  async findAll(filter?: {
+    name?: string;
+    email?: string;
+    id?: string;
+  }): Promise<User[]> {
+    const users = await this.prismaService.prisma.user.findMany({
+      where: {
+        name: {
+          contains: filter?.name,
+        },
+        email: {
+          contains: filter?.email,
+        },
+        id: {
+          equals: filter?.id,
+        },
+      },
+    });
+
+    return users.map((user) => new User(user.name, user.email, user.id));
+  }
 }
