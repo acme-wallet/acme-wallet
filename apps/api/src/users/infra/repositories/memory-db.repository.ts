@@ -11,10 +11,27 @@ export class MemoryDBRepository implements IUserRepository {
     });
   }
 
-  findAll(name?: string): Promise<User[]> {
-    if (name) {
-      return Promise.resolve(this.items.filter((item) => item.name === name));
+  findAll(filter?: {
+    name?: string;
+    email?: string;
+    id?: string;
+  }): Promise<User[]> {
+    let users = this.items;
+
+    if (filter?.name) {
+      users = users.filter((item) => item.name.includes(filter.name as string));
     }
-    return Promise.resolve(this.items);
+
+    if (filter?.email) {
+      users = users.filter((item) =>
+        item.email.includes(filter.email as string),
+      );
+    }
+
+    if (filter?.id) {
+      users = users.filter((item) => item.id === filter.id);
+    }
+
+    return Promise.resolve(users);
   }
 }

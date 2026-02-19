@@ -26,8 +26,12 @@ export class UsersController {
   }
 
   @Get()
-  async findAll(@Query('name') name?: string): Promise<GetUsersResponse[]> {
-    const users = await this.getUsersUseCase.execute({ name });
+  async findAll(
+    @Query('name') name?: string,
+    @Query('email') email?: string,
+    @Query('id') id?: string,
+  ): Promise<GetUsersResponse[]> {
+    const users = await this.getUsersUseCase.execute({ name, email, id });
     return users.map((user) => ({
       id: user.id,
       name: user.name,

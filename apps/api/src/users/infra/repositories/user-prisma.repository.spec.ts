@@ -85,7 +85,7 @@ describe('UserPrismaRepository', () => {
       },
     ]);
 
-    const result = await repo.findAll('Ana');
+    const result = await repo.findAll({ name: 'Ana' });
 
     expect(result).toHaveLength(1);
     expect(result[0].name).toBe('Ana');
@@ -93,6 +93,72 @@ describe('UserPrismaRepository', () => {
       where: {
         name: {
           contains: 'Ana',
+        },
+        email: {
+          contains: undefined,
+        },
+        id: {
+          equals: undefined,
+        },
+      },
+    });
+  });
+
+  it('should find users by email', async () => {
+    const user = new User('Ana', 'ana@acme.com');
+    prismaMock.user.findMany.mockResolvedValue([
+      {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        createdAt: new Date(),
+      },
+    ]);
+
+    const result = await repo.findAll({ email: 'ana@acme.com' });
+
+    expect(result).toHaveLength(1);
+    expect(result[0].email).toBe('ana@acme.com');
+    expect(prismaMock.user.findMany).toHaveBeenCalledWith({
+      where: {
+        name: {
+          contains: undefined,
+        },
+        email: {
+          contains: 'ana@acme.com',
+        },
+        id: {
+          equals: undefined,
+        },
+      },
+    });
+  });
+
+  it('should find users by id', async () => {
+    const user = new User('Ana', 'ana@acme.com', '123');
+    prismaMock.user.findMany.mockResolvedValue([
+      {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        createdAt: new Date(),
+      },
+    ]);
+
+    const result = await repo.findAll({ id: '123' });
+
+    expect(result).toHaveLength(1);
+    expect(result[0].id).toBe('123');
+    expect(prismaMock.user.findMany).toHaveBeenCalledWith({
+      where: {
+        name: {
+          contains: undefined,
+        },
+        email: {
+          contains: undefined,
+        },
+        id: {
+          equals: '123',
         },
       },
     });

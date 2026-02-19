@@ -21,11 +21,21 @@ export class UserPrismaRepository implements IUserRepository {
     };
   }
 
-  async findAll(name?: string): Promise<User[]> {
+  async findAll(filter?: {
+    name?: string;
+    email?: string;
+    id?: string;
+  }): Promise<User[]> {
     const users = await this.prismaService.prisma.user.findMany({
       where: {
         name: {
-          contains: name,
+          contains: filter?.name,
+        },
+        email: {
+          contains: filter?.email,
+        },
+        id: {
+          equals: filter?.id,
         },
       },
     });

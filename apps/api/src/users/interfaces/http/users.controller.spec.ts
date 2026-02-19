@@ -82,7 +82,7 @@ describe('UserController (Integration)', () => {
     expect(userRepository.findAll).toHaveBeenCalledWith(undefined);
   });
 
-  it('/users (GET) - should return filtered users', async () => {
+  it('should return filtered users by name', async () => {
     const user = new User('Leandro', 'leandro@email.com', '123');
     userRepository.findAll.mockResolvedValue([user]);
 
@@ -98,7 +98,57 @@ describe('UserController (Integration)', () => {
       name: 'Leandro',
       email: 'leandro@email.com',
     });
-    expect(userRepository.findAll).toHaveBeenCalledWith('Leandro');
+    expect(userRepository.findAll).toHaveBeenCalledWith({
+      name: 'Leandro',
+      email: undefined,
+      id: undefined,
+    });
+  });
+
+  it('should return filtered users by email', async () => {
+    const user = new User('Leandro', 'leandro@email.com', '123');
+    userRepository.findAll.mockResolvedValue([user]);
+
+    const response = await request(app.getHttpServer() as Server)
+      .get('/users?email=leandro@email.com')
+      .expect(200);
+
+    const body = response.body as GetUsersResponse[];
+
+    expect(body).toHaveLength(1);
+    expect(body[0]).toEqual({
+      id: '123',
+      name: 'Leandro',
+      email: 'leandro@email.com',
+    });
+    expect(userRepository.findAll).toHaveBeenCalledWith({
+      name: undefined,
+      email: 'leandro@email.com',
+      id: undefined,
+    });
+  });
+
+  it('should return filtered users by id', async () => {
+    const user = new User('Leandro', 'leandro@email.com', '123');
+    userRepository.findAll.mockResolvedValue([user]);
+
+    const response = await request(app.getHttpServer() as Server)
+      .get('/users?id=123')
+      .expect(200);
+
+    const body = response.body as GetUsersResponse[];
+
+    expect(body).toHaveLength(1);
+    expect(body[0]).toEqual({
+      id: '123',
+      name: 'Leandro',
+      email: 'leandro@email.com',
+    });
+    expect(userRepository.findAll).toHaveBeenCalledWith({
+      name: undefined,
+      email: undefined,
+      id: '123',
+    });
   });
 
   afterAll(async () => {
