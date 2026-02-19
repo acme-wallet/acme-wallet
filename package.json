@@ -13,7 +13,8 @@
     "db:studio": "pnpm --filter @repo/db db:studio",
     "typecheck": "turbo typecheck",
     "clean": "turbo clean && rm -rf node_modules .turbo && pnpm install && pnpm build",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test:integration": "pnpm  --filter api test:integration"
   },
   "lint-staged": {
     "**/*.{ts,tsx}": "eslint --fix"
