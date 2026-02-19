@@ -15,6 +15,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}/api
   NODE_VERSION: 22
   PNPM_VERSION: 10.29.2
+  TURBO_CACHE_DIR: .turbo
 
 jobs:
   # ──────────────────────────────────────────────
@@ -64,6 +65,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Necessário para o Turbo calcular hashes corretamente
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -79,20 +82,37 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # Configuração manual do Cache do Turborepo
+      - name: Turbo Cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.TURBO_CACHE_DIR }}
+          key: turbo-${{ runner.os }}-${{ github.sha }}
+          restore-keys: |
+            turbo-${{ runner.os }}-
+
       - name: Generate Prisma client
         run: pnpm --filter @repo/db run db:generate
+        env:
+          DATABASE_URL: "postgresql://dummy:dummy@localhost:5432/dummy"
 
       - name: Build packages
         run: pnpm --filter api... run build
+        env:
+          DATABASE_URL: "postgresql://dummy:dummy@localhost:5432/dummy"
 
-      - name: Lint
-        run: pnpm --filter api run lint
-
-      - name: Typecheck
-        run: pnpm --filter api run typecheck
+      - name: Lint & Typecheck
+        run: |
+          pnpm --filter api run lint
+          pnpm --filter api run typecheck
 
       - name: Unit Tests
         run: pnpm --filter api run test
+
+      - name: Integration Tests
+        run: pnpm --filter api run test:integration
+        env:
+          NODE_ENV: test
 
   # ──────────────────────────────────────────────
   # CI: Web — Lint, Typecheck, Test

@@ -28,6 +28,7 @@ RUN pnpm install --frozen-lockfile
 COPY . .
 
 # Generate Prisma client
+ENV DATABASE_URL="postgresql://dummy:5432/dummy"
 RUN pnpm --filter @repo/db run db:generate
 
 CMD [ "pnpm", "--filter", "api", "run", "start:dev" ]
@@ -77,6 +78,7 @@ RUN pnpm install --frozen-lockfile
 COPY . .
 
 # Generate Prisma client (output: packages/database/generated/prisma)
+ENV DATABASE_URL="postgresql://dummy:5432/dummy"
 RUN pnpm --filter @repo/db run db:generate
 
 # Build the API and its workspace dependencies only (not web)
