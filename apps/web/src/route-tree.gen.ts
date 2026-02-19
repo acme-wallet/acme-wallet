@@ -9,14 +9,14 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './pages/__root'
-import { Route as UsersIndexRouteImport } from './pages/users/index'
+import { Route as AuthRouteImport } from './pages/_auth'
 import { Route as NotfoundIndexRouteImport } from './pages/notfound/index'
 import { Route as LoginIndexRouteImport } from './pages/login/index'
-import { Route as HomeIndexRouteImport } from './pages/home/index'
+import { Route as AuthUsersIndexRouteImport } from './pages/_auth/users/index'
+import { Route as AuthHomeIndexRouteImport } from './pages/_auth/home/index'
 
-const UsersIndexRoute = UsersIndexRouteImport.update({
-  id: '/users/',
-  path: '/users/',
+const AuthRoute = AuthRouteImport.update({
+  id: '/_auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NotfoundIndexRoute = NotfoundIndexRouteImport.update({
@@ -29,53 +29,66 @@ const LoginIndexRoute = LoginIndexRouteImport.update({
   path: '/login/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HomeIndexRoute = HomeIndexRouteImport.update({
+const AuthUsersIndexRoute = AuthUsersIndexRouteImport.update({
+  id: '/users/',
+  path: '/users/',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthHomeIndexRoute = AuthHomeIndexRouteImport.update({
   id: '/home/',
   path: '/home/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/home/': typeof HomeIndexRoute
+  '/': typeof AuthRouteWithChildren
   '/login/': typeof LoginIndexRoute
   '/notfound/': typeof NotfoundIndexRoute
-  '/users/': typeof UsersIndexRoute
+  '/home/': typeof AuthHomeIndexRoute
+  '/users/': typeof AuthUsersIndexRoute
 }
 export interface FileRoutesByTo {
-  '/home': typeof HomeIndexRoute
+  '/': typeof AuthRouteWithChildren
   '/login': typeof LoginIndexRoute
   '/notfound': typeof NotfoundIndexRoute
-  '/users': typeof UsersIndexRoute
+  '/home': typeof AuthHomeIndexRoute
+  '/users': typeof AuthUsersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/home/': typeof HomeIndexRoute
+  '/_auth': typeof AuthRouteWithChildren
   '/login/': typeof LoginIndexRoute
   '/notfound/': typeof NotfoundIndexRoute
-  '/users/': typeof UsersIndexRoute
+  '/_auth/home/': typeof AuthHomeIndexRoute
+  '/_auth/users/': typeof AuthUsersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/home/' | '/login/' | '/notfound/' | '/users/'
+  fullPaths: '/' | '/login/' | '/notfound/' | '/home/' | '/users/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/home' | '/login' | '/notfound' | '/users'
-  id: '__root__' | '/home/' | '/login/' | '/notfound/' | '/users/'
+  to: '/' | '/login' | '/notfound' | '/home' | '/users'
+  id:
+    | '__root__'
+    | '/_auth'
+    | '/login/'
+    | '/notfound/'
+    | '/_auth/home/'
+    | '/_auth/users/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  HomeIndexRoute: typeof HomeIndexRoute
+  AuthRoute: typeof AuthRouteWithChildren
   LoginIndexRoute: typeof LoginIndexRoute
   NotfoundIndexRoute: typeof NotfoundIndexRoute
-  UsersIndexRoute: typeof UsersIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/users/': {
-      id: '/users/'
-      path: '/users'
-      fullPath: '/users/'
-      preLoaderRoute: typeof UsersIndexRouteImport
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/notfound/': {
@@ -92,21 +105,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/home/': {
-      id: '/home/'
+    '/_auth/users/': {
+      id: '/_auth/users/'
+      path: '/users'
+      fullPath: '/users/'
+      preLoaderRoute: typeof AuthUsersIndexRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_auth/home/': {
+      id: '/_auth/home/'
       path: '/home'
       fullPath: '/home/'
-      preLoaderRoute: typeof HomeIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthHomeIndexRouteImport
+      parentRoute: typeof AuthRoute
     }
   }
 }
 
+interface AuthRouteChildren {
+  AuthHomeIndexRoute: typeof AuthHomeIndexRoute
+  AuthUsersIndexRoute: typeof AuthUsersIndexRoute
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthHomeIndexRoute: AuthHomeIndexRoute,
+  AuthUsersIndexRoute: AuthUsersIndexRoute,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  HomeIndexRoute: HomeIndexRoute,
+  AuthRoute: AuthRouteWithChildren,
   LoginIndexRoute: LoginIndexRoute,
   NotfoundIndexRoute: NotfoundIndexRoute,
-  UsersIndexRoute: UsersIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

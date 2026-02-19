@@ -23,7 +23,7 @@ function LoginPage() {
 
             <div className="flex items-center justify-center p-6">
                 <Card className="w-full max-w-md shadow-xl">
-                    <CardHeader>
+                    <CardHeader className="flex flex-col justify-center items-center">
                         <CardTitle className="text-2xl">Acessar sistema</CardTitle>
                         <CardDescription>
                             Informe usuário e senha para continuar
@@ -32,7 +32,6 @@ function LoginPage() {
 
                     <CardContent>
                         <form className="space-y-4">
-
                             <div className="space-y-2">
                                 <Label htmlFor="user">Usuário</Label>
                                 <Input id="user" placeholder="Digite seu usuário" />
