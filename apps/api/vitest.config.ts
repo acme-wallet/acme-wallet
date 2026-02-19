@@ -14,5 +14,5 @@ export default defineConfig({
         globals: true,
         environment: 'node',
     },
-    plugins: [swc.vite()],
+    plugins: [swc.vite()] as any,
 });
