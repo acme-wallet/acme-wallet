@@ -1,0 +1,13 @@
+node_modules
+.git
+dist
+.turbo
+.env
+.env.*
+!.env.example
+*.md
+.husky
+.agents
+.vscode
+.idea
+coverage
