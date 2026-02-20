@@ -3,7 +3,6 @@ import { Input } from '@/components/ui/input';
 import { DataTable } from '@/components/ui/data-table';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { Plus } from 'lucide-react';
-import { useState } from 'react';
 import { useGetUsersQuery } from '@/store/services/api';
 import { UserActions } from '@/components/ui/users-action';
 
@@ -18,7 +17,6 @@ export const Route = createFileRoute('/_auth/users/')({
 });
 
 function UsersPage() {
-  const [search, setSearch] = useState('');
   const { data, isLoading } = useGetUsersQuery();
   const navigate = useNavigate();
 
@@ -44,8 +42,7 @@ function UsersPage() {
       <div className="flex items-center gap-4">
         <Input
           placeholder="Pesquisar usuário..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => console.log(e.target.value)}
           className="max-w-sm"
         />
       </div>
@@ -58,7 +55,7 @@ function UsersPage() {
           {
             header: 'Ações',
             accessor: 'id',
-            render: (user) => <UserActions user={user} />
+            render: (user) => <UserActions user={user} />,
           },
         ]}
         pageSize={10}

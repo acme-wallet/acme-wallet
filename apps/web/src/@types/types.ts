@@ -1,7 +1,7 @@
-import '@tanstack/react-router'
+import '@tanstack/react-router';
 
 declare module '@tanstack/react-router' {
   interface RouteMeta {
-    breadcrumb?: string
+    breadcrumb?: string;
   }
 }
