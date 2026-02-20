@@ -47,7 +47,7 @@ function NewUserPage() {
   }
 
   return (
-    <div className="max-full-lg">
+    <div className="w-full">
       <Card>
         <CardHeader>
           <CardTitle>Novo usuário</CardTitle>
