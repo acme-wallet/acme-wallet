@@ -67,7 +67,7 @@ function UsersPage() {
           {
             header: 'Ações',
             accessor: 'id',
-            render: (user) => <UserActions user={user} />
+            render: (user) => <UserActions user={user} />,
           },
         ]}
         pageSize={10}

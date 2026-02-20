@@ -9,6 +9,7 @@ import {
 
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 type Column<T> = {
   header: string;
@@ -129,7 +130,7 @@ export function DataTable<T>({
                 onClick={prevPage}
                 disabled={page === 1}
               >
-                {'<'}
+                <ChevronLeft />
               </Button>
 
               <Button
@@ -138,7 +139,7 @@ export function DataTable<T>({
                 onClick={nextPage}
                 disabled={page === totalPages}
               >
-                {'>'}
+                <ChevronRight />
               </Button>
             </div>
           </div>
