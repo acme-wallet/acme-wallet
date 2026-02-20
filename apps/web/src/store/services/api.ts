@@ -10,7 +10,7 @@ type User = {
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:3000',
+    baseUrl: `${import.meta.env.VITE_API_URL}`,
   }),
   tagTypes: ['Users'],
   endpoints: (builder) => ({

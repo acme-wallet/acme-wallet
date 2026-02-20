@@ -4,17 +4,11 @@ export function Breadcrumb() {
   const matches = useRouterState({ select: (s) => s.matches });
 
   const breadcrumbs = matches
-    .filter((match) => match.pathname !== '/')
-    .map((match) => {
-      const path = match.pathname;
-      const label =
-        match.pathname.split('/').pop()?.replace('_auth', '') || 'Home';
-
-      return {
-        label: label.charAt(0).toUpperCase() + label.slice(1),
-        path,
-      };
-    });
+    .filter((match) => (match as any).route?.meta?.breadcrumb)
+    .map((match) => ({
+      label: ((match as any).route?.meta?.breadcrumb) as string,
+      path: match.pathname,
+    }));
 
   return (
     <nav className="text-sm text-muted-foreground flex items-center gap-2">

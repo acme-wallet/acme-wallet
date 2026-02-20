@@ -2,9 +2,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { DataTable } from '@/components/ui/data-table';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { Plus, Trash, Pencil, EyeIcon } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { useState } from 'react';
 import { useGetUsersQuery } from '@/store/services/api';
+import { UserActions } from '@/components/ui/users-action';
 
 type User = {
   id: number;
@@ -57,15 +58,7 @@ function UsersPage() {
           {
             header: 'Ações',
             accessor: 'id',
-            render: () => (
-              <>
-                <div className="flex flex-row gap-10">
-                  <EyeIcon className="hover:cursor-pointer" />
-                  <Pencil className="hover:cursor-pointer" />
-                  <Trash className="hover:cursor-pointe" />
-                </div>
-              </>
-            ),
+            render: (user) => <UserActions user={user} />
           },
         ]}
         pageSize={10}

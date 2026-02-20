@@ -15,6 +15,7 @@ type Column<T> = {
   accessor: keyof T;
   render?: (row: T) => React.ReactNode;
   className?: string;
+  keyAccessor?: keyof T | ((row: T) => string | number);
 };
 
 type Props<T> = {
@@ -42,6 +43,11 @@ export function DataTable<T>({
 
   const paginatedData = data.slice(start, end);
 
+  const tableKeyAccessor: keyof T | ((row: T) => string | number) =
+    (columns.find((c) => c.keyAccessor)?.keyAccessor as
+      | keyof T
+      | ((row: T) => string | number)) ?? columns[0].accessor;
+
   function nextPage() {
     if (page < totalPages) setPage(page + 1);
   }
@@ -50,13 +56,21 @@ export function DataTable<T>({
     if (page > 1) setPage(page - 1);
   }
 
+  const getKey = (row: T) => {
+    const keyAccessor = tableKeyAccessor;
+    if (typeof keyAccessor === 'function') {
+      return keyAccessor(row);
+    }
+    return row[keyAccessor] as unknown as string | number;
+  };
+
   return (
     <div className="rounded-md border bg-background">
       <Table>
         <TableHeader>
           <TableRow>
-            {columns.map((col) => (
-              <TableHead key={String(col.accessor)}>{col.header}</TableHead>
+            {columns.map((col, colIndex) => (
+              <TableHead key={`${String(col.accessor)}-${colIndex}`}>{col.header}</TableHead>
             ))}
           </TableRow>
         </TableHeader>
@@ -80,11 +94,11 @@ export function DataTable<T>({
           )}
 
           {!isLoading &&
-            paginatedData.map((row, index) => (
-              <TableRow key={index}>
-                {columns.map((col) => (
+            paginatedData.map((row, rowIndex) => (
+              <TableRow key={`${String(getKey(row))}-${start + rowIndex}`}>
+                {columns.map((col, colIndex) => (
                   <TableCell
-                    key={String(col.accessor)}
+                    key={`${String(col.accessor)}-${start + rowIndex}-${colIndex}`}
                     className={col.className}
                   >
                     {col.render
