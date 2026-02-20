@@ -24,7 +24,7 @@ describe('Users HTTP API', () => {
       ],
     }).compile();
 
-    app = moduleFixture.createNestApplication();
+    app = moduleFixture.createNestApplication({ logger: false });
     app.useGlobalPipes(new ZodValidationPipe());
     await app.init();
 
