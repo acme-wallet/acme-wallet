@@ -17,11 +17,7 @@ export function Header({ onToggleSidebar }: Props) {
         <Menu size={20} />
       </Button>
       <div className="ml-auto rounded-4xl">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="hover:cursor-pointer"
-        >
+        <Button variant="ghost" size="icon" className="hover:cursor-pointer">
           <UserRound className="w-6 h-6 hover:cursor-pointer hover:bg-gray-200 hover:rounded-full" />
         </Button>
       </div>

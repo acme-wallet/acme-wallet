@@ -70,7 +70,9 @@ export function DataTable<T>({
         <TableHeader>
           <TableRow>
             {columns.map((col, colIndex) => (
-              <TableHead key={`${String(col.accessor)}-${colIndex}`}>{col.header}</TableHead>
+              <TableHead key={`${String(col.accessor)}-${colIndex}`}>
+                {col.header}
+              </TableHead>
             ))}
           </TableRow>
         </TableHeader>
