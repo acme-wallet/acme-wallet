@@ -5,3 +5,11 @@ content-type: application/json
     "name": "Leandro",
     "email": "leandro@example.com"
 }
+
+###
+GET http://localhost:3000/users?email=leandro@example.com&name=Leandro
+content-type: application/json
+
+###
+GET http://localhost:3000/health
+content-type: application/json
