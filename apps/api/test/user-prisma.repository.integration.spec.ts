@@ -32,22 +32,20 @@ describe('UserPrismaRepository (integration)', () => {
     await prismaClient.user.deleteMany();
   });
 
-  // it('should create a user in the database', async () => {
-  //   const user = User.create('Alice', 'alice@acme.com');
+  it('should create a user in the database', async () => {
+    const user = User.create('Alice', 'alice@acme.com');
 
-  //   const result = await repo.create(user);
+    await repo.create(user);
 
-  //   expect(result).toHaveProperty('id');
-  //   expect(result.id).toBeDefined();
+    const dbUser = await prismaClient.user.findUnique({
+      where: { email: 'alice@acme.com' },
+    });
 
-  //   const dbUser = await prismaClient.user.findUnique({
-  //     where: { id: result.id },
-  //   });
-
-  //   expect(dbUser).not.toBeNull();
-  //   expect(dbUser!.name).toBe('Alice');
-  //   expect(dbUser!.email).toBe('alice@acme.com');
-  // });
+    expect(dbUser).not.toBeNull();
+    expect(dbUser!.id).toBeDefined();
+    expect(dbUser!.name).toBe('Alice');
+    expect(dbUser!.email).toBe('alice@acme.com');
+  });
 
   it('should reject duplicate emails', async () => {
     const user1 = User.create('Bob', 'bob@acme.com');
