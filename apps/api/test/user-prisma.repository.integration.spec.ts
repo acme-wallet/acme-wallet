@@ -33,25 +33,23 @@ describe('UserPrismaRepository (integration)', () => {
   });
 
   it('should create a user in the database', async () => {
-    const user = new User('Alice', 'alice@acme.com');
+    const user = User.create('Alice', 'alice@acme.com');
 
-    const result = await repo.create(user);
-
-    expect(result).toHaveProperty('id');
-    expect(result.id).toBeDefined();
+    await repo.create(user);
 
     const dbUser = await prismaClient.user.findUnique({
-      where: { id: result.id },
+      where: { email: 'alice@acme.com' },
     });
 
     expect(dbUser).not.toBeNull();
+    expect(dbUser!.id).toBeDefined();
     expect(dbUser!.name).toBe('Alice');
     expect(dbUser!.email).toBe('alice@acme.com');
   });
 
   it('should reject duplicate emails', async () => {
-    const user1 = new User('Bob', 'bob@acme.com');
-    const user2 = new User('Bobby', 'bob@acme.com');
+    const user1 = User.create('Bob', 'bob@acme.com');
+    const user2 = User.create('Bobby', 'bob@acme.com');
 
     await repo.create(user1);
 
