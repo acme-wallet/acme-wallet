@@ -13,8 +13,10 @@ import { HealthResponseDto } from '../dto/health-response.dto';
 @ApiTags('health')
 @Controller('health')
 export class HealthController {
-  private readonly MEMORY_HEAP_THRESHOLD_BYTES = 300 * 1024 * 1024; // 300MB
-  private readonly DISK_STORAGE_THRESHOLD_PERCENT = 0.8; // 80%
+  private readonly MEMORY_HEAP_THRESHOLD_BYTES =
+    Number(process.env.MEMORY_HEAP_THRESHOLD_BYTES) || 300 * 1024 * 1024; // 300MB
+  private readonly DISK_STORAGE_THRESHOLD_PERCENT =
+    Number(process.env.DISK_STORAGE_THRESHOLD_PERCENT) || 0.8; // 80%
 
   constructor(
     private health: HealthCheckService,
