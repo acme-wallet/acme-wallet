@@ -1,9 +1,10 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { DataTable } from '@/components/ui/data-table';
-import { createFileRoute } from '@tanstack/react-router';
-import { Plus } from 'lucide-react';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { Plus, Trash, Pencil, EyeIcon } from 'lucide-react';
 import { useState } from 'react';
+import { useGetUsersQuery } from '@/store/services/api';
 
 type User = {
   id: number;
@@ -11,33 +12,14 @@ type User = {
   email: string;
 };
 
-const usersMock: User[] = [
-  { id: 1, name: 'João', email: 'joao@email.com' },
-  { id: 2, name: 'Maria', email: 'maria@email.com' },
-  { id: 3, name: 'Carlos', email: 'carlos@email.com' },
-  { id: 4, name: 'Ana', email: 'ana@email.com' },
-  { id: 5, name: 'Pedro', email: 'pedro@email.com' },
-  { id: 6, name: 'Fernanda', email: 'fernanda@email.com' },
-  { id: 7, name: 'Lucas', email: 'lucas@email.com' },
-  { id: 8, name: 'Juliana', email: 'juliana@email.com' },
-  { id: 9, name: 'Lucas', email: 'lucas@email.com' },
-  { id: 10, name: 'Juliana', email: 'juliana@email.com' },
-  { id: 11, name: 'Lucas', email: 'lucas@email.com' },
-  { id: 12, name: 'Juliana', email: 'juliana@email.com' },
-  { id: 13, name: 'Lucas', email: 'lucas@email.com' },
-  { id: 14, name: 'Juliana', email: 'juliana@email.com' },
-];
-
 export const Route = createFileRoute('/_auth/users/')({
   component: UsersPage,
 });
 
 function UsersPage() {
   const [search, setSearch] = useState('');
-
-  const filteredUsers = usersMock.filter((u) =>
-    u.name.toLowerCase().includes(search.toLowerCase()),
-  );
+  const { data, isLoading } = useGetUsersQuery();
+  const navigate = useNavigate();
 
   return (
     <div className="space-y-6">
@@ -49,7 +31,10 @@ function UsersPage() {
           </p>
         </div>
 
-        <Button className="flex items-center gap-2">
+        <Button
+          className="flex items-center gap-2"
+          onClick={() => navigate({ to: '/users/new' })}
+        >
           <Plus size={16} />
           Novo usuário
         </Button>
@@ -73,18 +58,19 @@ function UsersPage() {
             header: 'Ações',
             accessor: 'id',
             render: () => (
-              <Button
-                size="sm"
-                variant="outline"
-                className="hover:cursor-pointer hover:bg-gray-200"
-              >
-                Editar
-              </Button>
+              <>
+                <div className="flex flex-row gap-10">
+                  <EyeIcon className="hover:cursor-pointer" />
+                  <Pencil className="hover:cursor-pointer" />
+                  <Trash className="hover:cursor-pointe" />
+                </div>
+              </>
             ),
           },
         ]}
-        data={filteredUsers}
         pageSize={10}
+        data={data ?? []}
+        isLoading={isLoading}
       />
     </div>
   );

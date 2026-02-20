@@ -29,7 +29,7 @@ export function Sidebar({ open, onClose }: Props) {
         <div className="flex items-center justify-between p-4 lg:justify-center">
           <img src="/login-image.jpg" alt="Logo" className="w-12 h-12" />
 
-          <button className="lg:hidden" onClick={onClose}>
+          <button className="lg:hidden hover:cursor-pointer" onClick={onClose}>
             <X size={20} />
           </button>
         </div>
