@@ -25,20 +25,13 @@ describe('UserPrismaRepository', () => {
     repo = moduleRef.get(UserPrismaRepository);
   });
 
-  it('saves a user and returns id', async () => {
-    const input = new User('Ana', 'ana@acme.com');
+  it('should persist a user', async () => {
+    const input = User.create('Ana', 'ana@acme.com');
 
-    // Mocka o retorno do banco, após a criação
-    prismaMock.user.create.mockResolvedValue({
-      id: input.id,
-      name: input.name,
-      email: input.email,
-      createdAt: new Date(),
-    });
+    prismaMock.user.create.mockResolvedValue(input);
 
-    const output = await repo.create(input);
+    await repo.create(input);
 
-    // Valida se os dados corretos foram passados para o banco
     expect(prismaMock.user.create).toHaveBeenCalledWith({
       data: {
         id: input.id,
@@ -46,18 +39,16 @@ describe('UserPrismaRepository', () => {
         email: input.email,
       },
     });
-
-    expect(output.id).toBe(input.id);
   });
 
   it('should find all users', async () => {
-    const user = new User('Ana', 'ana@acme.com');
+    const user = User.create('Ana', 'ana@acme.com');
     prismaMock.user.findMany.mockResolvedValue([
       {
         id: user.id,
         name: user.name,
         email: user.email,
-        createdAt: new Date(),
+        createdAt: user.createdAt,
       },
     ]);
 
@@ -81,24 +72,17 @@ describe('UserPrismaRepository', () => {
   });
 
   it('should find users by name', async () => {
-    const user = new User('Ana', 'ana@acme.com');
-    prismaMock.user.findMany.mockResolvedValue([
-      {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        createdAt: new Date(),
-      },
-    ]);
+    const user = User.create('Ana', 'ana@acme.com');
+    prismaMock.user.findMany.mockResolvedValue([user]);
 
-    const result = await repo.findAll({ name: 'Ana' });
+    const result = await repo.findAll({ name: user.name });
 
     expect(result).toHaveLength(1);
-    expect(result[0].name).toBe('Ana');
+    expect(result[0].name).toBe(user.name);
     expect(prismaMock.user.findMany).toHaveBeenCalledWith({
       where: {
         name: {
-          contains: 'Ana',
+          contains: user.name,
         },
         email: {
           contains: undefined,
@@ -111,27 +95,20 @@ describe('UserPrismaRepository', () => {
   });
 
   it('should find users by email', async () => {
-    const user = new User('Ana', 'ana@acme.com');
-    prismaMock.user.findMany.mockResolvedValue([
-      {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        createdAt: new Date(),
-      },
-    ]);
+    const user = User.create('Ana', 'ana@acme.com');
+    prismaMock.user.findMany.mockResolvedValue([user]);
 
-    const result = await repo.findAll({ email: 'ana@acme.com' });
+    const result = await repo.findAll({ email: user.email });
 
     expect(result).toHaveLength(1);
-    expect(result[0].email).toBe('ana@acme.com');
+    expect(result[0].email).toBe(user.email);
     expect(prismaMock.user.findMany).toHaveBeenCalledWith({
       where: {
         name: {
           contains: undefined,
         },
         email: {
-          contains: 'ana@acme.com',
+          contains: user.email,
         },
         id: {
           equals: undefined,
@@ -141,20 +118,13 @@ describe('UserPrismaRepository', () => {
   });
 
   it('should find users by id', async () => {
-    const user = new User('Ana', 'ana@acme.com', '123');
-    prismaMock.user.findMany.mockResolvedValue([
-      {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        createdAt: new Date(),
-      },
-    ]);
+    const user = User.create('Ana', 'ana@acme.com');
+    prismaMock.user.findMany.mockResolvedValue([user]);
 
-    const result = await repo.findAll({ id: '123' });
+    const result = await repo.findAll({ id: user.id });
 
     expect(result).toHaveLength(1);
-    expect(result[0].id).toBe('123');
+    expect(result[0].id).toBe(user.id);
     expect(prismaMock.user.findMany).toHaveBeenCalledWith({
       where: {
         name: {
@@ -164,7 +134,7 @@ describe('UserPrismaRepository', () => {
           contains: undefined,
         },
         id: {
-          equals: '123',
+          equals: user.id,
         },
       },
     });

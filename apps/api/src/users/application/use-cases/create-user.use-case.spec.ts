@@ -11,25 +11,26 @@ describe('Create User Use Case', () => {
     sut = new CreateUserUseCase(userRepository);
   });
 
-  it('should be able to create a new user and return this id', async () => {
-    userRepository.create.mockResolvedValue({
-      id: '123',
-    });
+  it('should be able to create a new user and return its id', async () => {
+    userRepository.create.mockResolvedValue(undefined);
 
     const input = {
       name: 'Leandro Amaral',
       email: 'leandro@email.org.br',
     };
+
     const output = await sut.execute(input);
 
     expect(output).toHaveProperty('id');
+    expect(typeof output.id).toBe('string');
 
     expect(userRepository.create).toHaveBeenCalledWith(
       expect.objectContaining({
-        name: 'Leandro Amaral',
-        email: 'leandro@email.org.br',
+        name: input.name,
+        email: input.email,
       }),
     );
+
     expect(userRepository.create).toHaveBeenCalledTimes(1);
   });
 });
