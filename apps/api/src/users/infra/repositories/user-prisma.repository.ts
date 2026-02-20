@@ -7,18 +7,14 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class UserPrismaRepository implements IUserRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async create(user: User): Promise<{ id: string }> {
-    const output = await this.prismaService.prisma.user.create({
+  async create(data: User): Promise<void> {
+    await this.prismaService.prisma.user.create({
       data: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
+        id: data.id,
+        name: data.name,
+        email: data.email,
       },
     });
-
-    return {
-      id: output.id,
-    };
   }
 
   async findAll(filter?: {
@@ -40,6 +36,8 @@ export class UserPrismaRepository implements IUserRepository {
       },
     });
 
-    return users.map((user) => new User(user.name, user.email, user.id));
+    return users.map((user) =>
+      User.restore(user.id, user.name, user.email, user.createdAt),
+    );
   }
 }

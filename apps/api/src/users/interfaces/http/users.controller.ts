@@ -1,12 +1,11 @@
-import { Controller, Post, Body, UsePipes, Get, Query } from '@nestjs/common';
-import { ZodValidationPipe } from 'nestjs-zod';
+import { Controller, Post, Body, Get, Query } from '@nestjs/common';
 import CreateUserUseCase from 'src/users/application/use-cases/create-user.use-case';
 import {
   CreateUserRequest,
   CreateUserResponse,
 } from '../dto/user/create-user.dto';
 import GetUsersUseCase from 'src/users/application/use-cases/get-users.use-case';
-import { GetUsersResponse } from '../dto/user/get-users.dto';
+import { GetUsersRequest, GetUsersResponse } from '../dto/user/get-users.dto';
 
 @Controller('users')
 export class UsersController {
@@ -16,7 +15,6 @@ export class UsersController {
   ) {}
 
   @Post()
-  @UsePipes(ZodValidationPipe)
   create(@Body() body: CreateUserRequest): Promise<CreateUserResponse> {
     const input = {
       name: body.name,
@@ -26,12 +24,8 @@ export class UsersController {
   }
 
   @Get()
-  async findAll(
-    @Query('name') name?: string,
-    @Query('email') email?: string,
-    @Query('id') id?: string,
-  ): Promise<GetUsersResponse[]> {
-    const users = await this.getUsersUseCase.execute({ name, email, id });
+  async findAll(@Query() query: GetUsersRequest): Promise<GetUsersResponse[]> {
+    const users = await this.getUsersUseCase.execute(query);
     return users.map((user) => ({
       id: user.id,
       name: user.name,
