@@ -10,13 +10,21 @@
 
 import { Route as rootRouteImport } from './pages/__root'
 import { Route as AuthRouteImport } from './pages/_auth'
+import { Route as IndexRouteImport } from './pages/index'
 import { Route as NotfoundIndexRouteImport } from './pages/notfound/index'
 import { Route as LoginIndexRouteImport } from './pages/login/index'
 import { Route as AuthUsersIndexRouteImport } from './pages/_auth/users/index'
 import { Route as AuthHomeIndexRouteImport } from './pages/_auth/home/index'
+import { Route as AuthUsersNewRouteImport } from './pages/_auth/users/new'
+import { Route as AuthUsersIdRouteImport } from './pages/_auth/users/$id'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/_auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NotfoundIndexRoute = NotfoundIndexRouteImport.update({
@@ -39,44 +47,79 @@ const AuthHomeIndexRoute = AuthHomeIndexRouteImport.update({
   path: '/home/',
   getParentRoute: () => AuthRoute,
 } as any)
+const AuthUsersNewRoute = AuthUsersNewRouteImport.update({
+  id: '/users/new',
+  path: '/users/new',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthUsersIdRoute = AuthUsersIdRouteImport.update({
+  id: '/users/$id',
+  path: '/users/$id',
+  getParentRoute: () => AuthRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof AuthRouteWithChildren
+  '/': typeof IndexRoute
   '/login/': typeof LoginIndexRoute
   '/notfound/': typeof NotfoundIndexRoute
+  '/users/$id': typeof AuthUsersIdRoute
+  '/users/new': typeof AuthUsersNewRoute
   '/home/': typeof AuthHomeIndexRoute
   '/users/': typeof AuthUsersIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof AuthRouteWithChildren
+  '/': typeof IndexRoute
   '/login': typeof LoginIndexRoute
   '/notfound': typeof NotfoundIndexRoute
+  '/users/$id': typeof AuthUsersIdRoute
+  '/users/new': typeof AuthUsersNewRoute
   '/home': typeof AuthHomeIndexRoute
   '/users': typeof AuthUsersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
   '/_auth': typeof AuthRouteWithChildren
   '/login/': typeof LoginIndexRoute
   '/notfound/': typeof NotfoundIndexRoute
+  '/_auth/users/$id': typeof AuthUsersIdRoute
+  '/_auth/users/new': typeof AuthUsersNewRoute
   '/_auth/home/': typeof AuthHomeIndexRoute
   '/_auth/users/': typeof AuthUsersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login/' | '/notfound/' | '/home/' | '/users/'
+  fullPaths:
+    | '/'
+    | '/login/'
+    | '/notfound/'
+    | '/users/$id'
+    | '/users/new'
+    | '/home/'
+    | '/users/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/notfound' | '/home' | '/users'
+  to:
+    | '/'
+    | '/login'
+    | '/notfound'
+    | '/users/$id'
+    | '/users/new'
+    | '/home'
+    | '/users'
   id:
     | '__root__'
+    | '/'
     | '/_auth'
     | '/login/'
     | '/notfound/'
+    | '/_auth/users/$id'
+    | '/_auth/users/new'
     | '/_auth/home/'
     | '/_auth/users/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRouteWithChildren
   LoginIndexRoute: typeof LoginIndexRoute
   NotfoundIndexRoute: typeof NotfoundIndexRoute
@@ -89,6 +132,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/notfound/': {
@@ -119,15 +169,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthHomeIndexRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/_auth/users/new': {
+      id: '/_auth/users/new'
+      path: '/users/new'
+      fullPath: '/users/new'
+      preLoaderRoute: typeof AuthUsersNewRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_auth/users/$id': {
+      id: '/_auth/users/$id'
+      path: '/users/$id'
+      fullPath: '/users/$id'
+      preLoaderRoute: typeof AuthUsersIdRouteImport
+      parentRoute: typeof AuthRoute
+    }
   }
 }
 
 interface AuthRouteChildren {
+  AuthUsersIdRoute: typeof AuthUsersIdRoute
+  AuthUsersNewRoute: typeof AuthUsersNewRoute
   AuthHomeIndexRoute: typeof AuthHomeIndexRoute
   AuthUsersIndexRoute: typeof AuthUsersIndexRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
+  AuthUsersIdRoute: AuthUsersIdRoute,
+  AuthUsersNewRoute: AuthUsersNewRoute,
   AuthHomeIndexRoute: AuthHomeIndexRoute,
   AuthUsersIndexRoute: AuthUsersIndexRoute,
 }
@@ -135,6 +203,7 @@ const AuthRouteChildren: AuthRouteChildren = {
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
   AuthRoute: AuthRouteWithChildren,
   LoginIndexRoute: LoginIndexRoute,
   NotfoundIndexRoute: NotfoundIndexRoute,
