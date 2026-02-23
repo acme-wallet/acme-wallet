@@ -1,3 +1,3 @@
-export * from './user/create-user.schema';
-export * from './user/get-users.schema';
-export * from './health/health-response.schema';
+export * from './user/create-user.schema.js';
+export * from './user/get-users.schema.js';
+export * from './health/health-response.schema.js';

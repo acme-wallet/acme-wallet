@@ -3,9 +3,10 @@ import { Input } from '@/components/ui/input';
 import { DataTable } from '@/components/ui/data-table';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { Plus } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useGetUsersQuery } from '@/store/services/api';
 import { UserActions } from '@/components/ui/users-action';
+import { useQueryState } from 'nuqs';
 
 type User = {
   id: number;
@@ -18,16 +19,19 @@ export const Route = createFileRoute('/_auth/users/')({
 });
 
 function UsersPage() {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useQueryState('search');
   const { data, isLoading } = useGetUsersQuery();
   const navigate = useNavigate();
 
   const filteredData = useMemo(() => {
     if (!data) return [];
+
+    const term = (search ?? '').toLowerCase();
+
     return data.filter(
       (user) =>
-        user.name.toLowerCase().includes(search.toLowerCase()) ||
-        user.email.toLowerCase().includes(search.toLowerCase()),
+        user.name.toLowerCase().includes(term) ||
+        user.email.toLowerCase().includes(term),
     );
   }, [data, search]);
 
@@ -53,7 +57,7 @@ function UsersPage() {
       <div className="flex items-center gap-4">
         <Input
           placeholder="Pesquisar usuário..."
-          value={search}
+          value={search ?? ''}
           onChange={(e) => setSearch(e.target.value)}
           className="max-w-sm"
         />

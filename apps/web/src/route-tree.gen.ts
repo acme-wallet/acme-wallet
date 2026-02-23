@@ -11,7 +11,7 @@
 import { Route as rootRouteImport } from './pages/__root'
 import { Route as AuthRouteImport } from './pages/_auth'
 import { Route as IndexRouteImport } from './pages/index'
-import { Route as NotfoundIndexRouteImport } from './pages/notfound/index'
+import { Route as NotFoundIndexRouteImport } from './pages/not-found/index'
 import { Route as LoginIndexRouteImport } from './pages/login/index'
 import { Route as AuthUsersIndexRouteImport } from './pages/_auth/users/index'
 import { Route as AuthHomeIndexRouteImport } from './pages/_auth/home/index'
@@ -27,9 +27,9 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const NotfoundIndexRoute = NotfoundIndexRouteImport.update({
-  id: '/notfound/',
-  path: '/notfound/',
+const NotFoundIndexRoute = NotFoundIndexRouteImport.update({
+  id: '/not-found/',
+  path: '/not-found/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginIndexRoute = LoginIndexRouteImport.update({
@@ -61,7 +61,7 @@ const AuthUsersIdRoute = AuthUsersIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login/': typeof LoginIndexRoute
-  '/notfound/': typeof NotfoundIndexRoute
+  '/not-found/': typeof NotFoundIndexRoute
   '/users/$id': typeof AuthUsersIdRoute
   '/users/new': typeof AuthUsersNewRoute
   '/home/': typeof AuthHomeIndexRoute
@@ -70,7 +70,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginIndexRoute
-  '/notfound': typeof NotfoundIndexRoute
+  '/not-found': typeof NotFoundIndexRoute
   '/users/$id': typeof AuthUsersIdRoute
   '/users/new': typeof AuthUsersNewRoute
   '/home': typeof AuthHomeIndexRoute
@@ -81,7 +81,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteWithChildren
   '/login/': typeof LoginIndexRoute
-  '/notfound/': typeof NotfoundIndexRoute
+  '/not-found/': typeof NotFoundIndexRoute
   '/_auth/users/$id': typeof AuthUsersIdRoute
   '/_auth/users/new': typeof AuthUsersNewRoute
   '/_auth/home/': typeof AuthHomeIndexRoute
@@ -92,7 +92,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/login/'
-    | '/notfound/'
+    | '/not-found/'
     | '/users/$id'
     | '/users/new'
     | '/home/'
@@ -101,7 +101,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/login'
-    | '/notfound'
+    | '/not-found'
     | '/users/$id'
     | '/users/new'
     | '/home'
@@ -111,7 +111,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_auth'
     | '/login/'
-    | '/notfound/'
+    | '/not-found/'
     | '/_auth/users/$id'
     | '/_auth/users/new'
     | '/_auth/home/'
@@ -122,7 +122,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRouteWithChildren
   LoginIndexRoute: typeof LoginIndexRoute
-  NotfoundIndexRoute: typeof NotfoundIndexRoute
+  NotFoundIndexRoute: typeof NotFoundIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -141,11 +141,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/notfound/': {
-      id: '/notfound/'
-      path: '/notfound'
-      fullPath: '/notfound/'
-      preLoaderRoute: typeof NotfoundIndexRouteImport
+    '/not-found/': {
+      id: '/not-found/'
+      path: '/not-found'
+      fullPath: '/not-found/'
+      preLoaderRoute: typeof NotFoundIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login/': {
@@ -206,7 +206,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRouteWithChildren,
   LoginIndexRoute: LoginIndexRoute,
-  NotfoundIndexRoute: NotfoundIndexRoute,
+  NotFoundIndexRoute: NotFoundIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

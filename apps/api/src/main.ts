@@ -26,7 +26,7 @@ async function bootstrap() {
   );
 
   app.useGlobalPipes(new ZodValidationPipe());
-  
+
   const allowedOrigins = new Set<string>(
     [
       process.env.URL_API,
