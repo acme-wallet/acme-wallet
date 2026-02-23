@@ -1,4 +1,3 @@
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { DataTable } from '@/components/ui/data-table';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
@@ -7,6 +6,7 @@ import { useMemo } from 'react';
 import { useGetUsersQuery } from '@/store/services/api';
 import { UserActions } from '@/components/ui/users-action';
 import { useQueryState } from 'nuqs';
+import { PageHeader } from '@/components/ui/page-header';
 
 type User = {
   id: number;
@@ -37,31 +37,20 @@ function UsersPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold">Usuários</h1>
-          <p className="text-sm text-muted-foreground">
-            Gerencie os usuários do sistema
-          </p>
-        </div>
+      <PageHeader
+        title="Usuários"
+        description="Gerencie os usuários do sistema"
+        actionLabel="Novo usuário"
+        actionIcon={<Plus size={16} />}
+        onAction={() => navigate({ to: '/users/new' })}
+      />
 
-        <Button
-          className="flex items-center gap-2"
-          onClick={() => navigate({ to: '/users/new' })}
-        >
-          <Plus size={16} />
-          Novo usuário
-        </Button>
-      </div>
-
-      <div className="flex items-center gap-4">
-        <Input
-          placeholder="Pesquisar usuário..."
-          value={search ?? ''}
-          onChange={(e) => setSearch(e.target.value)}
-          className="max-w-sm"
-        />
-      </div>
+      <Input
+        placeholder="Pesquisar usuário..."
+        value={search ?? ''}
+        onChange={(e) => setSearch(e.target.value)}
+        className="max-w-sm"
+      />
 
       <DataTable<User>
         columns={[
