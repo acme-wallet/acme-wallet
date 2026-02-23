@@ -5,6 +5,15 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { User } from 'src/users/domain/entities/user.entity';
 import { UserPrismaRepository } from 'src/users/infra/repositories/user-prisma.repository';
 
+function prismaUserFromEntity(user: User) {
+  return {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    createdAt: user.createdAt,
+  };
+}
+
 describe('UserPrismaRepository', () => {
   let repo: UserPrismaRepository;
   let prismaMock: DeepMockProxy<PrismaClient>;
@@ -28,7 +37,9 @@ describe('UserPrismaRepository', () => {
   it('should persist a user', async () => {
     const input = User.create('Ana', 'ana@acme.com');
 
-    prismaMock.user.create.mockResolvedValue(input);
+    prismaMock.user.create.mockResolvedValue({
+      ...prismaUserFromEntity(input),
+    });
 
     await repo.create(input);
 
@@ -43,14 +54,7 @@ describe('UserPrismaRepository', () => {
 
   it('should find all users', async () => {
     const user = User.create('Ana', 'ana@acme.com');
-    prismaMock.user.findMany.mockResolvedValue([
-      {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        createdAt: user.createdAt,
-      },
-    ]);
+    prismaMock.user.findMany.mockResolvedValue([prismaUserFromEntity(user)]);
 
     const result = await repo.findAll();
 
@@ -73,7 +77,7 @@ describe('UserPrismaRepository', () => {
 
   it('should find users by name', async () => {
     const user = User.create('Ana', 'ana@acme.com');
-    prismaMock.user.findMany.mockResolvedValue([user]);
+    prismaMock.user.findMany.mockResolvedValue([prismaUserFromEntity(user)]);
 
     const result = await repo.findAll({ name: user.name });
 
@@ -96,7 +100,7 @@ describe('UserPrismaRepository', () => {
 
   it('should find users by email', async () => {
     const user = User.create('Ana', 'ana@acme.com');
-    prismaMock.user.findMany.mockResolvedValue([user]);
+    prismaMock.user.findMany.mockResolvedValue([prismaUserFromEntity(user)]);
 
     const result = await repo.findAll({ email: user.email });
 
@@ -119,7 +123,7 @@ describe('UserPrismaRepository', () => {
 
   it('should find users by id', async () => {
     const user = User.create('Ana', 'ana@acme.com');
-    prismaMock.user.findMany.mockResolvedValue([user]);
+    prismaMock.user.findMany.mockResolvedValue([prismaUserFromEntity(user)]);
 
     const result = await repo.findAll({ id: user.id });
 
