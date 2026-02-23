@@ -145,5 +145,9 @@ describe('HealthController (integration)', () => {
       ServiceUnavailableException,
     );
   });
+<<<<<<< HEAD
 });
 >>>>>>> f9afc0a (feat(tdd): add documentation for test-driven development principles and practices)
+=======
+});
+>>>>>>> ad34af1 (fix(users): refactor CRUD endpoints)

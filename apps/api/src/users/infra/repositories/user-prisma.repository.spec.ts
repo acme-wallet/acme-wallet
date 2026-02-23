@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> ad34af1 (fix(users): refactor CRUD endpoints)
 import { Test } from '@nestjs/testing';
 import { PrismaClient } from '@repo/db';
 import { DeepMockProxy, mockDeep } from 'vitest-mock-extended';
@@ -144,6 +147,7 @@ describe('UserPrismaRepository', () => {
       },
     });
   });
+<<<<<<< HEAD
 });
 =======
 import { Test } from '@nestjs/testing';
@@ -293,3 +297,6 @@ describe('UserPrismaRepository', () => {
   });
 });
 >>>>>>> f9afc0a (feat(tdd): add documentation for test-driven development principles and practices)
+=======
+});
+>>>>>>> ad34af1 (fix(users): refactor CRUD endpoints)

@@ -32,6 +32,10 @@ describe('Update User Use Case', () => {
 
     await expect(
       sut.execute({ id: 'invalid-id', name: 'New Name' }),
+<<<<<<< HEAD
     ).rejects.toThrow('User not found');
+=======
+    ).rejects.toThrow('User with id "invalid-id" not found');
+>>>>>>> ad34af1 (fix(users): refactor CRUD endpoints)
   });
 });
