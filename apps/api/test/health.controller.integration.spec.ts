@@ -4,6 +4,11 @@ import { HealthModule } from 'src/health/health.module';
 import { HealthController } from 'src/health/interfaces/http/health.controller';
 import { vi } from 'vitest';
 import { ServiceUnavailableException } from '@nestjs/common';
+import {
+  HealthCheckResult,
+  PrismaHealthIndicator,
+  HealthCheckError,
+} from '@nestjs/terminus';
 
 describe('HealthController (integration)', () => {
   let prismaClient: PrismaClient;
@@ -35,7 +40,7 @@ describe('HealthController (integration)', () => {
   });
 
   it('should return health status as ok when all services are up', async () => {
-    const result = await controller.check();
+    const result: HealthCheckResult = await controller.check();
 
     expect(result.status).toBe('ok');
     expect(result.info).toBeDefined();
@@ -52,8 +57,6 @@ describe('HealthController (integration)', () => {
   });
 
   it('should throw ServiceUnavailableException if a service is down', async () => {
-    const { PrismaHealthIndicator, HealthCheckError } =
-      await import('@nestjs/terminus');
     vi.spyOn(
       PrismaHealthIndicator.prototype,
       'pingCheck',
