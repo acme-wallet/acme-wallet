@@ -27,7 +27,7 @@ describe('Get User By Id Use Case', () => {
     userRepository.findById.mockResolvedValue(null);
 
     await expect(sut.execute({ id: 'invalid-id' })).rejects.toThrow(
-      'User with id "invalid-id" not found',
+      'User not found',
     );
   });
 });

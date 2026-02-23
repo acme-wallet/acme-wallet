@@ -32,6 +32,6 @@ describe('Update User Use Case', () => {
 
     await expect(
       sut.execute({ id: 'invalid-id', name: 'New Name' }),
-    ).rejects.toThrow('User with id "invalid-id" not found');
+    ).rejects.toThrow('User not found');
   });
 });
