@@ -10,5 +10,8 @@
     "sourceMap": true,
     "skipLibCheck": true
   },
-  "include": ["index.ts", "user/**/*.ts"]
+  "include": [
+    "index.ts",
+    "src/**/*.ts"
+  ]
 }

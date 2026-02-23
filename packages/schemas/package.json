@@ -1,6 +1,7 @@
 {
   "name": "@repo/schemas",
   "version": "0.0.0",
+  "type": "module",
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc --noEmit",

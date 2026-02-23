@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const CreateUserSchema = z.object({
   name: z.string().min(3, 'Mínimo 3 caracteres'),
-  email: z.email('E-mail inválido'),
+  email: z.string().email('E-mail inválido'),
 });
 
 export const CreateUserResponseSchema = z.object({
