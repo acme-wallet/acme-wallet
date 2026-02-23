@@ -17,7 +17,7 @@ export function PageHeader({
   actionIcon,
 }: Props) {
   return (
-    <div className="flex items-center justify-between mb-6">
+    <div className="flex items-center justify-between">
       <div>
         <h1 className="text-2xl font-semibold">{title}</h1>
 
