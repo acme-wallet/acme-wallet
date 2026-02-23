@@ -139,4 +139,45 @@ describe('UserPrismaRepository', () => {
       },
     });
   });
+
+  it('should find user by id', async () => {
+    const user = User.create('Ana', 'ana@acme.com');
+    prismaMock.user.findUnique.mockResolvedValue({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      createdAt: user.createdAt,
+    });
+
+    const result = await repo.findById(user.id);
+
+    expect(result?.id).toBe(user.id);
+    expect(prismaMock.user.findUnique).toHaveBeenCalledWith({
+      where: { id: user.id },
+    });
+  });
+
+  it('should update a user', async () => {
+    const user = User.create('Ana', 'ana@acme.com');
+
+    await repo.update(user);
+
+    expect(prismaMock.user.update).toHaveBeenCalledWith({
+      where: { id: user.id },
+      data: {
+        name: user.name,
+        email: user.email,
+      },
+    });
+  });
+
+  it('should delete a user', async () => {
+    const userId = '1';
+
+    await repo.delete(userId);
+
+    expect(prismaMock.user.delete).toHaveBeenCalledWith({
+      where: { id: userId },
+    });
+  });
 });

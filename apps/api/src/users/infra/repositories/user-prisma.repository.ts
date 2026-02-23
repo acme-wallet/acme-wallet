@@ -40,4 +40,30 @@ export class UserPrismaRepository implements IUserRepository {
       User.restore(user.id, user.name, user.email, user.createdAt),
     );
   }
+
+  async findById(id: string): Promise<User | null> {
+    const user = await this.prismaService.prisma.user.findUnique({
+      where: { id },
+    });
+
+    if (!user) return null;
+
+    return User.restore(user.id, user.name, user.email, user.createdAt);
+  }
+
+  async update(user: User): Promise<void> {
+    await this.prismaService.prisma.user.update({
+      where: { id: user.id },
+      data: {
+        name: user.name,
+        email: user.email,
+      },
+    });
+  }
+
+  async delete(id: string): Promise<void> {
+    await this.prismaService.prisma.user.delete({
+      where: { id },
+    });
+  }
 }
