@@ -1,3 +1,4 @@
+import ReactMarkdown from 'react-markdown';
 import { cn } from '@/lib/utils';
 import { ReasoningBlock } from './reasoning-block';
 
@@ -63,15 +64,26 @@ export function ChatMessage({ message, className }: ChatMessageProps) {
                 : 'bg-muted text-foreground rounded-tl-sm',
             )}
           >
-            {message.content || (
+            {message.content ? (
+              isUser ? (
+                // User messages: plain text (preserves whitespace)
+                <span className="whitespace-pre-wrap">{message.content}</span>
+              ) : (
+                // Assistant messages: full markdown rendering
+                <div className="prose prose-sm dark:prose-invert max-w-none prose-p:my-1 prose-headings:my-2 prose-ul:my-1 prose-ol:my-1 prose-li:my-0.5 prose-pre:my-2 prose-code:text-xs">
+                  <ReactMarkdown>{message.content}</ReactMarkdown>
+                  {message.isStreaming && (
+                    <span className="inline-block h-4 w-0.5 animate-pulse bg-current align-text-bottom ml-0.5" />
+                  )}
+                </div>
+              )
+            ) : (
+              // Loading dots while waiting for first token
               <span className="flex items-center gap-1 text-muted-foreground">
                 <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-current [animation-delay:-0.3s]" />
                 <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-current [animation-delay:-0.15s]" />
                 <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-current" />
               </span>
-            )}
-            {message.isStreaming && message.content && (
-              <span className="inline-block h-4 w-0.5 animate-pulse bg-current align-text-bottom ml-0.5" />
             )}
           </div>
         )}
