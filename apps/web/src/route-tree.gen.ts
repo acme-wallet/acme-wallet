@@ -15,6 +15,7 @@ import { Route as NotFoundIndexRouteImport } from './pages/not-found/index'
 import { Route as LoginIndexRouteImport } from './pages/login/index'
 import { Route as AuthUsersIndexRouteImport } from './pages/_auth/users/index'
 import { Route as AuthHomeIndexRouteImport } from './pages/_auth/home/index'
+import { Route as AuthChatIndexRouteImport } from './pages/_auth/chat/index'
 import { Route as AuthUsersNewRouteImport } from './pages/_auth/users/new'
 import { Route as AuthUsersIdRouteImport } from './pages/_auth/users/$id'
 import { Route as AuthUsersIdIndexRouteImport } from './pages/_auth/users/$id/index'
@@ -49,6 +50,11 @@ const AuthHomeIndexRoute = AuthHomeIndexRouteImport.update({
   path: '/home/',
   getParentRoute: () => AuthRoute,
 } as any)
+const AuthChatIndexRoute = AuthChatIndexRouteImport.update({
+  id: '/chat/',
+  path: '/chat/',
+  getParentRoute: () => AuthRoute,
+} as any)
 const AuthUsersNewRoute = AuthUsersNewRouteImport.update({
   id: '/users/new',
   path: '/users/new',
@@ -76,6 +82,7 @@ export interface FileRoutesByFullPath {
   '/not-found/': typeof NotFoundIndexRoute
   '/users/$id': typeof AuthUsersIdRouteWithChildren
   '/users/new': typeof AuthUsersNewRoute
+  '/chat/': typeof AuthChatIndexRoute
   '/home/': typeof AuthHomeIndexRoute
   '/users/': typeof AuthUsersIndexRoute
   '/users/$id/edit': typeof AuthUsersIdEditRoute
@@ -86,6 +93,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginIndexRoute
   '/not-found': typeof NotFoundIndexRoute
   '/users/new': typeof AuthUsersNewRoute
+  '/chat': typeof AuthChatIndexRoute
   '/home': typeof AuthHomeIndexRoute
   '/users': typeof AuthUsersIndexRoute
   '/users/$id/edit': typeof AuthUsersIdEditRoute
@@ -99,6 +107,7 @@ export interface FileRoutesById {
   '/not-found/': typeof NotFoundIndexRoute
   '/_auth/users/$id': typeof AuthUsersIdRouteWithChildren
   '/_auth/users/new': typeof AuthUsersNewRoute
+  '/_auth/chat/': typeof AuthChatIndexRoute
   '/_auth/home/': typeof AuthHomeIndexRoute
   '/_auth/users/': typeof AuthUsersIndexRoute
   '/_auth/users/$id/edit': typeof AuthUsersIdEditRoute
@@ -112,6 +121,7 @@ export interface FileRouteTypes {
     | '/not-found/'
     | '/users/$id'
     | '/users/new'
+    | '/chat/'
     | '/home/'
     | '/users/'
     | '/users/$id/edit'
@@ -122,6 +132,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/not-found'
     | '/users/new'
+    | '/chat'
     | '/home'
     | '/users'
     | '/users/$id/edit'
@@ -134,6 +145,7 @@ export interface FileRouteTypes {
     | '/not-found/'
     | '/_auth/users/$id'
     | '/_auth/users/new'
+    | '/_auth/chat/'
     | '/_auth/home/'
     | '/_auth/users/'
     | '/_auth/users/$id/edit'
@@ -191,6 +203,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthHomeIndexRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/_auth/chat/': {
+      id: '/_auth/chat/'
+      path: '/chat'
+      fullPath: '/chat/'
+      preLoaderRoute: typeof AuthChatIndexRouteImport
+      parentRoute: typeof AuthRoute
+    }
     '/_auth/users/new': {
       id: '/_auth/users/new'
       path: '/users/new'
@@ -239,6 +258,7 @@ const AuthUsersIdRouteWithChildren = AuthUsersIdRoute._addFileChildren(
 interface AuthRouteChildren {
   AuthUsersIdRoute: typeof AuthUsersIdRouteWithChildren
   AuthUsersNewRoute: typeof AuthUsersNewRoute
+  AuthChatIndexRoute: typeof AuthChatIndexRoute
   AuthHomeIndexRoute: typeof AuthHomeIndexRoute
   AuthUsersIndexRoute: typeof AuthUsersIndexRoute
 }
@@ -246,6 +266,7 @@ interface AuthRouteChildren {
 const AuthRouteChildren: AuthRouteChildren = {
   AuthUsersIdRoute: AuthUsersIdRouteWithChildren,
   AuthUsersNewRoute: AuthUsersNewRoute,
+  AuthChatIndexRoute: AuthChatIndexRoute,
   AuthHomeIndexRoute: AuthHomeIndexRoute,
   AuthUsersIndexRoute: AuthUsersIndexRoute,
 }

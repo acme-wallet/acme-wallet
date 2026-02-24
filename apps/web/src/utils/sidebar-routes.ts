@@ -1,4 +1,4 @@
-import { Home, Users } from 'lucide-react';
+import { Home, MessageSquare, Users } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
 export type SidebarRoute = {
@@ -17,5 +17,10 @@ export const sidebarRoutes: SidebarRoute[] = [
     label: 'Usuários',
     path: '/users',
     icon: Users,
+  },
+  {
+    label: 'Chat',
+    path: '/chat',
+    icon: MessageSquare,
   },
 ];
