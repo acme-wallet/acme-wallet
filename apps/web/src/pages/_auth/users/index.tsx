@@ -2,11 +2,12 @@ import { Input } from '@/components/ui/input';
 import { DataTable } from '@/components/ui/data-table';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { Plus } from 'lucide-react';
-import { useMemo } from 'react';
-import { useGetUsersQuery } from '@/store/services/api';
-import { UserActions } from '@/components/ui/users-action';
+import { useMemo, useState } from 'react';
+import { useDeleteUserMutation, useGetUsersQuery } from '@/store/services/api';
+import { RowActions } from '@/components/ui/users-action';
 import { useQueryState } from 'nuqs';
 import { PageHeader } from '@/components/ui/page-header';
+import { AppDialog } from '@/components/ui/app-dialog';
 
 type User = {
   id: number;
@@ -21,6 +22,9 @@ export const Route = createFileRoute('/_auth/users/')({
 function UsersPage() {
   const [search, setSearch] = useQueryState('search');
   const { data, isLoading } = useGetUsersQuery();
+  const [deleteUser] = useDeleteUserMutation();
+  const [open, setOpen] = useState(false);
+
   const navigate = useNavigate();
 
   const filteredData = useMemo(() => {
@@ -34,6 +38,12 @@ function UsersPage() {
         user.email.toLowerCase().includes(term),
     );
   }, [data, search]);
+
+  async function handleCancel(u: User) {
+    deleteUser(u.id).unwrap();
+    setOpen(false);
+    navigate({ to: '/users' });
+  }
 
   return (
     <div className="space-y-6">
@@ -60,12 +70,34 @@ function UsersPage() {
           {
             header: 'Ações',
             accessor: 'id',
-            render: (user) => <UserActions user={user} />,
+            render: (user) => (
+              <RowActions<User>
+                row={user}
+                onView={(u) =>
+                  navigate({ to: '/users/$id', params: { id: String(u.id) } })
+                }
+                onEdit={(u) =>
+                  navigate({
+                    to: '/users/$id/edit',
+                    params: { id: String(u.id) },
+                  })
+                }
+                onDelete={() => setOpen(true)}
+              />
+            ),
           },
         ]}
         pageSize={10}
         data={filteredData ?? []}
         isLoading={isLoading}
+      />
+      <AppDialog
+        open={open}
+        onOpenChange={setOpen}
+        title="Excluir registro"
+        description="Ao excluir, todos os dados do usuário serão perdidos."
+        confirmText="Confirmar"
+        onConfirm={() => handleCancel(filteredData[0])}
       />
     </div>
   );

@@ -10,6 +10,7 @@ type Props<T extends FieldValues> = {
   error?: string;
   placeholder?: string;
   type?: string;
+  width?: 'full' | 'auto';
 };
 
 export function FormInput<T extends FieldValues>({
@@ -19,9 +20,10 @@ export function FormInput<T extends FieldValues>({
   error,
   placeholder,
   type = 'text',
+  width = 'full',
 }: Props<T>) {
   return (
-    <div className="space-y-1">
+    <div className={cn('space-y-1', width === 'full' && 'w-full')}>
       <Label htmlFor={name}>{label}</Label>
 
       <Input
