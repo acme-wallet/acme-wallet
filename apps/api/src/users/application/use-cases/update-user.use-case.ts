@@ -6,7 +6,7 @@ import { UserNotFoundException } from '../../domain/exceptions/user-not-found.ex
 
 @Injectable()
 export default class UpdateUserUseCase {
-  constructor(private readonly userRepository: IUserRepository) { }
+  constructor(private readonly userRepository: IUserRepository) {}
 
   async execute(input: UpdateUserInput): Promise<UpdateUserOutput> {
     const userExists = await this.userRepository.findById(input.id);
