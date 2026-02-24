@@ -7,4 +7,7 @@ export abstract class IUserRepository {
     email?: string;
     id?: string;
   }): Promise<User[]>;
+  abstract findById(id: string): Promise<User | null>;
+  abstract update(user: User): Promise<void>;
+  abstract delete(id: string): Promise<void>;
 }

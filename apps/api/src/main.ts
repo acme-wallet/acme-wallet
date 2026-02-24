@@ -5,6 +5,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { apiReference } from '@scalar/nestjs-api-reference';
 import { ZodValidationPipe } from 'nestjs-zod';
 import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
+import { DomainExceptionFilter } from './common/filters/domain-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -26,6 +27,7 @@ async function bootstrap() {
   );
 
   app.useGlobalPipes(new ZodValidationPipe());
+  app.useGlobalFilters(new DomainExceptionFilter());
 
   const allowedOrigins = new Set<string>(
     [
