@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { AppDialog } from '@/components/ui/app-dialog';
 import { useState } from 'react';
+import { AsyncState } from '@/components/ui/async-state';
 
 export const Route = createFileRoute('/_auth/users/$id/')({
   component: UserViewPage,
@@ -14,11 +15,8 @@ function UserViewPage() {
   const { id } = Route.useParams();
   const [open, setOpen] = useState(false);
   const { data, isLoading } = useGetUserByIdQuery(id);
-
   const navigate = useNavigate();
-
-  if (isLoading) return <div>Carregando...</div>;
-  if (!data) return <div>Usuário não encontrado</div>;
+  const user = data!
 
   function handleCancel() {
     setOpen(false);
@@ -26,21 +24,25 @@ function UserViewPage() {
   }
 
   return (
-    <>
+    <AsyncState
+      isLoading={isLoading}
+      isEmpty={!data}
+      emptyText="Usuário não encontrado"
+    >
       <div className="w-full">
         <Card>
           <CardHeader>
-            <CardTitle>Visualização</CardTitle>
+            <CardTitle>Visualização do usuário</CardTitle>
           </CardHeader>
           <CardContent className="flex gap-4">
-            <Input value={data.name} disabled />
-            <Input value={data.email} disabled />
+            <Input value={user?.name} disabled />
+            <Input value={user?.email} disabled />
           </CardContent>
           <div className="flex flex-row gap-6 justify-end mr-5">
             <Button
               type="button"
               variant="secondary"
-              className="w-30 hover:cursor-pointer"
+              className="w-[7.5rem] hover:cursor-pointer"
               onClick={() => setOpen(true)}
             >
               Voltar
@@ -56,6 +58,6 @@ function UserViewPage() {
           onConfirm={() => handleCancel()}
         />
       </div>
-    </>
+    </AsyncState>
   );
 }

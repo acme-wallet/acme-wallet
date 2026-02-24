@@ -14,6 +14,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormInput } from '@/components/ui/form-input';
 import { CreateUserSchema } from '@repo/schemas';
+import { AsyncState } from '@/components/ui/async-state';
 
 export const Route = createFileRoute('/_auth/users/$id/edit')({
   component: EditUserPage,
@@ -29,11 +30,9 @@ type FormData = z.infer<typeof CreateUserSchema>;
 function EditUserPage() {
   const { id } = Route.useParams();
   const userId = String(id);
-
   const navigate = useNavigate();
   const { data: user, isLoading } = useGetUserByIdQuery(userId);
   const [updateUser, { isLoading: saving }] = useUpdateUserMutation();
-
   const [open, setOpen] = useState(false);
 
   const {
@@ -45,15 +44,6 @@ function EditUserPage() {
     resolver: zodResolver(CreateUserSchema),
     mode: 'onChange',
   });
-
-  useEffect(() => {
-    if (user) {
-      reset({
-        name: user.name,
-        email: user.email,
-      });
-    }
-  }, [user, reset]);
 
   async function onSubmit(data: FormData) {
     await updateUser({
@@ -69,27 +59,38 @@ function EditUserPage() {
     navigate({ to: '/users' });
   }
 
-  if (isLoading) return <div>Carregando...</div>;
-  if (!user) return <div>Usuário não encontrado</div>;
-
   const canSave = isValid && isDirty && !saving;
 
-  return (
-    <div className="w-full">
-      <Card>
-        <CardHeader>
-          <CardTitle>Editar usuário</CardTitle>
-        </CardHeader>
+  useEffect(() => {
+    if (user) {
+      reset({
+        name: user.name,
+        email: user.email,
+      });
+    }
+  }, [user, reset]);
 
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <CardContent>
-            <div className="flex flex-row w-full gap-5 mb-10">
+  return (
+    <AsyncState
+      isLoading={isLoading}
+      isEmpty={!user}
+      emptyText="Usuário não encontrado"
+    >
+      <div className="w-full">
+        <Card>
+          <CardHeader>
+            <CardTitle>Editação do usuário</CardTitle>
+          </CardHeader>
+
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <CardContent className='flex flex-wor gap-5 mb-10'>
               <FormInput<FormData>
                 label="Nome"
                 name="name"
                 register={register}
                 error={errors.name?.message}
                 placeholder="Nome"
+                width='full'
               />
 
               <FormInput<FormData>
@@ -98,34 +99,36 @@ function EditUserPage() {
                 register={register}
                 error={errors.email?.message}
                 placeholder="Email"
+                width='full'
+
               />
+            </CardContent>
+
+            <div className="flex gap-6 justify-end mr-5 pb-5">
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => setOpen(true)}
+              >
+                Cancelar
+              </Button>
+
+              <Button type="submit" disabled={!canSave}>
+                {saving ? 'Salvando...' : 'Salvar'}
+              </Button>
             </div>
-          </CardContent>
+          </form>
+        </Card>
 
-          <div className="flex gap-6 justify-end mr-5 pb-5">
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={() => setOpen(true)}
-            >
-              Cancelar
-            </Button>
-
-            <Button type="submit" disabled={!canSave}>
-              {saving ? 'Salvando...' : 'Salvar'}
-            </Button>
-          </div>
-        </form>
-      </Card>
-
-      <AppDialog
-        open={open}
-        onOpenChange={setOpen}
-        title="Cancelar edição?"
-        description="Tem certeza que deseja cancelar a edição? As alterações não salvas serão perdidas."
-        confirmText="Sim"
-        onConfirm={handleCancel}
-      />
-    </div>
+        <AppDialog
+          open={open}
+          onOpenChange={setOpen}
+          title="Cancelar edição?"
+          description="Tem certeza que deseja cancelar a edição? As alterações não salvas serão perdidas."
+          confirmText="Sim"
+          onConfirm={handleCancel}
+        />
+      </div>
+    </AsyncState>
   );
 }

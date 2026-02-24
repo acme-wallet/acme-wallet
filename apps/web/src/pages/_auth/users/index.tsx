@@ -24,6 +24,7 @@ function UsersPage() {
   const { data, isLoading } = useGetUsersQuery();
   const [deleteUser] = useDeleteUserMutation();
   const [open, setOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState<User | null>(null);
 
   const navigate = useNavigate();
 
@@ -39,10 +40,27 @@ function UsersPage() {
     );
   }, [data, search]);
 
-  async function handleCancel(u: User) {
-    deleteUser(u.id).unwrap();
-    setOpen(false);
-    navigate({ to: '/users' });
+  async function handleDeleteConfirm() {
+    if (userToDelete) {
+      await deleteUser(userToDelete.id).unwrap();
+      setOpen(false);
+      setUserToDelete(null);
+      navigate({ to: '/users' });
+    }
+  }
+
+  async function handleView(user: User) {
+    navigate({
+      to: '/users/$id',
+      params: { id: String(user.id) },
+    });
+  }
+
+  async function handleEdit(user: User) {
+    navigate({
+      to: '/users/$id/edit',
+      params: { id: String(user.id) },
+    });
   }
 
   return (
@@ -74,15 +92,15 @@ function UsersPage() {
               <RowActions<User>
                 row={user}
                 onView={(u) =>
-                  navigate({ to: '/users/$id', params: { id: String(u.id) } })
+                  handleView(u)
                 }
                 onEdit={(u) =>
-                  navigate({
-                    to: '/users/$id/edit',
-                    params: { id: String(u.id) },
-                  })
+                  handleEdit(u)
                 }
-                onDelete={() => setOpen(true)}
+                onDelete={(u) => {
+                  setUserToDelete(u);
+                  setOpen(true);
+                }}
               />
             ),
           },
@@ -97,7 +115,7 @@ function UsersPage() {
         title="Excluir registro"
         description="Ao excluir, todos os dados do usuário serão perdidos."
         confirmText="Confirmar"
-        onConfirm={() => handleCancel(filteredData[0])}
+        onConfirm={handleDeleteConfirm}
       />
     </div>
   );
