@@ -152,17 +152,14 @@ describe('Users HTTP API', () => {
         id: validId,
         name: 'Leandro',
         email: 'leandro@email.com',
-        createdAt: new Date(),
+        createdAt: new Date().toISOString(),
       };
       getUserByIdUseCase.execute.mockResolvedValue(user);
 
       const response = await request(server).get(`/users/${validId}`);
 
       expect(response.statusCode).toBe(200);
-      expect(response.body).toEqual({
-        ...user,
-        createdAt: user.createdAt.toISOString(),
-      });
+      expect(response.body).toEqual(user);
     });
 
     it('should return 400 when id is not a uuid', async () => {
