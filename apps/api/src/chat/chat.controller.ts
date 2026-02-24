@@ -1,12 +1,7 @@
 import { Body, Controller, Post, Res, HttpCode } from '@nestjs/common';
 import type { Response } from 'express';
 import { ChatService } from './chat.service';
-
-class ChatStreamDto {
-  message!: string;
-  systemPrompt?: string;
-  model?: string;
-}
+import { ChatStreamInput } from './dto/chat-stream-input.dto';
 
 @Controller('chat')
 export class ChatController {
@@ -14,7 +9,7 @@ export class ChatController {
 
   @Post('stream')
   @HttpCode(200)
-  async stream(@Body() dto: ChatStreamDto, @Res() res: Response) {
+  async stream(@Body() dto: ChatStreamInput, @Res() res: Response) {
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');

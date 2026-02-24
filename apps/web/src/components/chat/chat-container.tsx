@@ -2,14 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { ChatMessage, type Message } from './chat-message';
 import { PromptInput } from './prompt-input';
 import { SystemPromptConfig, type ModelOption } from './system-prompt-config';
-
-const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000';
-
-type StreamEvent =
-  | { type: 'text_delta'; delta: string }
-  | { type: 'reasoning_delta'; delta: string }
-  | { type: 'done' }
-  | { type: 'error'; message: string };
+import { useLazyStreamChatQuery } from '../../store/services/api';
 
 export function ChatContainer() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -22,11 +15,38 @@ export function ChatContainer() {
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const assistantIdRef = useRef<string | null>(null);
 
-  // Auto-scroll to bottom on new content
+  const [triggerStream, { data: streamData }] = useLazyStreamChatQuery();
+
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
   }, [messages]);
+
+  useEffect(() => {
+    const id = assistantIdRef.current;
+    if (!id || !streamData) return;
+
+    setMessages((prev) =>
+      prev.map((m) =>
+        m.id === id
+          ? {
+              ...m,
+              content: streamData.error
+                ? `⚠️ Erro: ${streamData.error}`
+                : streamData.content,
+              reasoning: streamData.reasoning,
+              isStreaming: !streamData.done,
+            }
+          : m,
+      ),
+    );
+
+    if (streamData.done) {
+      setIsStreaming(false);
+      assistantIdRef.current = null;
+    }
+  }, [streamData]);
 
   const sendMessage = useCallback(async () => {
     const trimmed = input.trim();
@@ -39,6 +59,8 @@ export function ChatContainer() {
     };
 
     const assistantId = crypto.randomUUID();
+    assistantIdRef.current = assistantId;
+
     const assistantMsg: Message = {
       id: assistantId,
       role: 'assistant',
@@ -51,100 +73,11 @@ export function ChatContainer() {
     setInput('');
     setIsStreaming(true);
 
-    try {
-      const response = await fetch(`${API_URL}/chat/stream`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: trimmed,
-          systemPrompt,
-          model,
-        }),
-      });
-
-      if (!response.ok || !response.body) {
-        throw new Error(`HTTP error: ${response.status}`);
-      }
-
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = '';
-
-      while (true) {
-        const { value, done } = await reader.read();
-        if (done) break;
-
-        buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split('\n');
-        buffer = lines.pop() ?? '';
-
-        for (const line of lines) {
-          if (!line.startsWith('data: ')) continue;
-          const raw = line.slice(6).trim();
-          if (!raw) continue;
-
-          let event: StreamEvent;
-          try {
-            event = JSON.parse(raw) as StreamEvent;
-          } catch {
-            continue;
-          }
-
-          if (event.type === 'text_delta') {
-            setMessages((prev) =>
-              prev.map((m) =>
-                m.id === assistantId
-                  ? { ...m, content: m.content + event.delta }
-                  : m,
-              ),
-            );
-          } else if (event.type === 'reasoning_delta') {
-            setMessages((prev) =>
-              prev.map((m) =>
-                m.id === assistantId
-                  ? { ...m, reasoning: (m.reasoning ?? '') + event.delta }
-                  : m,
-              ),
-            );
-          } else if (event.type === 'done' || event.type === 'error') {
-            if (event.type === 'error') {
-              setMessages((prev) =>
-                prev.map((m) =>
-                  m.id === assistantId
-                    ? { ...m, content: `⚠️ Erro: ${event.message}` }
-                    : m,
-                ),
-              );
-            }
-            break;
-          }
-        }
-      }
-    } catch {
-      setMessages((prev) =>
-        prev.map((m) =>
-          m.id === assistantId
-            ? {
-                ...m,
-                content:
-                  '⚠️ Falha ao conectar ao servidor. Verifique se a API está rodando.',
-              }
-            : m,
-        ),
-      );
-    } finally {
-      setMessages((prev) =>
-        prev.map((m) =>
-          m.id === assistantId ? { ...m, isStreaming: false } : m,
-        ),
-      );
-      setIsStreaming(false);
-    }
-  }, [input, isStreaming, systemPrompt, model]);
+    triggerStream({ message: trimmed, systemPrompt, model });
+  }, [input, isStreaming, systemPrompt, model, triggerStream]);
 
   return (
     <div className="flex h-full flex-col gap-3">
-      {/* Settings panel */}
       <SystemPromptConfig
         systemPrompt={systemPrompt}
         onSystemPromptChange={setSystemPrompt}
@@ -152,7 +85,6 @@ export function ChatContainer() {
         onModelChange={setModel}
       />
 
-      {/* Messages area */}
       <div
         ref={scrollContainerRef}
         className="flex-1 overflow-y-auto rounded-xl border border-border bg-background"
@@ -192,7 +124,6 @@ export function ChatContainer() {
         )}
       </div>
 
-      {/* Input area */}
       <PromptInput
         value={input}
         onChange={setInput}
