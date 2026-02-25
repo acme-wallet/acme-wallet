@@ -1,2 +1,5 @@
-pnpm lint
-pnpm turbo typecheck --filter="...[HEAD]"
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+pnpm -w turbo lint --filter="...[HEAD]"
+pnpm -w turbo typecheck --filter="...[HEAD]"
