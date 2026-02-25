@@ -12,11 +12,7 @@ export function Header({ onOpenChat, onClickProfile, onToggleSidebar }: Props) {
     <header className="w-full h-14 border-b flex items-center px-4 bg-background">
       <HeaderIconButton icon={Menu} label="Menu" onClick={onToggleSidebar} />
       <div className="ml-auto rounded-4xl flex items-center gap-1">
-        <HeaderIconButton
-          icon={Stars}
-          label="IA"
-          onClick={onOpenChat}
-        />
+        <HeaderIconButton icon={Stars} label="IA" onClick={onOpenChat} />
         <HeaderIconButton
           icon={UserRound}
           label="Perfil"
