@@ -12,7 +12,7 @@ export function HeaderIconButton({
   icon: Icon,
   onClick,
   label,
-  className
+  className,
 }: HeaderIconButtonProps) {
   return (
     <Button
@@ -23,7 +23,7 @@ export function HeaderIconButton({
       title={label}
       className={className}
     >
-      <Icon className="w-6 h-6"/>
+      <Icon className="w-6 h-6" />
     </Button>
   );
 }
