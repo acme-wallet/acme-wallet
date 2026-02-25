@@ -2,16 +2,16 @@
 
 ## Onde alterar
 
-- `apps/api/src/<context>/application/use-cases/<action>.use-case.ts`
-- `apps/api/src/<context>/application/use-cases/<action>.use-case.spec.ts`
-- `apps/api/src/<context>/<context>.module.ts`
+- `apps/api/src/<context_plural>/application/use-cases/<action>.use-case.ts`
+- `apps/api/src/<context_plural>/application/use-cases/<action>.use-case.spec.ts`
+- `apps/api/src/<context_plural>/<context_plural>.module.ts`
 
 ## Padrão
 
 - `@Injectable()`
 - API pública única: `execute(input)`
 - `Input/Output` vindos de `@repo/schemas`
-- Dependência por contrato (`I<Context>Repository`)
+- Dependência por contrato (`I<EntityName>Repository`)
 
 ## TDD (vertical)
 

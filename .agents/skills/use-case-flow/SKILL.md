@@ -1,6 +1,6 @@
 ---
 name: use-case-flow
-description: Implementar fluxo completo de caso de uso no apps/api (Schema, UseCase, Repository e Controller) com TDD e testes unitários por camada.
+description: Implementar fluxo completo de caso de uso no apps/api (Schema, DTO, UseCase, Repository e Controller) com TDD e testes unitários por camada.
 ---
 
 # Use Case Flow
@@ -8,9 +8,10 @@ description: Implementar fluxo completo de caso de uso no apps/api (Schema, UseC
 Use esta skill para criar ou evoluir uma operação completa no `apps/api`, seguindo o fluxo do projeto:
 
 1. Schema
-2. Use Case
-3. Repository
-4. Controller
+2. DTO
+3. Use Case
+4. Repository
+5. Controller
 
 Use em conjunto com `.agents/skills/tdd/SKILL.md`.
 
@@ -23,18 +24,19 @@ Use em conjunto com `.agents/skills/tdd/SKILL.md`.
 ## Onde está cada etapa
 
 - Schema: [schema.md](schema.md)
+- DTO: [dto.md](dto.md)
 - Use Case: [use-case.md](use-case.md)
 - Repository: [repository.md](repository.md)
 - Controller: [controller.md](controller.md)
 
 ## Mapeamento do projeto
 
-- Use cases: `apps/api/src/<context>/application/use-cases/*.use-case.ts`
-- Controllers: `apps/api/src/<context>/interfaces/http/*.controller.ts`
-- Repositories: `apps/api/src/<context>/infra/repositories/*-prisma.repository.ts`
-- Contratos de repositório: `apps/api/src/<context>/domain/repositories/*.repository.ts`
-- Schemas zod: `packages/schemas/<context>/*.schema.ts`
-- DTOs HTTP: `apps/api/src/<context>/interfaces/dto/**`
+- Use cases: `apps/api/src/<context_plural>/application/use-cases/*.use-case.ts`
+- Controllers: `apps/api/src/<context_plural>/interfaces/http/*.controller.ts`
+- Repositories: `apps/api/src/<context_plural>/infra/repositories/*-prisma.repository.ts`
+- Contratos de repositório: `apps/api/src/<context_plural>/domain/repositories/*.repository.ts`
+- Schemas zod: `packages/schemas/<entity_name>/*.schema.ts`
+- DTOs HTTP: `apps/api/src/<context_plural>/interfaces/dto/**`
 
 ## Regras globais
 
@@ -55,7 +57,7 @@ Use em conjunto com `.agents/skills/tdd/SKILL.md`.
 - [ ] Módulo Nest atualizado (`providers` e binding `provide/useClass`)
 - [ ] Teste unitário de schema
 - [ ] Teste unitário de use case
-- [ ] Teste unitário de repository
+- [ ] Teste unitário de repositório
 - [ ] Teste unitário de controller
 - [ ] Validação final executada com `pnpm build`
 - [ ] Validação final executada com `pnpm test`

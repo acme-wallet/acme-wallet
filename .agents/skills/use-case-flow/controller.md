@@ -2,14 +2,14 @@
 
 ## Onde alterar
 
-- Controller: `apps/api/src/<context>/interfaces/http/*.controller.ts`
-- DTOs: `apps/api/src/<context>/interfaces/dto/**`
-- Módulo: `apps/api/src/<context>/<context>.module.ts`
+- Controller: `apps/api/src/<context_plural>/interfaces/http/*.controller.ts`
+- DTOs: `apps/api/src/<context_plural>/interfaces/dto/**`
+- Módulo: `apps/api/src/<context_plural>/<context_plural>.module.ts`
 
 ## Padrão
 
 - DTO request/response com `createZodDto(...)` usando `@repo/schemas`
-- Controller apenas faz map HTTP -> input do use case
+- Controller apenas mapeia de HTTP para o input do use case
 - Chamada para `useCase.execute(...)`
 - `ParseUUIDPipe` para `:id` quando aplicável
 

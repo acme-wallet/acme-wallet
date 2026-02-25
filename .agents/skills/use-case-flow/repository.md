@@ -2,15 +2,15 @@
 
 ## Onde alterar
 
-- Contrato: `apps/api/src/<context>/domain/repositories/*.repository.ts`
-- Implementação: `apps/api/src/<context>/infra/repositories/*-prisma.repository.ts`
-- Módulo: `apps/api/src/<context>/<context>.module.ts`
+- Contrato: `apps/api/src/<context_plural>/domain/repositories/*.repository.ts`
+- Implementação: `apps/api/src/<context_plural>/infra/repositories/*-prisma.repository.ts`
+- Módulo: `apps/api/src/<context_plural>/<context_plural>.module.ts`
 
 ## Padrão
 
 - Contrato abstrato (`abstract class I...Repository`)
 - Implementação com `@Injectable()` e `PrismaService`
-- Mapping para entidade com `Entity.restore(...)` quando aplicável
+- Mapeamento para entidade com `Entity.restore(...)` quando aplicável
 
 ## TDD (vertical)
 
