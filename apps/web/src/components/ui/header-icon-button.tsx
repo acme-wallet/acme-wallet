@@ -12,7 +12,6 @@ export function HeaderIconButton({
   icon: Icon,
   onClick,
   label,
-  className,
 }: HeaderIconButtonProps) {
   return (
     <Button
@@ -21,7 +20,6 @@ export function HeaderIconButton({
       onClick={onClick}
       aria-label={label}
       title={label}
-      className={className}
     >
       <Icon className="w-6 h-6" />
     </Button>
