@@ -81,6 +81,27 @@ describe('Chat HTTP API', () => {
       expect(response.text).toContain('data: {"type":"done"}');
     });
 
+    it('should write reasoning_delta and text_delta SSE events', async () => {
+      chatStreamUseCase.execute.mockReturnValue(
+        makeGenerator([
+          { type: 'reasoning_delta', delta: 'thinking...' },
+          { type: 'text_delta', delta: 'answer' },
+          { type: 'done' },
+        ]),
+      );
+
+      const response = await request(server)
+        .post('/chat/stream')
+        .send({ message: 'Why?' });
+
+      expect(response.text).toContain(
+        'data: {"type":"reasoning_delta","delta":"thinking..."}',
+      );
+      expect(response.text).toContain(
+        'data: {"type":"text_delta","delta":"answer"}',
+      );
+    });
+
     it('should stop after error event', async () => {
       chatStreamUseCase.execute.mockReturnValue(
         makeGenerator([
@@ -111,21 +132,21 @@ describe('Chat HTTP API', () => {
       await request(server).post('/chat/stream').send({
         message: 'Hi',
         systemPrompt: 'Be concise.',
-        model: 'gpt-4o',
+        model: 'qwen/qwen3-32b',
       });
 
       expect(chatStreamUseCase.execute).toHaveBeenCalledWith(
         expect.objectContaining({
           message: 'Hi',
           systemPrompt: 'Be concise.',
-          model: 'gpt-4o',
+          model: 'qwen/qwen3-32b',
         }),
       );
     });
   });
 });
 
-describe('Chat HTTP API — with OllamaAdapter', () => {
+describe('Chat HTTP API — with OllamaAdapter (stub / not implemented)', () => {
   let app: INestApplication;
   let server: Server;
 
