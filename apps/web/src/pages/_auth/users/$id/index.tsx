@@ -16,7 +16,7 @@ function UserViewPage() {
   const [open, setOpen] = useState(false);
   const { data, isLoading } = useGetUserByIdQuery(id);
   const navigate = useNavigate();
-  const user = data!
+  const user = data!;
 
   function handleCancel() {
     setOpen(false);
