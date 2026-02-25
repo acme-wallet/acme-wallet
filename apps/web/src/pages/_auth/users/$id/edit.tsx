@@ -83,14 +83,14 @@ function EditUserPage() {
           </CardHeader>
 
           <form onSubmit={handleSubmit(onSubmit)}>
-            <CardContent className='flex flex-wor gap-5 mb-10'>
+            <CardContent className="flex flex-wor gap-5 mb-10">
               <FormInput<FormData>
                 label="Nome"
                 name="name"
                 register={register}
                 error={errors.name?.message}
                 placeholder="Nome"
-                width='full'
+                width="full"
               />
 
               <FormInput<FormData>
@@ -99,8 +99,7 @@ function EditUserPage() {
                 register={register}
                 error={errors.email?.message}
                 placeholder="Email"
-                width='full'
-
+                width="full"
               />
             </CardContent>
 
