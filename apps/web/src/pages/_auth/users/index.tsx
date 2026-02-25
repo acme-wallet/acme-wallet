@@ -91,12 +91,8 @@ function UsersPage() {
             render: (user) => (
               <RowActions<User>
                 row={user}
-                onView={(u) =>
-                  handleView(u)
-                }
-                onEdit={(u) =>
-                  handleEdit(u)
-                }
+                onView={(u) => handleView(u)}
+                onEdit={(u) => handleEdit(u)}
                 onDelete={(u) => {
                   setUserToDelete(u);
                   setOpen(true);
