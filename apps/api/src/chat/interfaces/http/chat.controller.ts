@@ -1,11 +1,11 @@
 import { Body, Controller, HttpCode, Post, Res } from '@nestjs/common';
 import type { Response } from 'express';
-import { ChatService } from './chat.service';
-import { ChatStreamInput } from './dto/chat-stream-input.dto';
+import { ChatStreamInput } from '../../interfaces/dto/chat-stream-input.dto';
+import { ChatStreamUseCase } from '../../application/use-cases/chat-stream.use-case';
 
 @Controller('chat')
 export class ChatController {
-  constructor(private readonly chatService: ChatService) {}
+  constructor(private readonly chatStreamUseCase: ChatStreamUseCase) {}
 
   @Post('stream')
   @HttpCode(200)
@@ -16,11 +16,7 @@ export class ChatController {
     res.setHeader('X-Accel-Buffering', 'no');
     res.flushHeaders();
 
-    const generator = this.chatService.streamChat(
-      dto.message,
-      dto.systemPrompt,
-      dto.model,
-    );
+    const generator = this.chatStreamUseCase.execute(dto);
 
     for await (const event of generator) {
       res.write(`data: ${JSON.stringify(event)}\n\n`);
