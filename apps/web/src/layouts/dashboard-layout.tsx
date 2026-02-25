@@ -13,7 +13,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       <div className="flex-1 flex flex-col min-w-0">
         <Header
           onToggleSidebar={() => setOpen(!open)}
-          onClickStars={() => setOpenChat(!openChat)}
+          onOpenChat={() => setOpenChat(!openChat)}
         />
 
         <div className="flex-1 flex min-h-0">
