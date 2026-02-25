@@ -1,4 +1,5 @@
-import 'dotenv/config';
+import './env';
+
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
@@ -30,14 +31,9 @@ async function bootstrap() {
   app.useGlobalFilters(new DomainExceptionFilter());
 
   const allowedOrigins = new Set<string>(
-    [
-      process.env.URL_API,
-      process.env.URL_WEB,
-      process.env.FRONTEND_URL,
-      'http://localhost:3000',
-      'http://localhost:5173',
-      'http://127.0.0.1:5173',
-    ].filter((value): value is string => Boolean(value)),
+    [process.env.URL_FRONTEND].filter((value): value is string =>
+      Boolean(value),
+    ),
   );
 
   const corsOptions: CorsOptions = {
