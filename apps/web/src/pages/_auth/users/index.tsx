@@ -2,11 +2,12 @@ import { Input } from '@/components/ui/input';
 import { DataTable } from '@/components/ui/data-table';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { Plus } from 'lucide-react';
-import { useMemo } from 'react';
-import { useGetUsersQuery } from '@/store/services/api';
-import { UserActions } from '@/components/ui/users-action';
+import { useMemo, useState } from 'react';
+import { useDeleteUserMutation, useGetUsersQuery } from '@/store/services/api';
+import { RowActions } from '@/components/ui/users-action';
 import { useQueryState } from 'nuqs';
 import { PageHeader } from '@/components/ui/page-header';
+import { AppDialog } from '@/components/ui/app-dialog';
 
 type User = {
   id: number;
@@ -21,6 +22,10 @@ export const Route = createFileRoute('/_auth/users/')({
 function UsersPage() {
   const [search, setSearch] = useQueryState('search');
   const { data, isLoading } = useGetUsersQuery();
+  const [deleteUser] = useDeleteUserMutation();
+  const [open, setOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState<User | null>(null);
+
   const navigate = useNavigate();
 
   const filteredData = useMemo(() => {
@@ -34,6 +39,29 @@ function UsersPage() {
         user.email.toLowerCase().includes(term),
     );
   }, [data, search]);
+
+  async function handleDeleteConfirm() {
+    if (userToDelete) {
+      await deleteUser(userToDelete.id).unwrap();
+      setOpen(false);
+      setUserToDelete(null);
+      navigate({ to: '/users' });
+    }
+  }
+
+  async function handleView(user: User) {
+    navigate({
+      to: '/users/$id',
+      params: { id: String(user.id) },
+    });
+  }
+
+  async function handleEdit(user: User) {
+    navigate({
+      to: '/users/$id/edit',
+      params: { id: String(user.id) },
+    });
+  }
 
   return (
     <div className="space-y-6">
@@ -60,12 +88,34 @@ function UsersPage() {
           {
             header: 'Ações',
             accessor: 'id',
-            render: (user) => <UserActions user={user} />,
+            render: (user) => (
+              <RowActions<User>
+                row={user}
+                onView={(u) =>
+                  handleView(u)
+                }
+                onEdit={(u) =>
+                  handleEdit(u)
+                }
+                onDelete={(u) => {
+                  setUserToDelete(u);
+                  setOpen(true);
+                }}
+              />
+            ),
           },
         ]}
         pageSize={10}
         data={filteredData ?? []}
         isLoading={isLoading}
+      />
+      <AppDialog
+        open={open}
+        onOpenChange={setOpen}
+        title="Excluir registro"
+        description="Ao excluir, todos os dados do usuário serão perdidos."
+        confirmText="Confirmar"
+        onConfirm={handleDeleteConfirm}
       />
     </div>
   );

@@ -17,6 +17,8 @@ import { Route as AuthUsersIndexRouteImport } from './pages/_auth/users/index'
 import { Route as AuthHomeIndexRouteImport } from './pages/_auth/home/index'
 import { Route as AuthUsersNewRouteImport } from './pages/_auth/users/new'
 import { Route as AuthUsersIdRouteImport } from './pages/_auth/users/$id'
+import { Route as AuthUsersIdIndexRouteImport } from './pages/_auth/users/$id/index'
+import { Route as AuthUsersIdEditRouteImport } from './pages/_auth/users/$id/edit'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/_auth',
@@ -57,24 +59,37 @@ const AuthUsersIdRoute = AuthUsersIdRouteImport.update({
   path: '/users/$id',
   getParentRoute: () => AuthRoute,
 } as any)
+const AuthUsersIdIndexRoute = AuthUsersIdIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthUsersIdRoute,
+} as any)
+const AuthUsersIdEditRoute = AuthUsersIdEditRouteImport.update({
+  id: '/edit',
+  path: '/edit',
+  getParentRoute: () => AuthUsersIdRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login/': typeof LoginIndexRoute
   '/not-found/': typeof NotFoundIndexRoute
-  '/users/$id': typeof AuthUsersIdRoute
+  '/users/$id': typeof AuthUsersIdRouteWithChildren
   '/users/new': typeof AuthUsersNewRoute
   '/home/': typeof AuthHomeIndexRoute
   '/users/': typeof AuthUsersIndexRoute
+  '/users/$id/edit': typeof AuthUsersIdEditRoute
+  '/users/$id/': typeof AuthUsersIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginIndexRoute
   '/not-found': typeof NotFoundIndexRoute
-  '/users/$id': typeof AuthUsersIdRoute
   '/users/new': typeof AuthUsersNewRoute
   '/home': typeof AuthHomeIndexRoute
   '/users': typeof AuthUsersIndexRoute
+  '/users/$id/edit': typeof AuthUsersIdEditRoute
+  '/users/$id': typeof AuthUsersIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -82,10 +97,12 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteWithChildren
   '/login/': typeof LoginIndexRoute
   '/not-found/': typeof NotFoundIndexRoute
-  '/_auth/users/$id': typeof AuthUsersIdRoute
+  '/_auth/users/$id': typeof AuthUsersIdRouteWithChildren
   '/_auth/users/new': typeof AuthUsersNewRoute
   '/_auth/home/': typeof AuthHomeIndexRoute
   '/_auth/users/': typeof AuthUsersIndexRoute
+  '/_auth/users/$id/edit': typeof AuthUsersIdEditRoute
+  '/_auth/users/$id/': typeof AuthUsersIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -97,15 +114,18 @@ export interface FileRouteTypes {
     | '/users/new'
     | '/home/'
     | '/users/'
+    | '/users/$id/edit'
+    | '/users/$id/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/login'
     | '/not-found'
-    | '/users/$id'
     | '/users/new'
     | '/home'
     | '/users'
+    | '/users/$id/edit'
+    | '/users/$id'
   id:
     | '__root__'
     | '/'
@@ -116,6 +136,8 @@ export interface FileRouteTypes {
     | '/_auth/users/new'
     | '/_auth/home/'
     | '/_auth/users/'
+    | '/_auth/users/$id/edit'
+    | '/_auth/users/$id/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -183,18 +205,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthUsersIdRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/_auth/users/$id/': {
+      id: '/_auth/users/$id/'
+      path: '/'
+      fullPath: '/users/$id/'
+      preLoaderRoute: typeof AuthUsersIdIndexRouteImport
+      parentRoute: typeof AuthUsersIdRoute
+    }
+    '/_auth/users/$id/edit': {
+      id: '/_auth/users/$id/edit'
+      path: '/edit'
+      fullPath: '/users/$id/edit'
+      preLoaderRoute: typeof AuthUsersIdEditRouteImport
+      parentRoute: typeof AuthUsersIdRoute
+    }
   }
 }
 
+interface AuthUsersIdRouteChildren {
+  AuthUsersIdEditRoute: typeof AuthUsersIdEditRoute
+  AuthUsersIdIndexRoute: typeof AuthUsersIdIndexRoute
+}
+
+const AuthUsersIdRouteChildren: AuthUsersIdRouteChildren = {
+  AuthUsersIdEditRoute: AuthUsersIdEditRoute,
+  AuthUsersIdIndexRoute: AuthUsersIdIndexRoute,
+}
+
+const AuthUsersIdRouteWithChildren = AuthUsersIdRoute._addFileChildren(
+  AuthUsersIdRouteChildren,
+)
+
 interface AuthRouteChildren {
-  AuthUsersIdRoute: typeof AuthUsersIdRoute
+  AuthUsersIdRoute: typeof AuthUsersIdRouteWithChildren
   AuthUsersNewRoute: typeof AuthUsersNewRoute
   AuthHomeIndexRoute: typeof AuthHomeIndexRoute
   AuthUsersIndexRoute: typeof AuthUsersIndexRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
-  AuthUsersIdRoute: AuthUsersIdRoute,
+  AuthUsersIdRoute: AuthUsersIdRouteWithChildren,
   AuthUsersNewRoute: AuthUsersNewRoute,
   AuthHomeIndexRoute: AuthHomeIndexRoute,
   AuthUsersIndexRoute: AuthUsersIndexRoute,
