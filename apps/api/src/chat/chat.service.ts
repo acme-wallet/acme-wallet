@@ -1,11 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Agent, run } from '@openai/agents';
-
-export type ChatStreamEvent =
-  | { type: 'text_delta'; delta: string }
-  | { type: 'reasoning_delta'; delta: string }
-  | { type: 'done' }
-  | { type: 'error'; message: string };
+import type { ChatStreamEvent } from '@repo/schemas';
 
 @Injectable()
 export class ChatService {
@@ -47,7 +42,10 @@ export class ChatService {
     } catch (error) {
       yield {
         type: 'error',
-        message: error instanceof Error ? error.message : 'Unknown error',
+        message:
+          error instanceof Error
+            ? error.message
+            : 'Unknown error occurred during chat streaming.',
       };
     }
   }

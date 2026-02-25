@@ -5,3 +5,4 @@ export * from './user/update-user.schema.js';
 export * from './user/delete-user.schema.js';
 export * from './health/health-response.schema.js';
 export * from './chat/chat-stream.schema.js';
+export * from './chat/chat-stream-result.schema.js';

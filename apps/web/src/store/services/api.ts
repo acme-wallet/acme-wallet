@@ -1,6 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type {
+  ChatStreamEvent,
   ChatStreamInput,
+  ChatStreamResult,
   CreateUserInput,
   CreateUserOutput,
 } from '@repo/schemas';
@@ -128,10 +130,16 @@ export const api = createApi({
               const raw = line.slice(6).trim();
               if (!raw) continue;
 
-              let event: StreamEvent;
+              let event: ChatStreamEvent;
               try {
-                event = JSON.parse(raw) as StreamEvent;
-              } catch {
+                event = JSON.parse(raw) as ChatStreamEvent;
+              } catch (parseError) {
+                console.error(
+                  'Failed to parse stream event JSON on client:',
+                  parseError,
+                  'Raw data:',
+                  raw,
+                );
                 continue;
               }
 
