@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { Bot, SendHorizontal, Sparkles, UserRound, X } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 type Props = {
   open: boolean;
@@ -61,7 +62,7 @@ export function SidebarChat({ open, onClose }: Props) {
 
     window.setTimeout(() => {
       const assistantMessage: ChatMessage = {
-        id: `assistant-${Date.now()}`,
+        id: `assistant-${crypto.randomUUID()}`,
         role: 'assistant',
         content: buildAssistantReply(trimmedPrompt),
       };
@@ -81,13 +82,11 @@ export function SidebarChat({ open, onClose }: Props) {
       )}
 
       <aside
-        className={`
-                    fixed top-0 right-0 z-50 h-screen w-full max-w-[420px] bg-card border-l transition-transform duration-300
-                    ${open ? 'translate-x-0' : 'translate-x-full'}
-                    lg:relative lg:top-auto lg:right-auto lg:z-auto lg:h-full lg:translate-x-0 lg:transition-[width] lg:duration-300
-                    ${open ? 'lg:w-[420px]' : 'lg:w-0'}
-                    lg:max-w-none lg:overflow-hidden
-                `}
+        className={cn(
+          'fixed top-0 right-0 z-50 h-screen w-full max-w-[420px] bg-card border-l transition-transform duration-300',
+          'lg:relative lg:top-auto lg:right-auto lg:z-auto lg:h-full lg:translate-x-0 lg:transition-[width] lg:duration-300 lg:max-w-none lg:overflow-hidden',
+          open ? 'translate-x-0 lg:w-[420px]' : 'translate-x-full lg:w-0',
+        )}
       >
         <div className="h-full flex flex-col bg-background">
           <header className="flex items-center justify-between gap-3 border-b px-4 py-3">
@@ -124,14 +123,12 @@ export function SidebarChat({ open, onClose }: Props) {
                 )}
 
                 <div
-                  className={`
-                    max-w-[85%] rounded-2xl px-3 py-2 text-sm whitespace-pre-line
-                    ${
-                      message.role === 'user'
-                        ? 'bg-primary text-primary-foreground rounded-br-md'
-                        : 'bg-muted text-foreground rounded-bl-md'
-                    }
-                  `}
+                  className={cn(
+                    'max-w-[85%] rounded-2xl px-3 py-2 text-sm whitespace-pre-line',
+                    message.role === 'user'
+                      ? 'bg-primary text-primary-foreground rounded-br-md'
+                      : 'bg-muted text-foreground rounded-bl-md',
+                  )}
                 >
                   {message.content}
                 </div>

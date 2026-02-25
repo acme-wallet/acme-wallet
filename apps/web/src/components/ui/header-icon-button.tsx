@@ -12,7 +12,6 @@ export function HeaderIconButton({
   icon: Icon,
   onClick,
   label,
-  className,
 }: HeaderIconButtonProps) {
   return (
     <Button
@@ -21,9 +20,9 @@ export function HeaderIconButton({
       onClick={onClick}
       aria-label={label}
       title={label}
-      className={['hover:cursor-pointer', className].filter(Boolean).join(' ')}
+      className="hover:cursor-pointer"
     >
-      <Icon className="w-20 h-20 hover:bg-gray-200 hover:rounded-full" />
+      <Icon className="w-6 h-6 hover:bg-gray-200 hover:rounded-full" />
     </Button>
   );
 }
