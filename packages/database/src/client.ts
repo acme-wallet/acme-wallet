@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
+require('dotenv').config({ path: require('node:path').resolve(__dirname, '../../../../.env') });
+/* eslint-enable @typescript-eslint/no-require-imports */
 import { PrismaClient } from "../generated/prisma/client";
 import { PrismaPg } from '@prisma/adapter-pg';
 
