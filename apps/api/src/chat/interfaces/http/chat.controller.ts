@@ -16,16 +16,22 @@ export class ChatController {
     res.setHeader('X-Accel-Buffering', 'no');
     res.flushHeaders();
 
-    const generator = this.chatStreamUseCase.execute(dto);
+    try {
+      const generator = this.chatStreamUseCase.execute(dto);
 
-    for await (const event of generator) {
-      res.write(`data: ${JSON.stringify(event)}\n\n`);
+      for await (const event of generator) {
+        res.write(`data: ${JSON.stringify(event)}\n\n`);
 
-      if (event.type === 'done' || event.type === 'error') {
-        break;
+        if (event.type === 'done' || event.type === 'error') {
+          break;
+        }
       }
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : 'Internal server error on stream';
+      res.write(`data: ${JSON.stringify({ type: 'error', message })}\n\n`);
+    } finally {
+      res.end();
     }
-
-    res.end();
   }
 }
