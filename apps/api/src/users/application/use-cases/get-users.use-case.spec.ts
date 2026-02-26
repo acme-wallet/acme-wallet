@@ -1,7 +1,7 @@
-import GetUsersUseCase from './get-users.use-case';
 import { IUserRepository } from 'src/users/domain/repositories/user.repository';
-import { User } from '../../domain/entities/user.entity';
 import { mock, MockProxy } from 'vitest-mock-extended';
+import { User } from '../../domain/entities/user.entity';
+import GetUsersUseCase from './get-users.use-case';
 
 describe('Get Users Use Case', () => {
   let userRepository: MockProxy<IUserRepository>;
@@ -21,6 +21,8 @@ describe('Get Users Use Case', () => {
 
     expect(result).toHaveLength(1);
     expect(result[0].name).toBe('Leandro');
+    expect(result[0].email).toBe('leandro@email.com');
+    expect(result[0].id).toBe(users[0].id);
     expect(userRepository.findAll).toHaveBeenCalledWith({});
     expect(userRepository.findAll).toHaveBeenCalledTimes(1);
   });
