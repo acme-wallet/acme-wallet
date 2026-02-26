@@ -54,7 +54,7 @@ async function bootstrap() {
         return callback(null, true);
       }
 
-      if (configService.get('NODE_ENV', { infer: true }) !== 'production') {
+      if (configService.get('NODE_ENV', { infer: true }) === 'development') {
         return callback(null, true);
       }
 
