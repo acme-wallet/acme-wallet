@@ -27,6 +27,7 @@ describe('HealthController (integration)', () => {
       {
         imports: [
           ConfigModule.forRoot({
+            isGlobal: true,
             validate: (config) => envSchema.parse(config),
           }),
           HealthModule,
