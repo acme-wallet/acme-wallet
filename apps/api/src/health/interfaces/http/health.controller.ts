@@ -15,6 +15,9 @@ import { Env } from '../../../common/configs/env.schema';
 @ApiTags('health')
 @Controller('health')
 export class HealthController {
+  private readonly memoryHeapThreshold: number;
+  private readonly diskStorageThreshold: number;
+
   constructor(
     private health: HealthCheckService,
     private prisma: PrismaHealthIndicator,
@@ -22,7 +25,16 @@ export class HealthController {
     private memory: MemoryHealthIndicator,
     private disk: DiskHealthIndicator,
     private configService: ConfigService<Env, true>,
-  ) {}
+  ) {
+    this.memoryHeapThreshold = this.configService.get(
+      'MEMORY_HEAP_THRESHOLD_BYTES',
+      { infer: true },
+    );
+    this.diskStorageThreshold = this.configService.get(
+      'DISK_STORAGE_THRESHOLD_PERCENT',
+      { infer: true },
+    );
+  }
 
   @Get()
   @HealthCheck()
@@ -31,22 +43,13 @@ export class HealthController {
     type: HealthResponseDto,
   })
   check(): Promise<HealthResponseDto> {
-    const memoryHeapThreshold = this.configService.get(
-      'MEMORY_HEAP_THRESHOLD_BYTES',
-      { infer: true },
-    );
-    const diskStorageThreshold = this.configService.get(
-      'DISK_STORAGE_THRESHOLD_PERCENT',
-      { infer: true },
-    );
-
     return this.health.check([
       () => this.prisma.pingCheck('database', this.db.prisma),
-      () => this.memory.checkHeap('memory_heap', memoryHeapThreshold),
+      () => this.memory.checkHeap('memory_heap', this.memoryHeapThreshold),
       () =>
         this.disk.checkStorage('storage', {
           path: '/',
-          thresholdPercent: diskStorageThreshold,
+          thresholdPercent: this.diskStorageThreshold,
         }),
     ]);
   }
