@@ -9,6 +9,8 @@ import {
   PrismaHealthIndicator,
   HealthCheckError,
 } from '@nestjs/terminus';
+import { ConfigModule } from '@nestjs/config';
+import { envSchema } from 'src/common/configs/env.schema';
 
 describe('HealthController (integration)', () => {
   let prismaClient: PrismaClient;
@@ -23,7 +25,12 @@ describe('HealthController (integration)', () => {
     const { module, prismaClient: client } = await createTestingModule(
       databaseUrl,
       {
-        imports: [HealthModule],
+        imports: [
+          ConfigModule.forRoot({
+            validate: (config) => envSchema.parse(config),
+          }),
+          HealthModule,
+        ],
       },
     );
 
