@@ -1,3 +1,5 @@
 export interface IUseCase<TInput, TOutput> {
-  execute(input: TInput): Promise<TOutput>;
+  execute(
+    ...args: TInput extends void ? [] : [TInput]
+  ): Promise<TOutput> | TOutput;
 }
