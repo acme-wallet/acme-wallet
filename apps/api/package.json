@@ -9,7 +9,7 @@
     "build": "nest build",
     "format": "prettier --write .",
     "start": "nest start",
-    "dev": "nest start --watch",
+    "dev": "nest start --watch --debug",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",

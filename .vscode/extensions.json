@@ -1,0 +1,13 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "Prisma.prisma",
+    "vitest.explorer",
+    "orta.vscode-jest",
+    "yoavbls.pretty-ts-errors",
+    "ms-azuretools.vscode-docker",
+    "bradlc.vscode-tailwindcss",
+    "github.vscode-pull-request-github"
+  ]
+}
