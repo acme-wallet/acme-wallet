@@ -1,32 +1,26 @@
-// @ts-check
 import { nestjs } from '@acme/lint-config';
 
 export default [
   ...nestjs(import.meta.dirname),
   {
-    files: ['**/*.ts'],
-    rules: {
-      'no-restricted-syntax': [
-        'error',
-        {
-          selector:
-            'ClassDeclaration[id.name=/UseCase$/]:not(:has(TSClassImplements > Identifier[name="IUseCase"]))',
-          message:
-            'Classes with the sufix name UseCase must implement the IUseCase interface.',
-        },
-      ],
-    },
-  },
-  {
+    // Rules for .use-case.ts files.
     files: ['**/*.use-case.ts'],
     rules: {
       'no-restricted-syntax': [
         'error',
+        // 1. Exported classes must have the "UseCase" suffix in their name.
         {
           selector:
-            'ClassDeclaration:not(:has(TSClassImplements > Identifier[name="IUseCase"]))',
+            ':matches(ExportDefaultDeclaration, ExportNamedDeclaration) > ClassDeclaration:not([id.name=/UseCase$/])',
           message:
-            'Classes within a .use-case.ts file must implement the IUseCase interface.',
+            'Exported classes in a .use-case.ts file must have the UseCase suffix.',
+        },
+        // 2. Exported classes must implement the IUseCase interface.
+        {
+          selector:
+            ':matches(ExportDefaultDeclaration, ExportNamedDeclaration) > ClassDeclaration:not(:has(TSClassImplements > Identifier[name="IUseCase"]))',
+          message:
+            'Exported classes in a .use-case.ts file must implement the IUseCase interface.',
         },
       ],
     },
