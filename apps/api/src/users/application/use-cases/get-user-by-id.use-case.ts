@@ -1,17 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { GetUserByIdInput, GetUserByIdOutput } from '@repo/schemas';
-import { IUseCase } from '../../../common/use-case.interface';
-import { UserNotFoundException } from '../../domain/exceptions/user-not-found.exception';
-import { IUserRepository } from '../../domain/repositories/user.repository';
+import { IUseCase } from 'src/common/use-case.interface';
+import { UserNotFoundException } from 'src/users/domain/exceptions/user-not-found.exception';
+import { IUserRepository } from 'src/users/domain/repositories/user.repository';
+import {
+  GetUserByIdInputDto,
+  GetUserByIdOutputDto,
+} from 'src/users/interfaces/dto/user/get-user-by-id.dto';
 
 @Injectable()
 export default class GetUserByIdUseCase implements IUseCase<
-  GetUserByIdInput,
-  GetUserByIdOutput
+  GetUserByIdInputDto,
+  GetUserByIdOutputDto
 > {
   constructor(private readonly userRepository: IUserRepository) {}
 
-  async execute(input: GetUserByIdInput): Promise<GetUserByIdOutput> {
+  async execute(input: GetUserByIdInputDto): Promise<GetUserByIdOutputDto> {
     const user = await this.userRepository.findById(input.id);
 
     if (!user) {

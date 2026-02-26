@@ -1,16 +1,25 @@
 import { Injectable } from '@nestjs/common';
-import { GetUsersInput, GetUsersOutput } from '@repo/schemas';
-import { IUseCase } from '../../../common/use-case.interface';
-import { IUserRepository } from '../../domain/repositories/user.repository';
+import { IUseCase } from 'src/common/use-case.interface';
+import { IUserRepository } from 'src/users/domain/repositories/user.repository';
+import {
+  GetUsersInputDto,
+  GetUsersOutputDto,
+} from 'src/users/interfaces/dto/user/get-users.dto';
 
 @Injectable()
 export default class GetUsersUseCase implements IUseCase<
-  GetUsersInput,
-  GetUsersOutput[]
+  GetUsersInputDto,
+  GetUsersOutputDto[]
 > {
   constructor(private readonly userRepository: IUserRepository) {}
 
-  async execute(input: GetUsersInput): Promise<GetUsersOutput[]> {
-    return this.userRepository.findAll(input);
+  async execute(input: GetUsersInputDto): Promise<GetUsersOutputDto[]> {
+    const users = await this.userRepository.findAll(input);
+
+    return users.map((user) => ({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    }));
   }
 }

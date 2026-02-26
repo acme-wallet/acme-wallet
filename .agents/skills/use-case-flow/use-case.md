@@ -10,7 +10,8 @@
 
 - `@Injectable()`
 - API pública única: `execute(input)`
-- `Input/Output` vindos de `@repo/schemas`
+- `Input/Output` vindos de aliases exportados em `interfaces/dto/**` (`*InputDto` / `*OutputDto`)
+- Não importar `@repo/schemas` diretamente na camada de application
 - Dependência por contrato (`I<EntityName>Repository`)
 
 ## TDD (vertical)

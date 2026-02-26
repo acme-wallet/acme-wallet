@@ -7,3 +7,6 @@ export class UpdateUserRequest extends createZodDto(
 export class UpdateUserResponse extends createZodDto(
   UpdateUserResponseSchema,
 ) {}
+
+export type UpdateUserInputDto = UpdateUserRequest & { id: string };
+export type UpdateUserOutputDto = UpdateUserResponse;
