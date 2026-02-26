@@ -1,7 +1,6 @@
 import { cn } from '@/lib/utils';
 import { CornerDownRight } from 'lucide-react';
 
-
 interface ChatSuggestionsProps {
   suggestions: readonly string[];
   onSelect: (suggestion: string) => void;
@@ -39,7 +38,7 @@ export function ChatSuggestions({
             'disabled:cursor-not-allowed disabled:opacity-50',
           )}
         >
-          <CornerDownRight  className="h-3.5 w-3.5 shrink-0" />
+          <CornerDownRight className="h-3.5 w-3.5 shrink-0" />
           {suggestion}
         </button>
       ))}

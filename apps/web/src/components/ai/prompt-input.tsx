@@ -40,7 +40,9 @@ const PromptInputContext = createContext<PromptInputContextValue | null>(null);
 function usePromptInputContext() {
   const context = useContext(PromptInputContext);
   if (!context) {
-    throw new Error('PromptInput components must be used inside <PromptInput>.');
+    throw new Error(
+      'PromptInput components must be used inside <PromptInput>.',
+    );
   }
   return context;
 }
@@ -126,7 +128,11 @@ export function PromptInput({
         multiple={multiple}
         onChange={handleFileChange}
       />
-      <form className={cn('w-full', className)} onSubmit={handleSubmit} {...props}>
+      <form
+        className={cn('w-full', className)}
+        onSubmit={handleSubmit}
+        {...props}
+      >
         <InputGroup className="overflow-hidden">{children}</InputGroup>
       </form>
     </PromptInputContext.Provider>
@@ -144,7 +150,10 @@ export function PromptInputAttachments({
   if (!attachments.length) return null;
 
   return (
-    <div className={cn('flex w-full flex-wrap items-center gap-2 p-3', className)} {...props}>
+    <div
+      className={cn('flex w-full flex-wrap items-center gap-2 p-3', className)}
+      {...props}
+    >
       {attachments.map((attachment) =>
         children({ id: attachment.id, filename: attachment.file.name }),
       )}
@@ -175,32 +184,42 @@ export function PromptInputAttachment({
   );
 }
 
-export const PromptInputBody = ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => (
+export const PromptInputBody = ({
+  className,
+  ...props
+}: HTMLAttributes<HTMLDivElement>) => (
   <div className={cn('contents', className)} {...props} />
 );
 
-export const PromptInputTextarea = (props: ComponentProps<typeof InputGroupTextarea>) => (
-  <InputGroupTextarea name="message" {...props} />
-);
+export const PromptInputTextarea = (
+  props: ComponentProps<typeof InputGroupTextarea>,
+) => <InputGroupTextarea name="message" {...props} />;
 
 export const PromptInputFooter = ({
   className,
   ...props
 }: Omit<ComponentProps<typeof InputGroupAddon>, 'align'>) => (
-  <InputGroupAddon align="block-end" className={cn('justify-between gap-1', className)} {...props} />
+  <InputGroupAddon
+    align="block-end"
+    className={cn('justify-between gap-1', className)}
+    {...props}
+  />
 );
 
-export const PromptInputTools = ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => (
+export const PromptInputTools = ({
+  className,
+  ...props
+}: HTMLAttributes<HTMLDivElement>) => (
   <div className={cn('flex items-center gap-1', className)} {...props} />
 );
 
-export const PromptInputSubmit = (props: ComponentProps<typeof InputGroupButton>) => (
-  <InputGroupButton type="submit" size="icon-sm" {...props} />
-);
+export const PromptInputSubmit = (
+  props: ComponentProps<typeof InputGroupButton>,
+) => <InputGroupButton type="submit" size="icon-sm" {...props} />;
 
-export const PromptInputActionMenu = (props: ComponentProps<typeof DropdownMenu>) => (
-  <DropdownMenu {...props} />
-);
+export const PromptInputActionMenu = (
+  props: ComponentProps<typeof DropdownMenu>,
+) => <DropdownMenu {...props} />;
 
 export const PromptInputActionMenuTrigger = ({
   children,
@@ -217,9 +236,9 @@ export const PromptInputActionMenuContent = (
   props: ComponentProps<typeof DropdownMenuContent>,
 ) => <DropdownMenuContent align="start" {...props} />;
 
-export const PromptInputActionMenuItem = (props: ComponentProps<typeof DropdownMenuItem>) => (
-  <DropdownMenuItem {...props} />
-);
+export const PromptInputActionMenuItem = (
+  props: ComponentProps<typeof DropdownMenuItem>,
+) => <DropdownMenuItem {...props} />;
 
 export function PromptInputActionAddAttachments({
   label = 'Adicionar fotos ou arquivos',
