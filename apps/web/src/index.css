@@ -140,6 +140,30 @@ body {
     @apply border-border;
   }
 
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #d1d5db #ffffff;
+  }
+
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: #ffffff;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 9999px;
+    border: 2px solid #ffffff;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: #c4cbd4;
+  }
+
   body {
     @apply bg-background text-foreground antialiased;
   }

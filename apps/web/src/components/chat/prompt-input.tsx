@@ -1,4 +1,20 @@
-import { useRef, type KeyboardEvent } from 'react';
+import type { FormEvent } from 'react';
+import {
+  PromptInputActionAddAttachments,
+  PromptInputActionMenu,
+  PromptInputActionMenuContent,
+  PromptInputActionMenuTrigger,
+  PromptInputAttachment,
+  PromptInputAttachments,
+  PromptInput as ShadcnPromptInput,
+  PromptInputBody,
+  PromptInputFooter,
+  PromptInputSubmit,
+  PromptInputTextarea,
+  PromptInputTools,
+  type PromptInputMessage,
+} from '@/components/ai/prompt-input';
+import { PlusIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface PromptInputProps {
@@ -15,60 +31,66 @@ export function PromptInput({
   onChange,
   onSubmit,
   disabled,
-  placeholder = 'Envie uma mensagem...',
+  placeholder = 'Pergunte alguma coisa...',
   className,
 }: PromptInputProps) {
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-  function handleKeyDown(e: KeyboardEvent<HTMLTextAreaElement>) {
-    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-      e.preventDefault();
-      if (!disabled && value.trim()) onSubmit();
-    }
-  }
-
-  function handleInput() {
-    const el = textareaRef.current;
-    if (!el) return;
-    el.style.height = 'auto';
-    el.style.height = `${Math.min(el.scrollHeight, 200)}px`;
+  function handleSubmit(
+    message: PromptInputMessage,
+    event: FormEvent<HTMLFormElement>,
+  ) {
+    event.preventDefault();
+    if (disabled || !message.text.trim()) return;
+    onSubmit();
   }
 
   return (
-    <div
+    <ShadcnPromptInput
+      onSubmit={handleSubmit}
       className={cn(
-        'flex items-end gap-2 rounded-2xl border border-border bg-background px-4 py-3 shadow-sm focus-within:ring-2 focus-within:ring-primary/30 transition-shadow',
+        'rounded-2xl border border-border bg-background shadow-sm',
         className,
       )}
+      multiple
+      accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.txt"
     >
-      <textarea
-        ref={textareaRef}
-        rows={1}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        onKeyDown={handleKeyDown}
-        onInput={handleInput}
-        disabled={disabled}
-        placeholder={placeholder}
-        className="flex-1 resize-none bg-transparent text-sm leading-relaxed outline-none placeholder:text-muted-foreground disabled:opacity-50"
-        style={{ maxHeight: '200px' }}
-      />
-      <button
-        type="button"
-        onClick={onSubmit}
-        disabled={disabled || !value.trim()}
-        title="Enviar (Ctrl+Enter)"
-        className={cn(
-          'flex h-8 w-8 shrink-0 items-center justify-center rounded-xl transition-all',
-          disabled || !value.trim()
-            ? 'text-muted-foreground/40 cursor-not-allowed'
-            : 'bg-primary text-primary-foreground hover:bg-primary/90 cursor-pointer shadow-sm',
-        )}
-      >
-        <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor">
-          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-        </svg>
-      </button>
-    </div>
+      <PromptInputAttachments>
+        {(attachment) => <PromptInputAttachment data={attachment} />}
+      </PromptInputAttachments>
+      <PromptInputBody>
+        <PromptInputTextarea
+          value={value}
+          onChange={(event) => onChange(event.currentTarget.value)}
+          disabled={disabled}
+          placeholder={placeholder}
+          className="min-h-12 max-h-[200px] border-0 bg-transparent text-sm leading-relaxed shadow-none focus-visible:ring-0"
+        />
+      </PromptInputBody>
+      <PromptInputFooter className="px-2 pb-2">
+        <PromptInputTools>
+          <PromptInputActionMenu>
+            <PromptInputActionMenuTrigger
+              type="button"
+              disabled={disabled}
+              aria-label="Abrir menu de anexo"
+              className="h-8 w-8 rounded-xl"
+            >
+              <PlusIcon className="h-4 w-4" />
+            </PromptInputActionMenuTrigger>
+            <PromptInputActionMenuContent>
+              <PromptInputActionAddAttachments label="Adicionar fotos ou arquivos" />
+            </PromptInputActionMenuContent>
+          </PromptInputActionMenu>
+        </PromptInputTools>
+        <PromptInputSubmit
+          disabled={disabled || !value.trim()}
+          className={cn(
+            'h-8 w-8 rounded-xl',
+            disabled || !value.trim()
+              ? 'text-muted-foreground/40'
+              : 'bg-primary text-primary-foreground hover:bg-primary/90',
+          )}
+        />
+      </PromptInputFooter>
+    </ShadcnPromptInput>
   );
 }

@@ -21,13 +21,6 @@ export type StreamEvent =
   | { type: 'done' }
   | { type: 'error'; message: string };
 
-export type ChatStreamResult = {
-  content: string;
-  reasoning: string;
-  done: boolean;
-  error: string | null;
-};
-
 const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export const api = createApi({
