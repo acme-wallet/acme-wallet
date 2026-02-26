@@ -5,6 +5,7 @@ import { ChatModule } from './chat/chat.module';
 import { envSchema } from './common/configs/env.schema';
 import { HealthModule } from './health/health.module';
 import { UsersModule } from './users/users.module';
+import { WalletModule } from './wallet/wallet.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { UsersModule } from './users/users.module';
     UsersModule,
     HealthModule,
     ChatModule,
+    WalletModule,
   ],
   controllers: [],
   providers: [],
