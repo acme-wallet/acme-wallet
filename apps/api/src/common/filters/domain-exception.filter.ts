@@ -1,7 +1,8 @@
 import {
-  ExceptionFilter,
-  Catch,
   ArgumentsHost,
+  Catch,
+  ExceptionFilter,
+  HttpException,
   HttpStatus,
 } from '@nestjs/common';
 import { Response } from 'express';
@@ -15,6 +16,7 @@ const DOMAIN_EXCEPTION_STATUS_MAP = new Map<ErrorConstructor, HttpStatus>([
 
 @Catch(Error)
 export class DomainExceptionFilter implements ExceptionFilter {
+  // TODO: analise the best approach to use this filter
   catch(exception: Error, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
@@ -24,7 +26,29 @@ export class DomainExceptionFilter implements ExceptionFilter {
     );
 
     if (status === undefined) {
-      throw exception;
+      if (exception instanceof HttpException) {
+        const exceptionResponse = exception.getResponse();
+        const statusCode = exception.getStatus();
+
+        if (typeof exceptionResponse === 'string') {
+          response.status(statusCode).json({
+            statusCode,
+            message: exceptionResponse,
+            error: exception.name,
+          });
+          return;
+        }
+
+        response.status(statusCode).json(exceptionResponse);
+        return;
+      }
+
+      response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Internal server error',
+        error: 'InternalServerError',
+      });
+      return;
     }
 
     response.status(status).json({
