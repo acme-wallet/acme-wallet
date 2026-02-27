@@ -28,7 +28,7 @@ describe('HealthController (integration)', () => {
         imports: [
           ConfigModule.forRoot({
             isGlobal: true,
-            envFilePath: '../../.env',
+            envFilePath: ['../../.env', '../../.env.example'],
             validate: (config) => envSchema.parse(config),
           }),
           HealthModule,
