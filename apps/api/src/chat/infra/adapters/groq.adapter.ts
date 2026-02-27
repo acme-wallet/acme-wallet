@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import type { ChatStreamEvent } from '@repo/schemas';
 import Groq from 'groq-sdk';
 import { Env } from 'src/common/configs/env.schema';
-import { ILlmProvider } from '../../application/ports/llm.provider';
+import { ILlmPort } from '../../application/ports/llm.port';
 import type { ChatStreamInput } from '../../interfaces/dto/chat-stream-input.dto';
 
 type DeltaWithReasoning = {
@@ -12,7 +12,7 @@ type DeltaWithReasoning = {
 };
 
 @Injectable()
-export class GroqAdapter implements ILlmProvider {
+export class GroqAdapter implements ILlmPort {
   private readonly client: Groq;
   private readonly DEFAULT_MODEL = 'qwen/qwen3-32b';
 

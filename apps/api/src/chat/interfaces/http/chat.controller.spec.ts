@@ -5,7 +5,7 @@ import { Server } from 'http';
 import { ZodValidationPipe } from 'nestjs-zod';
 import request from 'supertest';
 import { mock } from 'vitest-mock-extended';
-import { ILlmProvider } from '../../application/ports/llm.provider';
+import { ILlmPort } from '../../application/ports/llm.port';
 import { ChatStreamUseCase } from '../../application/use-cases/chat-stream.use-case';
 import { OllamaAdapter } from '../../infra/adapters/ollama.adapter';
 import { ChatController } from './chat.controller';
@@ -153,7 +153,7 @@ describe('Chat HTTP API — with OllamaAdapter (stub / not implemented)', () => 
       controllers: [ChatController],
       providers: [
         ChatStreamUseCase,
-        { provide: ILlmProvider, useClass: OllamaAdapter },
+        { provide: ILlmPort, useClass: OllamaAdapter },
       ],
     }).compile();
 

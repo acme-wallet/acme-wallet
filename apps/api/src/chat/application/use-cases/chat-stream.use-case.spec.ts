@@ -1,6 +1,6 @@
 import type { ChatStreamEvent } from '@repo/schemas';
 import { mock, MockProxy } from 'vitest-mock-extended';
-import { ILlmProvider } from '../ports/llm.provider';
+import { ILlmPort } from '../ports/llm.port';
 import { ChatStreamUseCase } from './chat-stream.use-case';
 
 // eslint-disable-next-line @typescript-eslint/require-await
@@ -13,11 +13,11 @@ async function* makeGenerator(
 }
 
 describe('ChatStreamUseCase', () => {
-  let llmProvider: MockProxy<ILlmProvider>;
+  let llmProvider: MockProxy<ILlmPort>;
   let sut: ChatStreamUseCase;
 
   beforeEach(() => {
-    llmProvider = mock<ILlmProvider>();
+    llmProvider = mock<ILlmPort>();
     sut = new ChatStreamUseCase(llmProvider);
   });
 
