@@ -9,6 +9,7 @@ export const envSchema = z.object({
   MEMORY_HEAP_THRESHOLD_BYTES: z.coerce.number().default(300 * 1024 * 1024),
   DISK_STORAGE_THRESHOLD_PERCENT: z.coerce.number().default(0.8),
   DATABASE_URL: z.string().url(),
+  GROQ_API_KEY: z.string().optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;
