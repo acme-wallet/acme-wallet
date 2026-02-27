@@ -1,7 +1,7 @@
-import { ChatStreamUseCase } from './chat-stream.use-case';
-import { ILlmProvider } from '../ports/llm.provider';
-import { mock, MockProxy } from 'vitest-mock-extended';
 import type { ChatStreamEvent } from '@repo/schemas';
+import { mock, MockProxy } from 'vitest-mock-extended';
+import { ILlmProvider } from '../ports/llm.provider';
+import { ChatStreamUseCase } from './chat-stream.use-case';
 
 // eslint-disable-next-line @typescript-eslint/require-await
 async function* makeGenerator(
@@ -28,7 +28,7 @@ describe('ChatStreamUseCase', () => {
     ];
     llmProvider.stream.mockReturnValue(makeGenerator(events));
 
-    const input = { message: 'Hi', systemPrompt: undefined, model: undefined };
+    const input = { message: 'Hi', systemPrompt: undefined };
     const generator = sut.execute(input);
     const collected: ChatStreamEvent[] = [];
 

@@ -134,7 +134,7 @@ export const api = createApi({
                   raw,
                 );
                 updateCachedData((draft) => {
-                  draft.error = 'Falha ao processar a resposta do servidor.';
+                  draft.error = 'Failed to process server response.';
                   draft.done = true;
                 });
                 break;
@@ -156,10 +156,11 @@ export const api = createApi({
               if (event.type === 'done' || event.type === 'error') break;
             }
           }
-        } catch {
+        } catch (error) {
+          console.error('API stream connection failed:', error);
           updateCachedData((draft) => {
             draft.error =
-              'Falha ao conectar ao servidor. Verifique se a API está rodando.';
+              'Failed to connect to server. Check if API is running.';
             draft.done = true;
           });
         }
