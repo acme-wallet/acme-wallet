@@ -1,14 +1,14 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import request from 'supertest';
-import { Server } from 'http';
-import { mock } from 'vitest-mock-extended';
-import { ZodValidationPipe } from 'nestjs-zod';
 import type { ChatStreamEvent } from '@repo/schemas';
-import { ChatController } from './chat.controller';
-import { ChatStreamUseCase } from '../../application/use-cases/chat-stream.use-case';
+import { Server } from 'http';
+import { ZodValidationPipe } from 'nestjs-zod';
+import request from 'supertest';
+import { mock } from 'vitest-mock-extended';
 import { ILlmProvider } from '../../application/ports/llm.provider';
+import { ChatStreamUseCase } from '../../application/use-cases/chat-stream.use-case';
 import { OllamaAdapter } from '../../infra/adapters/ollama.adapter';
+import { ChatController } from './chat.controller';
 
 // eslint-disable-next-line @typescript-eslint/require-await
 async function* makeGenerator(
@@ -132,14 +132,12 @@ describe('Chat HTTP API', () => {
       await request(server).post('/chat/stream').send({
         message: 'Hi',
         systemPrompt: 'Be concise.',
-        model: 'qwen/qwen3-32b',
       });
 
       expect(chatStreamUseCase.execute).toHaveBeenCalledWith(
         expect.objectContaining({
           message: 'Hi',
           systemPrompt: 'Be concise.',
-          model: 'qwen/qwen3-32b',
         }),
       );
     });
