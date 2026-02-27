@@ -1,15 +1,16 @@
-import './env';
-
 import { NestFactory } from '@nestjs/core';
+import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { apiReference } from '@scalar/nestjs-api-reference';
 import { ZodValidationPipe } from 'nestjs-zod';
 import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
 import { DomainExceptionFilter } from './common/filters/domain-exception.filter';
+import { Env } from './common/configs/env.schema';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const configService = app.get(ConfigService<Env, true>);
 
   const config = new DocumentBuilder()
     .setTitle('Cats example')
@@ -30,10 +31,9 @@ async function bootstrap() {
   app.useGlobalPipes(new ZodValidationPipe());
   app.useGlobalFilters(new DomainExceptionFilter());
 
+  const urlFrontend = configService.get('URL_FRONTEND', { infer: true });
   const allowedOrigins = new Set<string>(
-    [process.env.URL_FRONTEND].filter((value): value is string =>
-      Boolean(value),
-    ),
+    [urlFrontend].filter((value): value is string => Boolean(value)),
   );
 
   const corsOptions: CorsOptions = {
@@ -54,7 +54,7 @@ async function bootstrap() {
         return callback(null, true);
       }
 
-      if (process.env.NODE_ENV !== 'production') {
+      if (configService.get('NODE_ENV', { infer: true }) === 'development') {
         return callback(null, true);
       }
 
@@ -73,7 +73,7 @@ async function bootstrap() {
 
   app.enableCors(corsOptions);
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(configService.get('PORT', { infer: true }));
 }
 
 void bootstrap();

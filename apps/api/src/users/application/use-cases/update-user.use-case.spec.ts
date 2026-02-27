@@ -1,4 +1,4 @@
-import UpdateUserUseCase from './update-user.use-case';
+import { UpdateUserUseCase } from './update-user.use-case';
 import { IUserRepository } from 'src/users/domain/repositories/user.repository';
 import { User } from '../../domain/entities/user.entity';
 import { mock, MockProxy } from 'vitest-mock-extended';

@@ -40,8 +40,9 @@ Use em conjunto com `.agents/skills/tdd/SKILL.md`.
 
 ## Regras globais
 
-- Contratos de entrada/saída via `@repo/schemas`
-- DTOs com `createZodDto(...)`
+- Contratos HTTP baseados em `@repo/schemas` via DTOs de `interfaces/dto`
+- DTOs com `createZodDto(...)` e export de aliases `*InputDto` / `*OutputDto`
+- Use cases devem consumir tipos de `interfaces/dto/**`, sem importar `@repo/schemas` diretamente
 - Regra de negócio no domínio/use case, não no controller
 - Repository sem validação HTTP
 - Testes unitários ao lado dos arquivos (`*.spec.ts`)

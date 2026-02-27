@@ -6,6 +6,7 @@ import type {
   CreateUserInput,
   CreateUserOutput,
 } from '@repo/schemas';
+import { env } from '../../common/configs/env';
 
 type User = {
   id: number;
@@ -21,12 +22,10 @@ export type StreamEvent =
   | { type: 'done' }
   | { type: 'error'; message: string };
 
-const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
-    baseUrl,
+    baseUrl: env.VITE_API_URL,
   }),
   tagTypes: ['Users'],
   endpoints: (builder) => ({
@@ -91,7 +90,7 @@ export const api = createApi({
         const controller = new AbortController();
 
         try {
-          const response = await fetch(`${baseUrl}/chat/stream`, {
+          const response = await fetch(`${env.VITE_API_URL}/chat/stream`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(arg),

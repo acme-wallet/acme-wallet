@@ -1,17 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserInput, CreateUserOutput } from '@repo/schemas';
 import { IUseCase } from 'src/common/use-case.interface';
+import { User } from 'src/users/domain/entities/user.entity';
 import { IUserRepository } from 'src/users/domain/repositories/user.repository';
-import { User } from '../../domain/entities/user.entity';
+import {
+  CreateUserInputDto,
+  CreateUserOutputDto,
+} from 'src/users/interfaces/dto/user/create-user.dto';
 
 @Injectable()
-export default class CreateUserUseCase implements IUseCase<
-  CreateUserInput,
-  CreateUserOutput
+export class CreateUserUseCase implements IUseCase<
+  CreateUserInputDto,
+  CreateUserOutputDto
 > {
   constructor(private readonly userRepository: IUserRepository) {}
 
-  async execute(input: CreateUserInput): Promise<CreateUserOutput> {
+  async execute(input: CreateUserInputDto): Promise<CreateUserOutputDto> {
     const user = User.create(input.name, input.email);
 
     await this.userRepository.create(user);
