@@ -133,7 +133,7 @@ export function PromptInput({
         onSubmit={handleSubmit}
         {...props}
       >
-        <InputGroup className="overflow-hidden">{children}</InputGroup>
+        <InputGroup className="overflow-hidden rounded-2xl">{children}</InputGroup>
       </form>
     </PromptInputContext.Provider>
   );

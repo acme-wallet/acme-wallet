@@ -14,7 +14,7 @@ import {
   PromptInputTools,
   type PromptInputMessage,
 } from '@/components/ai/prompt-input';
-import { PlusIcon } from 'lucide-react';
+import { ArrowUpIcon, PlusIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface PromptInputProps {
@@ -46,10 +46,7 @@ export function PromptInput({
   return (
     <ShadcnPromptInput
       onSubmit={handleSubmit}
-      className={cn(
-        'rounded-2xl border border-border bg-background shadow-sm',
-        className,
-      )}
+      className={cn(className)}
       multiple
       accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.txt"
     >
@@ -86,10 +83,12 @@ export function PromptInput({
           className={cn(
             'h-8 w-8 rounded-xl',
             disabled || !value.trim()
-              ? 'text-muted-foreground/40'
+              ? 'bg-muted text-muted-foreground hover:bg-muted'
               : 'bg-primary text-primary-foreground hover:bg-primary/90',
           )}
-        />
+        >
+          <ArrowUpIcon className="h-4 w-4" />
+        </PromptInputSubmit>
       </PromptInputFooter>
     </ShadcnPromptInput>
   );
