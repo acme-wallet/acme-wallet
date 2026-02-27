@@ -9,6 +9,9 @@
 ## Padrão
 
 - `@Injectable()`
+- Classe exportada deve terminar com sufixo `UseCase`
+- Implementação obrigatória da interface `IUseCase` importada de `common/use-case.interface.ts`
+- Não utilizar `default export` nas classes de `UseCase` (usar export nomeado)
 - API pública única: `execute(input)`
 - `Input/Output` vindos de aliases exportados em `interfaces/dto/**` (`*InputDto` / `*OutputDto`)
 - Não importar `@repo/schemas` diretamente na camada de application

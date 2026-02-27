@@ -14,6 +14,7 @@
 - `export type <Action>OutputDto = <Action>Response`
 - Para casos sem response body, expor `type <Action>OutputDto = void`
 - Separar request e response (`*.request.dto.ts` e `*.response.dto.ts`) quando fizer sentido
+- Para casos com parâmetros de rota e corpo, use interseção: `export type <Action>InputDto = <Action>Request & { <paramName>: <paramType> }`
 - DTOs não devem conter regra de negócio
 
 ## Caso comum: `id` no `param`, não no `body`
@@ -29,13 +30,12 @@
 
 ```ts
 import { createZodDto } from 'nestjs-zod';
-import {
-  CreateUserSchema,
-  CreateUserResponseSchema,
-} from '@repo/schemas';
+import { CreateUserSchema, CreateUserResponseSchema } from '@repo/schemas';
 
 export class CreateUserRequest extends createZodDto(CreateUserSchema) {}
-export class CreateUserResponse extends createZodDto(CreateUserResponseSchema) {}
+export class CreateUserResponse extends createZodDto(
+  CreateUserResponseSchema,
+) {}
 
 export type CreateUserInputDto = CreateUserRequest;
 export type CreateUserOutputDto = CreateUserResponse;
@@ -50,7 +50,9 @@ import { UpdateUserSchema, UpdateUserResponseSchema } from '@repo/schemas';
 export class UpdateUserRequest extends createZodDto(
   UpdateUserSchema.omit({ id: true }),
 ) {}
-export class UpdateUserResponse extends createZodDto(UpdateUserResponseSchema) {}
+export class UpdateUserResponse extends createZodDto(
+  UpdateUserResponseSchema,
+) {}
 
 export type UpdateUserInputDto = UpdateUserRequest & { id: string };
 export type UpdateUserOutputDto = UpdateUserResponse;

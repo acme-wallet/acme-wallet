@@ -7,7 +7,7 @@ import {
 } from 'src/users/interfaces/dto/user/get-users.dto';
 
 @Injectable()
-export default class GetUsersUseCase implements IUseCase<
+export class GetUsersUseCase implements IUseCase<
   GetUsersInputDto,
   GetUsersOutputDto[]
 > {

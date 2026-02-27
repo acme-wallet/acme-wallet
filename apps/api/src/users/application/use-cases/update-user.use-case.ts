@@ -9,7 +9,7 @@ import {
 } from 'src/users/interfaces/dto/user/update-user.dto';
 
 @Injectable()
-export default class UpdateUserUseCase implements IUseCase<
+export class UpdateUserUseCase implements IUseCase<
   UpdateUserInputDto,
   UpdateUserOutputDto
 > {

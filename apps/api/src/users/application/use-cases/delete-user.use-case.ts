@@ -8,7 +8,7 @@ import {
 } from 'src/users/interfaces/dto/user/delete-user.dto';
 
 @Injectable()
-export default class DeleteUserUseCase implements IUseCase<
+export class DeleteUserUseCase implements IUseCase<
   DeleteUserInputDto,
   DeleteUserOutputDto
 > {
