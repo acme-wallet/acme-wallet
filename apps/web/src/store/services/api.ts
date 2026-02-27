@@ -133,7 +133,11 @@ export const api = createApi({
                   'Raw data:',
                   raw,
                 );
-                continue;
+                updateCachedData((draft) => {
+                  draft.error = 'Falha ao processar a resposta do servidor.';
+                  draft.done = true;
+                });
+                break;
               }
 
               updateCachedData((draft) => {
