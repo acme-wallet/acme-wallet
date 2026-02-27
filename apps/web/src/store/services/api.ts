@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { CreateUserInput, CreateUserOutput } from '@repo/schemas';
+import { env } from '../../common/configs/env';
 
 type User = {
   id: number;
@@ -12,7 +13,7 @@ export type UpdateUserInput = Partial<Omit<User, 'id'>> & { id: string };
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
-    baseUrl: `${import.meta.env.VITE_API_URL}`,
+    baseUrl: `${env.VITE_API_URL}`,
   }),
   tagTypes: ['Users'],
   endpoints: (builder) => ({
