@@ -1,7 +1,7 @@
 import { IUserRepository } from 'src/users/domain/repositories/user.repository';
 import { mock, MockProxy } from 'vitest-mock-extended';
 import { User } from '../../domain/entities/user.entity';
-import GetUsersUseCase from './get-users.use-case';
+import { GetUsersUseCase } from './get-users.use-case';
 
 describe('Get Users Use Case', () => {
   let userRepository: MockProxy<IUserRepository>;

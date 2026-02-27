@@ -8,7 +8,7 @@ import {
 } from 'src/users/interfaces/dto/user/get-user-by-id.dto';
 
 @Injectable()
-export default class GetUserByIdUseCase implements IUseCase<
+export class GetUserByIdUseCase implements IUseCase<
   GetUserByIdInputDto,
   GetUserByIdOutputDto
 > {

@@ -1,4 +1,4 @@
-import CreateUserUseCase from './create-user.use-case';
+import { CreateUserUseCase } from './create-user.use-case';
 import { IUserRepository } from 'src/users/domain/repositories/user.repository';
 import { mock, MockProxy } from 'vitest-mock-extended';
 
