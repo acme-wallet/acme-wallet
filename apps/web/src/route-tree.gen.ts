@@ -13,13 +13,26 @@ import { Route as AuthRouteImport } from './pages/_auth'
 import { Route as IndexRouteImport } from './pages/index'
 import { Route as NotFoundIndexRouteImport } from './pages/not-found/index'
 import { Route as LoginIndexRouteImport } from './pages/login/index'
+import { Route as AuthHumanRouteImport } from './pages/_auth/human'
+import { Route as AuthFactoryRouteImport } from './pages/_auth/factory'
 import { Route as AuthUsersIndexRouteImport } from './pages/_auth/users/index'
+import { Route as AuthMainIndexRouteImport } from './pages/_auth/main/index'
 import { Route as AuthHomeIndexRouteImport } from './pages/_auth/home/index'
 import { Route as AuthChatIndexRouteImport } from './pages/_auth/chat/index'
 import { Route as AuthUsersNewRouteImport } from './pages/_auth/users/new'
 import { Route as AuthUsersIdRouteImport } from './pages/_auth/users/$id'
 import { Route as AuthUsersIdIndexRouteImport } from './pages/_auth/users/$id/index'
+import { Route as AuthHumanUsersIndexRouteImport } from './pages/_auth/human/users/index'
+import { Route as AuthHumanRhIndexRouteImport } from './pages/_auth/human/rh/index'
+import { Route as AuthHumanPcpIndexRouteImport } from './pages/_auth/human/pcp/index'
+import { Route as AuthHumanHomeIndexRouteImport } from './pages/_auth/human/home/index'
+import { Route as AuthFactoryUsersIndexRouteImport } from './pages/_auth/factory/users/index'
+import { Route as AuthFactoryPcpIndexRouteImport } from './pages/_auth/factory/pcp/index'
+import { Route as AuthFactoryHomeIndexRouteImport } from './pages/_auth/factory/home/index'
+import { Route as AuthFactoryEngenhariasIndexRouteImport } from './pages/_auth/factory/engenharias/index'
 import { Route as AuthUsersIdEditRouteImport } from './pages/_auth/users/$id/edit'
+import { Route as AuthHumanPcpProgramacaoIndexRouteImport } from './pages/_auth/human/pcp/programacao/index'
+import { Route as AuthHumanPcpApontamentosIndexRouteImport } from './pages/_auth/human/pcp/apontamentos/index'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/_auth',
@@ -40,9 +53,24 @@ const LoginIndexRoute = LoginIndexRouteImport.update({
   path: '/login/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthHumanRoute = AuthHumanRouteImport.update({
+  id: '/human',
+  path: '/human',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthFactoryRoute = AuthFactoryRouteImport.update({
+  id: '/factory',
+  path: '/factory',
+  getParentRoute: () => AuthRoute,
+} as any)
 const AuthUsersIndexRoute = AuthUsersIndexRouteImport.update({
   id: '/users/',
   path: '/users/',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthMainIndexRoute = AuthMainIndexRouteImport.update({
+  id: '/main/',
+  path: '/main/',
   getParentRoute: () => AuthRoute,
 } as any)
 const AuthHomeIndexRoute = AuthHomeIndexRouteImport.update({
@@ -70,86 +98,217 @@ const AuthUsersIdIndexRoute = AuthUsersIdIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthUsersIdRoute,
 } as any)
+const AuthHumanUsersIndexRoute = AuthHumanUsersIndexRouteImport.update({
+  id: '/users/',
+  path: '/users/',
+  getParentRoute: () => AuthHumanRoute,
+} as any)
+const AuthHumanRhIndexRoute = AuthHumanRhIndexRouteImport.update({
+  id: '/rh/',
+  path: '/rh/',
+  getParentRoute: () => AuthHumanRoute,
+} as any)
+const AuthHumanPcpIndexRoute = AuthHumanPcpIndexRouteImport.update({
+  id: '/pcp/',
+  path: '/pcp/',
+  getParentRoute: () => AuthHumanRoute,
+} as any)
+const AuthHumanHomeIndexRoute = AuthHumanHomeIndexRouteImport.update({
+  id: '/home/',
+  path: '/home/',
+  getParentRoute: () => AuthHumanRoute,
+} as any)
+const AuthFactoryUsersIndexRoute = AuthFactoryUsersIndexRouteImport.update({
+  id: '/users/',
+  path: '/users/',
+  getParentRoute: () => AuthFactoryRoute,
+} as any)
+const AuthFactoryPcpIndexRoute = AuthFactoryPcpIndexRouteImport.update({
+  id: '/pcp/',
+  path: '/pcp/',
+  getParentRoute: () => AuthFactoryRoute,
+} as any)
+const AuthFactoryHomeIndexRoute = AuthFactoryHomeIndexRouteImport.update({
+  id: '/home/',
+  path: '/home/',
+  getParentRoute: () => AuthFactoryRoute,
+} as any)
+const AuthFactoryEngenhariasIndexRoute =
+  AuthFactoryEngenhariasIndexRouteImport.update({
+    id: '/engenharias/',
+    path: '/engenharias/',
+    getParentRoute: () => AuthFactoryRoute,
+  } as any)
 const AuthUsersIdEditRoute = AuthUsersIdEditRouteImport.update({
   id: '/edit',
   path: '/edit',
   getParentRoute: () => AuthUsersIdRoute,
 } as any)
+const AuthHumanPcpProgramacaoIndexRoute =
+  AuthHumanPcpProgramacaoIndexRouteImport.update({
+    id: '/pcp/programacao/',
+    path: '/pcp/programacao/',
+    getParentRoute: () => AuthHumanRoute,
+  } as any)
+const AuthHumanPcpApontamentosIndexRoute =
+  AuthHumanPcpApontamentosIndexRouteImport.update({
+    id: '/pcp/apontamentos/',
+    path: '/pcp/apontamentos/',
+    getParentRoute: () => AuthHumanRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/factory': typeof AuthFactoryRouteWithChildren
+  '/human': typeof AuthHumanRouteWithChildren
   '/login/': typeof LoginIndexRoute
   '/not-found/': typeof NotFoundIndexRoute
   '/users/$id': typeof AuthUsersIdRouteWithChildren
   '/users/new': typeof AuthUsersNewRoute
   '/chat/': typeof AuthChatIndexRoute
   '/home/': typeof AuthHomeIndexRoute
+  '/main/': typeof AuthMainIndexRoute
   '/users/': typeof AuthUsersIndexRoute
   '/users/$id/edit': typeof AuthUsersIdEditRoute
+  '/factory/engenharias/': typeof AuthFactoryEngenhariasIndexRoute
+  '/factory/home/': typeof AuthFactoryHomeIndexRoute
+  '/factory/pcp/': typeof AuthFactoryPcpIndexRoute
+  '/factory/users/': typeof AuthFactoryUsersIndexRoute
+  '/human/home/': typeof AuthHumanHomeIndexRoute
+  '/human/pcp/': typeof AuthHumanPcpIndexRoute
+  '/human/rh/': typeof AuthHumanRhIndexRoute
+  '/human/users/': typeof AuthHumanUsersIndexRoute
   '/users/$id/': typeof AuthUsersIdIndexRoute
+  '/human/pcp/apontamentos/': typeof AuthHumanPcpApontamentosIndexRoute
+  '/human/pcp/programacao/': typeof AuthHumanPcpProgramacaoIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/factory': typeof AuthFactoryRouteWithChildren
+  '/human': typeof AuthHumanRouteWithChildren
   '/login': typeof LoginIndexRoute
   '/not-found': typeof NotFoundIndexRoute
   '/users/new': typeof AuthUsersNewRoute
   '/chat': typeof AuthChatIndexRoute
   '/home': typeof AuthHomeIndexRoute
+  '/main': typeof AuthMainIndexRoute
   '/users': typeof AuthUsersIndexRoute
   '/users/$id/edit': typeof AuthUsersIdEditRoute
+  '/factory/engenharias': typeof AuthFactoryEngenhariasIndexRoute
+  '/factory/home': typeof AuthFactoryHomeIndexRoute
+  '/factory/pcp': typeof AuthFactoryPcpIndexRoute
+  '/factory/users': typeof AuthFactoryUsersIndexRoute
+  '/human/home': typeof AuthHumanHomeIndexRoute
+  '/human/pcp': typeof AuthHumanPcpIndexRoute
+  '/human/rh': typeof AuthHumanRhIndexRoute
+  '/human/users': typeof AuthHumanUsersIndexRoute
   '/users/$id': typeof AuthUsersIdIndexRoute
+  '/human/pcp/apontamentos': typeof AuthHumanPcpApontamentosIndexRoute
+  '/human/pcp/programacao': typeof AuthHumanPcpProgramacaoIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteWithChildren
+  '/_auth/factory': typeof AuthFactoryRouteWithChildren
+  '/_auth/human': typeof AuthHumanRouteWithChildren
   '/login/': typeof LoginIndexRoute
   '/not-found/': typeof NotFoundIndexRoute
   '/_auth/users/$id': typeof AuthUsersIdRouteWithChildren
   '/_auth/users/new': typeof AuthUsersNewRoute
   '/_auth/chat/': typeof AuthChatIndexRoute
   '/_auth/home/': typeof AuthHomeIndexRoute
+  '/_auth/main/': typeof AuthMainIndexRoute
   '/_auth/users/': typeof AuthUsersIndexRoute
   '/_auth/users/$id/edit': typeof AuthUsersIdEditRoute
+  '/_auth/factory/engenharias/': typeof AuthFactoryEngenhariasIndexRoute
+  '/_auth/factory/home/': typeof AuthFactoryHomeIndexRoute
+  '/_auth/factory/pcp/': typeof AuthFactoryPcpIndexRoute
+  '/_auth/factory/users/': typeof AuthFactoryUsersIndexRoute
+  '/_auth/human/home/': typeof AuthHumanHomeIndexRoute
+  '/_auth/human/pcp/': typeof AuthHumanPcpIndexRoute
+  '/_auth/human/rh/': typeof AuthHumanRhIndexRoute
+  '/_auth/human/users/': typeof AuthHumanUsersIndexRoute
   '/_auth/users/$id/': typeof AuthUsersIdIndexRoute
+  '/_auth/human/pcp/apontamentos/': typeof AuthHumanPcpApontamentosIndexRoute
+  '/_auth/human/pcp/programacao/': typeof AuthHumanPcpProgramacaoIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/factory'
+    | '/human'
     | '/login/'
     | '/not-found/'
     | '/users/$id'
     | '/users/new'
     | '/chat/'
     | '/home/'
+    | '/main/'
     | '/users/'
     | '/users/$id/edit'
+    | '/factory/engenharias/'
+    | '/factory/home/'
+    | '/factory/pcp/'
+    | '/factory/users/'
+    | '/human/home/'
+    | '/human/pcp/'
+    | '/human/rh/'
+    | '/human/users/'
     | '/users/$id/'
+    | '/human/pcp/apontamentos/'
+    | '/human/pcp/programacao/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/factory'
+    | '/human'
     | '/login'
     | '/not-found'
     | '/users/new'
     | '/chat'
     | '/home'
+    | '/main'
     | '/users'
     | '/users/$id/edit'
+    | '/factory/engenharias'
+    | '/factory/home'
+    | '/factory/pcp'
+    | '/factory/users'
+    | '/human/home'
+    | '/human/pcp'
+    | '/human/rh'
+    | '/human/users'
     | '/users/$id'
+    | '/human/pcp/apontamentos'
+    | '/human/pcp/programacao'
   id:
     | '__root__'
     | '/'
     | '/_auth'
+    | '/_auth/factory'
+    | '/_auth/human'
     | '/login/'
     | '/not-found/'
     | '/_auth/users/$id'
     | '/_auth/users/new'
     | '/_auth/chat/'
     | '/_auth/home/'
+    | '/_auth/main/'
     | '/_auth/users/'
     | '/_auth/users/$id/edit'
+    | '/_auth/factory/engenharias/'
+    | '/_auth/factory/home/'
+    | '/_auth/factory/pcp/'
+    | '/_auth/factory/users/'
+    | '/_auth/human/home/'
+    | '/_auth/human/pcp/'
+    | '/_auth/human/rh/'
+    | '/_auth/human/users/'
     | '/_auth/users/$id/'
+    | '/_auth/human/pcp/apontamentos/'
+    | '/_auth/human/pcp/programacao/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -189,11 +348,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_auth/human': {
+      id: '/_auth/human'
+      path: '/human'
+      fullPath: '/human'
+      preLoaderRoute: typeof AuthHumanRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_auth/factory': {
+      id: '/_auth/factory'
+      path: '/factory'
+      fullPath: '/factory'
+      preLoaderRoute: typeof AuthFactoryRouteImport
+      parentRoute: typeof AuthRoute
+    }
     '/_auth/users/': {
       id: '/_auth/users/'
       path: '/users'
       fullPath: '/users/'
       preLoaderRoute: typeof AuthUsersIndexRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_auth/main/': {
+      id: '/_auth/main/'
+      path: '/main'
+      fullPath: '/main/'
+      preLoaderRoute: typeof AuthMainIndexRouteImport
       parentRoute: typeof AuthRoute
     }
     '/_auth/home/': {
@@ -231,6 +411,62 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthUsersIdIndexRouteImport
       parentRoute: typeof AuthUsersIdRoute
     }
+    '/_auth/human/users/': {
+      id: '/_auth/human/users/'
+      path: '/users'
+      fullPath: '/human/users/'
+      preLoaderRoute: typeof AuthHumanUsersIndexRouteImport
+      parentRoute: typeof AuthHumanRoute
+    }
+    '/_auth/human/rh/': {
+      id: '/_auth/human/rh/'
+      path: '/rh'
+      fullPath: '/human/rh/'
+      preLoaderRoute: typeof AuthHumanRhIndexRouteImport
+      parentRoute: typeof AuthHumanRoute
+    }
+    '/_auth/human/pcp/': {
+      id: '/_auth/human/pcp/'
+      path: '/pcp'
+      fullPath: '/human/pcp/'
+      preLoaderRoute: typeof AuthHumanPcpIndexRouteImport
+      parentRoute: typeof AuthHumanRoute
+    }
+    '/_auth/human/home/': {
+      id: '/_auth/human/home/'
+      path: '/home'
+      fullPath: '/human/home/'
+      preLoaderRoute: typeof AuthHumanHomeIndexRouteImport
+      parentRoute: typeof AuthHumanRoute
+    }
+    '/_auth/factory/users/': {
+      id: '/_auth/factory/users/'
+      path: '/users'
+      fullPath: '/factory/users/'
+      preLoaderRoute: typeof AuthFactoryUsersIndexRouteImport
+      parentRoute: typeof AuthFactoryRoute
+    }
+    '/_auth/factory/pcp/': {
+      id: '/_auth/factory/pcp/'
+      path: '/pcp'
+      fullPath: '/factory/pcp/'
+      preLoaderRoute: typeof AuthFactoryPcpIndexRouteImport
+      parentRoute: typeof AuthFactoryRoute
+    }
+    '/_auth/factory/home/': {
+      id: '/_auth/factory/home/'
+      path: '/home'
+      fullPath: '/factory/home/'
+      preLoaderRoute: typeof AuthFactoryHomeIndexRouteImport
+      parentRoute: typeof AuthFactoryRoute
+    }
+    '/_auth/factory/engenharias/': {
+      id: '/_auth/factory/engenharias/'
+      path: '/engenharias'
+      fullPath: '/factory/engenharias/'
+      preLoaderRoute: typeof AuthFactoryEngenhariasIndexRouteImport
+      parentRoute: typeof AuthFactoryRoute
+    }
     '/_auth/users/$id/edit': {
       id: '/_auth/users/$id/edit'
       path: '/edit'
@@ -238,8 +474,62 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthUsersIdEditRouteImport
       parentRoute: typeof AuthUsersIdRoute
     }
+    '/_auth/human/pcp/programacao/': {
+      id: '/_auth/human/pcp/programacao/'
+      path: '/pcp/programacao'
+      fullPath: '/human/pcp/programacao/'
+      preLoaderRoute: typeof AuthHumanPcpProgramacaoIndexRouteImport
+      parentRoute: typeof AuthHumanRoute
+    }
+    '/_auth/human/pcp/apontamentos/': {
+      id: '/_auth/human/pcp/apontamentos/'
+      path: '/pcp/apontamentos'
+      fullPath: '/human/pcp/apontamentos/'
+      preLoaderRoute: typeof AuthHumanPcpApontamentosIndexRouteImport
+      parentRoute: typeof AuthHumanRoute
+    }
   }
 }
+
+interface AuthFactoryRouteChildren {
+  AuthFactoryEngenhariasIndexRoute: typeof AuthFactoryEngenhariasIndexRoute
+  AuthFactoryHomeIndexRoute: typeof AuthFactoryHomeIndexRoute
+  AuthFactoryPcpIndexRoute: typeof AuthFactoryPcpIndexRoute
+  AuthFactoryUsersIndexRoute: typeof AuthFactoryUsersIndexRoute
+}
+
+const AuthFactoryRouteChildren: AuthFactoryRouteChildren = {
+  AuthFactoryEngenhariasIndexRoute: AuthFactoryEngenhariasIndexRoute,
+  AuthFactoryHomeIndexRoute: AuthFactoryHomeIndexRoute,
+  AuthFactoryPcpIndexRoute: AuthFactoryPcpIndexRoute,
+  AuthFactoryUsersIndexRoute: AuthFactoryUsersIndexRoute,
+}
+
+const AuthFactoryRouteWithChildren = AuthFactoryRoute._addFileChildren(
+  AuthFactoryRouteChildren,
+)
+
+interface AuthHumanRouteChildren {
+  AuthHumanHomeIndexRoute: typeof AuthHumanHomeIndexRoute
+  AuthHumanPcpIndexRoute: typeof AuthHumanPcpIndexRoute
+  AuthHumanRhIndexRoute: typeof AuthHumanRhIndexRoute
+  AuthHumanUsersIndexRoute: typeof AuthHumanUsersIndexRoute
+  AuthHumanPcpApontamentosIndexRoute: typeof AuthHumanPcpApontamentosIndexRoute
+  AuthHumanPcpProgramacaoIndexRoute: typeof AuthHumanPcpProgramacaoIndexRoute
+}
+
+const AuthHumanRouteChildren: AuthHumanRouteChildren = {
+  AuthHumanHomeIndexRoute: AuthHumanHomeIndexRoute,
+  AuthHumanPcpIndexRoute: AuthHumanPcpIndexRoute,
+  AuthHumanRhIndexRoute: AuthHumanRhIndexRoute,
+  AuthHumanUsersIndexRoute: AuthHumanUsersIndexRoute,
+  AuthHumanPcpApontamentosIndexRoute: AuthHumanPcpApontamentosIndexRoute,
+  AuthHumanPcpProgramacaoIndexRoute: AuthHumanPcpProgramacaoIndexRoute,
+}
+
+const AuthHumanRouteWithChildren = AuthHumanRoute._addFileChildren(
+  AuthHumanRouteChildren,
+)
 
 interface AuthUsersIdRouteChildren {
   AuthUsersIdEditRoute: typeof AuthUsersIdEditRoute
@@ -256,18 +546,24 @@ const AuthUsersIdRouteWithChildren = AuthUsersIdRoute._addFileChildren(
 )
 
 interface AuthRouteChildren {
+  AuthFactoryRoute: typeof AuthFactoryRouteWithChildren
+  AuthHumanRoute: typeof AuthHumanRouteWithChildren
   AuthUsersIdRoute: typeof AuthUsersIdRouteWithChildren
   AuthUsersNewRoute: typeof AuthUsersNewRoute
   AuthChatIndexRoute: typeof AuthChatIndexRoute
   AuthHomeIndexRoute: typeof AuthHomeIndexRoute
+  AuthMainIndexRoute: typeof AuthMainIndexRoute
   AuthUsersIndexRoute: typeof AuthUsersIndexRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
+  AuthFactoryRoute: AuthFactoryRouteWithChildren,
+  AuthHumanRoute: AuthHumanRouteWithChildren,
   AuthUsersIdRoute: AuthUsersIdRouteWithChildren,
   AuthUsersNewRoute: AuthUsersNewRoute,
   AuthChatIndexRoute: AuthChatIndexRoute,
   AuthHomeIndexRoute: AuthHomeIndexRoute,
+  AuthMainIndexRoute: AuthMainIndexRoute,
   AuthUsersIndexRoute: AuthUsersIndexRoute,
 }
 
