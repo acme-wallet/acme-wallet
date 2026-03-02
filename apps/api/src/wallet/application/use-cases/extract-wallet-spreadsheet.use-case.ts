@@ -6,13 +6,12 @@ import {
   ExtractWalletSpreadsheetOutputDto,
 } from 'src/wallet/interfaces/dto/wallet/extract-wallet-spreadsheet.dto';
 
-const PREVIEW_LIMIT = 5;
-
 @Injectable()
-export default class ExtractWalletSpreadsheetUseCase implements IUseCase<
+export class ExtractWalletSpreadsheetUseCase implements IUseCase<
   ExtractWalletSpreadsheetInputDto,
   ExtractWalletSpreadsheetOutputDto
 > {
+  private readonly PREVIEW_LIMIT = 5;
   constructor(
     private readonly walletSpreadsheetExtractor: IWalletSpreadsheetExtractor,
   ) {}
@@ -27,7 +26,7 @@ export default class ExtractWalletSpreadsheetUseCase implements IUseCase<
     return {
       sheetName,
       totalRows: rows.length,
-      preview: rows.slice(0, PREVIEW_LIMIT),
+      preview: rows.slice(0, this.PREVIEW_LIMIT),
     };
   }
 }

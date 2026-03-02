@@ -1,6 +1,6 @@
 import { IWalletSpreadsheetExtractor } from 'src/wallet/application/ports/wallet-spreadsheet-extractor.port';
 import { mock, MockProxy } from 'vitest-mock-extended';
-import ExtractWalletSpreadsheetUseCase from './extract-wallet-spreadsheet.use-case';
+import { ExtractWalletSpreadsheetUseCase } from './extract-wallet-spreadsheet.use-case';
 
 describe('Extract Wallet Spreadsheet Use Case', () => {
   let spreadsheetExtractor: MockProxy<IWalletSpreadsheetExtractor>;
@@ -31,5 +31,20 @@ describe('Extract Wallet Spreadsheet Use Case', () => {
       totalRows: 7,
       preview: rows.slice(0, 5),
     });
+  });
+
+  it.each([
+    'Spreadsheet does not contain any sheets',
+    'Spreadsheet does not contain header row',
+  ])('should propagate extractor exception: %s', (message) => {
+    const fileBuffer = Buffer.from('spreadsheet-buffer');
+    const expectedError = new Error(message);
+
+    spreadsheetExtractor.extract.mockImplementation(() => {
+      throw expectedError;
+    });
+
+    expect(() => sut.execute({ fileBuffer })).toThrow(expectedError);
+    expect(spreadsheetExtractor.extract).toHaveBeenCalledWith(fileBuffer);
   });
 });
