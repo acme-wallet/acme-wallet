@@ -1,16 +1,12 @@
+import { ServiceUnavailableException } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { HealthCheckResult, HttpHealthIndicator } from '@nestjs/terminus';
 import { PrismaClient } from '@repo/db';
-import { createTestingModule } from './helpers/prisma-test-container';
+import { envSchema } from 'src/common/configs/env.schema';
 import { HealthModule } from 'src/health/health.module';
 import { HealthController } from 'src/health/interfaces/http/health.controller';
 import { vi } from 'vitest';
-import { ServiceUnavailableException } from '@nestjs/common';
-import {
-  HealthCheckResult,
-  PrismaHealthIndicator,
-  HealthCheckError,
-} from '@nestjs/terminus';
-import { ConfigModule } from '@nestjs/config';
-import { envSchema } from 'src/common/configs/env.schema';
+import { createTestingModule } from './helpers/prisma-test-container';
 
 describe('HealthController (integration)', () => {
   let prismaClient: PrismaClient;
@@ -49,6 +45,10 @@ describe('HealthController (integration)', () => {
   });
 
   it('should return health status as ok when all services are up', async () => {
+    vi.spyOn(HttpHealthIndicator.prototype, 'pingCheck').mockResolvedValueOnce({
+      llama_cpp: { status: 'up' },
+    });
+
     const result: HealthCheckResult = await controller.check();
 
     expect(result.status).toBe('ok');
@@ -61,20 +61,13 @@ describe('HealthController (integration)', () => {
     expect(result.details.memory_heap.status).toBe('up');
 
     expect(result.details).toHaveProperty('storage');
-
     expect(result.details.storage).toBeDefined();
+
+    expect(result.details).toHaveProperty('llama_cpp');
+    expect(result.details.llama_cpp.status).toBe('up');
   });
 
   it('should throw ServiceUnavailableException if a service is down', async () => {
-    vi.spyOn(
-      PrismaHealthIndicator.prototype,
-      'pingCheck',
-    ).mockRejectedValueOnce(
-      new HealthCheckError('Connection refused', {
-        database: { status: 'down' },
-      }),
-    );
-
     await expect(controller.check()).rejects.toThrow(
       ServiceUnavailableException,
     );

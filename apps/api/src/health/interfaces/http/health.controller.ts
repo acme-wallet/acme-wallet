@@ -57,7 +57,7 @@ export class HealthController {
           path: '/',
           thresholdPercent: this.diskStorageThreshold,
         }),
-      () => this.http.pingCheck('llamacpp', `${this.llamacppApiUrl}/health`),
+      () => this.http.pingCheck('llama_cpp', `${this.llamacppApiUrl}/health`),
     ]);
   }
 }
