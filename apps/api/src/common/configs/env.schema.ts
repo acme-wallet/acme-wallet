@@ -10,6 +10,7 @@ export const envSchema = z.object({
   DISK_STORAGE_THRESHOLD_PERCENT: z.coerce.number().default(0.8),
   DATABASE_URL: z.string().url(),
   GROQ_API_KEY: z.string().optional(),
+  LLAMACPP_API_URL: z.string().url(),
 });
 
 export type Env = z.infer<typeof envSchema>;
