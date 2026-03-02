@@ -1,11 +1,10 @@
-import { NestFactory } from '@nestjs/core';
+import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
 import { ConfigService } from '@nestjs/config';
-import { AppModule } from './app.module';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { NestFactory } from '@nestjs/core';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { apiReference } from '@scalar/nestjs-api-reference';
 import { ZodValidationPipe } from 'nestjs-zod';
-import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
-import { DomainExceptionFilter } from './common/filters/domain-exception.filter';
+import { AppModule } from './app.module';
 import { Env } from './common/configs/env.schema';
 
 async function bootstrap() {
@@ -29,7 +28,6 @@ async function bootstrap() {
   );
 
   app.useGlobalPipes(new ZodValidationPipe());
-  app.useGlobalFilters(new DomainExceptionFilter());
 
   const urlFrontend = configService.get('URL_FRONTEND', { infer: true });
   const allowedOrigins = new Set<string>(

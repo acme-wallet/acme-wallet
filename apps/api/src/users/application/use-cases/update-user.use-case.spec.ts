@@ -1,7 +1,7 @@
-import { UpdateUserUseCase } from './update-user.use-case';
 import { IUserRepository } from 'src/users/domain/repositories/user.repository';
-import { User } from '../../domain/entities/user.entity';
 import { mock, MockProxy } from 'vitest-mock-extended';
+import { User } from '../../domain/entities/user.entity';
+import { UpdateUserUseCase } from './update-user.use-case';
 
 describe('Update User Use Case', () => {
   let userRepository: MockProxy<IUserRepository>;
@@ -32,6 +32,6 @@ describe('Update User Use Case', () => {
 
     await expect(
       sut.execute({ id: 'invalid-id', name: 'New Name' }),
-    ).rejects.toThrow('User with id "invalid-id" not found');
+    ).rejects.toThrow("User with id 'invalid-id' not found");
   });
 });
