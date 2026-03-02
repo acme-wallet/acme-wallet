@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import {
   IWalletSpreadsheetExtractor,
   WalletSpreadsheetExtractionResult,
@@ -16,7 +20,9 @@ export class XlsxWalletSpreadsheetExtractorAdapter implements IWalletSpreadsheet
       const firstSheetName = workbook.SheetNames[0];
 
       if (!firstSheetName) {
-        throw new Error('Spreadsheet does not contain any sheets');
+        throw new BadRequestException(
+          'Spreadsheet does not contain any sheets',
+        );
       }
 
       const worksheet = workbook.Sheets[firstSheetName];
@@ -28,7 +34,9 @@ export class XlsxWalletSpreadsheetExtractorAdapter implements IWalletSpreadsheet
       });
 
       if (matrix.length === 0) {
-        throw new Error('Spreadsheet does not contain header row');
+        throw new BadRequestException(
+          'Spreadsheet does not contain header row',
+        );
       }
 
       const headerRow = matrix[0] ?? [];
@@ -37,27 +45,29 @@ export class XlsxWalletSpreadsheetExtractorAdapter implements IWalletSpreadsheet
         this.resolveHeaderName(header, index),
       );
 
-      const rows: WalletSpreadsheetRow[] = matrix.slice(1).map((row) => {
-        const parsedRow: WalletSpreadsheetRow = {};
-
-        headers.forEach((header, index) => {
-          const value = row[index];
-          parsedRow[header] = this.toWalletSpreadsheetValue(value);
-        });
-
-        return parsedRow;
-      });
+      const rows: WalletSpreadsheetRow[] = matrix
+        .slice(1)
+        .map((row) =>
+          Object.fromEntries(
+            headers.map((header, index) => [
+              header,
+              this.toWalletSpreadsheetValue(row[index]),
+            ]),
+          ),
+        );
 
       return {
         sheetName: firstSheetName,
         rows,
       };
     } catch (error) {
-      if (error instanceof Error) {
+      if (error instanceof BadRequestException) {
         throw error;
       }
 
-      throw new Error('Failed to extract wallet spreadsheet data');
+      throw new InternalServerErrorException(
+        'Failed to extract wallet spreadsheet data',
+      );
     }
   }
 

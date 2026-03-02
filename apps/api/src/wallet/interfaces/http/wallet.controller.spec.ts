@@ -1,7 +1,7 @@
-import { INestApplication } from '@nestjs/common';
+import { BadRequestException, INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Server } from 'http';
-import ExtractWalletSpreadsheetUseCase from 'src/wallet/application/use-cases/extract-wallet-spreadsheet.use-case';
+import { ExtractWalletSpreadsheetUseCase } from 'src/wallet/application';
 import request from 'supertest';
 import { mock } from 'vitest-mock-extended';
 import { WalletController } from './wallet.controller';
@@ -63,7 +63,6 @@ describe('Wallet HTTP API', () => {
           { Date: '2026-01-02', Amount: 20 },
         ],
       });
-      expect(extractWalletSpreadsheetUseCase.execute).toHaveBeenCalledTimes(1);
     });
 
     it('should return 201 when uploaded field name is not "file"', async () => {
@@ -83,7 +82,11 @@ describe('Wallet HTTP API', () => {
 
       expect(response.statusCode).toBe(201);
       expect(response.headers['content-type']).toMatch(/json/);
-      expect(extractWalletSpreadsheetUseCase.execute).toHaveBeenCalledTimes(1);
+      expect(response.body).toEqual({
+        sheetName: 'Wallet',
+        totalRows: 1,
+        preview: [{ Date: '2026-01-01', Amount: 10 }],
+      });
     });
 
     it('should return 400 when file is missing', async () => {
@@ -91,7 +94,11 @@ describe('Wallet HTTP API', () => {
 
       expect(response.statusCode).toBe(400);
       expect(response.headers['content-type']).toMatch(/json/);
-      expect(extractWalletSpreadsheetUseCase.execute).not.toHaveBeenCalled();
+      expect(response.body).toEqual({
+        message: 'File is required',
+        error: 'Bad Request',
+        statusCode: 400,
+      });
     });
 
     it('should return 400 when more than one file is uploaded', async () => {
@@ -102,7 +109,11 @@ describe('Wallet HTTP API', () => {
 
       expect(response.statusCode).toBe(400);
       expect(response.headers['content-type']).toMatch(/json/);
-      expect(extractWalletSpreadsheetUseCase.execute).not.toHaveBeenCalled();
+      expect(response.body).toEqual({
+        message: 'Too many files',
+        error: 'Bad Request',
+        statusCode: 400,
+      });
     });
 
     it('should return 413 when file size is greater than 5MB', async () => {
@@ -114,26 +125,28 @@ describe('Wallet HTTP API', () => {
 
       expect(response.statusCode).toBe(413);
       expect(response.headers['content-type']).toMatch(/json/);
-      expect(extractWalletSpreadsheetUseCase.execute).not.toHaveBeenCalled();
+      expect(response.body).toEqual({
+        message: 'File too large',
+        error: 'Payload Too Large',
+        statusCode: 413,
+      });
     });
 
-    it('should return 500 when use case throws an error', async () => {
+    it('should return 400 when use case throws an error', async () => {
       extractWalletSpreadsheetUseCase.execute.mockImplementation(() => {
-        throw new Error('Invalid spreadsheet');
+        throw new BadRequestException('Invalid spreadsheet');
       });
 
       const response = await request(server)
         .post('/wallet/extract')
         .attach('file', Buffer.from('excel-file-content'), 'wallet.xlsx');
 
-      expect(response.statusCode).toBe(500);
-      expect(response.headers['content-type']).toMatch(/json/);
-      expect(response.body).toEqual({
-        statusCode: 500,
-        message: 'Internal server error',
-        error: 'InternalServerError',
+      expect(response.statusCode).toBe(400);
+      expect(response.body).toMatchObject({
+        statusCode: 400,
+        message: 'Invalid spreadsheet',
+        error: 'Bad Request',
       });
-      expect(extractWalletSpreadsheetUseCase.execute).toHaveBeenCalledTimes(1);
     });
   });
 });

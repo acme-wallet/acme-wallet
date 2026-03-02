@@ -1,14 +1,13 @@
 import {
   BadRequestException,
   Controller,
-  InternalServerErrorException,
   Post,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import type {} from 'multer';
-import ExtractWalletSpreadsheetUseCase from 'src/wallet/application/use-cases/extract-wallet-spreadsheet.use-case';
+import { ExtractWalletSpreadsheetUseCase } from 'src/wallet/application';
 import type {
   ExtractWalletSpreadsheetInputDto,
   ExtractWalletSpreadsheetOutputDto,
@@ -46,13 +45,6 @@ export class WalletController {
       fileBuffer: file.buffer,
     };
 
-    try {
-      return this.extractWalletSpreadsheetUseCase.execute(inputDto);
-    } catch {
-      throw new InternalServerErrorException(
-        'Internal server error',
-        'InternalServerError',
-      );
-    }
+    return this.extractWalletSpreadsheetUseCase.execute(inputDto);
   }
 }
