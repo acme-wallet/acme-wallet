@@ -1,7 +1,7 @@
-import { DeleteUserUseCase } from './delete-user.use-case';
 import { IUserRepository } from 'src/users/domain/repositories/user.repository';
-import { User } from '../../domain/entities/user.entity';
 import { mock, MockProxy } from 'vitest-mock-extended';
+import { User } from '../../domain/entities/user.entity';
+import { DeleteUserUseCase } from './delete-user.use-case';
 
 describe('Delete User Use Case', () => {
   let userRepository: MockProxy<IUserRepository>;
@@ -25,7 +25,7 @@ describe('Delete User Use Case', () => {
     userRepository.findById.mockResolvedValue(null);
 
     await expect(sut.execute({ id: 'invalid-id' })).rejects.toThrow(
-      'User with id "invalid-id" not found',
+      "User with id 'invalid-id' not found",
     );
   });
 });

@@ -1,7 +1,7 @@
-import { GetUserByIdUseCase } from './get-user-by-id.use-case';
 import { IUserRepository } from 'src/users/domain/repositories/user.repository';
-import { User } from '../../domain/entities/user.entity';
 import { mock, MockProxy } from 'vitest-mock-extended';
+import { User } from '../../domain/entities/user.entity';
+import { GetUserByIdUseCase } from './get-user-by-id.use-case';
 
 describe('Get User By Id Use Case', () => {
   let userRepository: MockProxy<IUserRepository>;
@@ -27,7 +27,7 @@ describe('Get User By Id Use Case', () => {
     userRepository.findById.mockResolvedValue(null);
 
     await expect(sut.execute({ id: 'invalid-id' })).rejects.toThrow(
-      'User with id "invalid-id" not found',
+      "User with id 'invalid-id' not found",
     );
   });
 });
