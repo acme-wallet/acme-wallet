@@ -51,10 +51,10 @@ export class LlamacppAdapter implements ILlmPort {
           yield { type: 'text_delta', delta: delta.content };
         }
 
-        if ('reasoning' in delta && delta.reasoning) {
+        if (delta && 'reasoning' in delta && delta.reasoning) {
           yield {
             type: 'reasoning_delta',
-            delta: String((delta as { reasoning: unknown }).reasoning),
+            delta: String(delta.reasoning as unknown),
           };
         }
       }

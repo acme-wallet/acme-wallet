@@ -25,7 +25,7 @@ services:
     environment:
       # alternatively, you can use "LLAMA_ARG_MODEL_URL" to download the model
       LLAMA_ARG_MODEL_URL: ${LLAMACPP_DEFAULT_MODEL_URL}
-      LLAMA_ARG_N_GPU_LAYERS: 55
+      LLAMA_ARG_N_GPU_LAYERS: ${LLAMACPP_N_GPU_LAYERS:-55}
       LLAMA_ARG_PORT: 8080
       LLAMA_ARG_HOST: 0.0.0.0
     healthcheck:
