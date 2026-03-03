@@ -5,9 +5,7 @@ import { Server } from 'http';
 import { ZodValidationPipe } from 'nestjs-zod';
 import request from 'supertest';
 import { mock } from 'vitest-mock-extended';
-import { ILlmPort } from '../../application/ports/llm.port';
 import { ChatStreamUseCase } from '../../application/use-cases/chat-stream.use-case';
-import { OllamaAdapter } from '../../infra/adapters/ollama.adapter';
 import { ChatController } from './chat.controller';
 
 // eslint-disable-next-line @typescript-eslint/require-await
@@ -141,41 +139,5 @@ describe('Chat HTTP API', () => {
         }),
       );
     });
-  });
-});
-
-describe('Chat HTTP API — with OllamaAdapter (stub / not implemented)', () => {
-  let app: INestApplication;
-  let server: Server;
-
-  beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      controllers: [ChatController],
-      providers: [
-        ChatStreamUseCase,
-        { provide: ILlmPort, useClass: OllamaAdapter },
-      ],
-    }).compile();
-
-    app = moduleFixture.createNestApplication({ logger: false });
-    app.useGlobalPipes(new ZodValidationPipe());
-    await app.init();
-
-    server = app.getHttpServer() as Server;
-  });
-
-  afterAll(async () => {
-    await app.close();
-  });
-
-  it('POST /chat/stream should write an SSE error event when OllamaAdapter is the provider', async () => {
-    const response = await request(server)
-      .post('/chat/stream')
-      .send({ message: 'Hi' });
-
-    expect(response.status).toBe(200);
-    expect(response.headers['content-type']).toMatch(/text\/event-stream/);
-    expect(response.text).toContain('"type":"error"');
-    expect(response.text).toContain('OllamaAdapter is not yet implemented.');
   });
 });

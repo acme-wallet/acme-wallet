@@ -2,11 +2,12 @@
 
 ## Requisitos
 
-- Node.js (versao LTS recomendada)
-- pnpm (o projeto usa pnpm)
-- Postgres (ou uma URL de conexao valida para DATABASE_URL)
+- Node.js (versão LTS recomendada)
+- pnpm (o projeto usa pnpm como package manager)
+- Docker & Docker Compose (para banco de dados e LLM local)
+- GPU NVIDIA com drivers instalados (para aceleração do LLM via CUDA)
 
-## Instalacao
+## Instalação
 
 Na raiz do projeto:
 
@@ -14,20 +15,55 @@ Na raiz do projeto:
 pnpm install
 ```
 
-## Variaveis de ambiente
+## Variáveis de ambiente
 
-Crie um arquivo `.env` em:
-
-- `packages/database/`
-- `apps/api/`
-
-Conteudo minimo:
+Copie o arquivo de exemplo e preencha os valores:
 
 ```bash
-DATABASE_URL={YOUR_DATABASE_URL}
+cp .env.example .env
 ```
 
-## Executar a aplicacao
+Edite o `.env` com suas configurações.
+
+## Executar com Docker Compose (banco + LLM local)
+
+O `docker-compose.yml` sobe dois serviços:
+
+| Serviço           | Descrição                                  | Porta  |
+| ----------------- | ------------------------------------------ | ------ |
+| `db`              | PostgreSQL 17                              | `5431` |
+| `llamacpp-server` | llama.cpp Server (CUDA) com modelo via URL | `8080` |
+
+```bash
+docker compose up -d
+```
+
+> **Nota:** O modelo é baixado automaticamente na primeira inicialização a partir de `LLAMACPP_DEFAULT_MODEL_URL`. O download pode demorar dependendo do tamanho do modelo e da sua conexão.
+
+### LLM Local — llama.cpp Server
+
+O `llamacpp-server` expõe uma API compatível com OpenAI em `http://localhost:8080/v1`. Você pode interagir com ele diretamente:
+
+```bash
+# Acessar a interface web do llama.cpp
+http://localhost:8080
+
+# Verificar se o servidor está pronto
+curl http://localhost:8080/health
+
+# Enviar uma mensagem
+curl http://localhost:8080/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "",
+    "messages": [{ "role": "user", "content": "Olá!" }],
+    "stream": false
+  }'
+```
+
+> O campo `model` pode ser vazio (`""`), pois o servidor usa o modelo carregado na inicialização.
+
+## Executar a aplicação (dev)
 
 ```bash
 pnpm dev

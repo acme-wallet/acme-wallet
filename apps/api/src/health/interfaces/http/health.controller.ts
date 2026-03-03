@@ -1,22 +1,24 @@
 import { Controller, Get } from '@nestjs/common';
-import { ApiTags, ApiOkResponse } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import {
+  DiskHealthIndicator,
   HealthCheck,
   HealthCheckService,
-  PrismaHealthIndicator,
+  HttpHealthIndicator,
   MemoryHealthIndicator,
-  DiskHealthIndicator,
+  PrismaHealthIndicator,
 } from '@nestjs/terminus';
+import { Env } from '../../../common/configs/env.schema';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { HealthResponseDto } from '../dto/health-response.dto';
-import { Env } from '../../../common/configs/env.schema';
 
 @ApiTags('health')
 @Controller('health')
 export class HealthController {
   private readonly memoryHeapThreshold: number;
   private readonly diskStorageThreshold: number;
+  private readonly llamacppApiUrl: string;
 
   constructor(
     private health: HealthCheckService,
@@ -24,6 +26,7 @@ export class HealthController {
     private db: PrismaService,
     private memory: MemoryHealthIndicator,
     private disk: DiskHealthIndicator,
+    private http: HttpHealthIndicator,
     private configService: ConfigService<Env, true>,
   ) {
     this.memoryHeapThreshold = this.configService.get(
@@ -34,6 +37,9 @@ export class HealthController {
       'DISK_STORAGE_THRESHOLD_PERCENT',
       { infer: true },
     );
+    this.llamacppApiUrl = this.configService.get('LLAMACPP_API_URL', {
+      infer: true,
+    });
   }
 
   @Get()
@@ -51,6 +57,7 @@ export class HealthController {
           path: '/',
           thresholdPercent: this.diskStorageThreshold,
         }),
+      () => this.http.pingCheck('llama_cpp', `${this.llamacppApiUrl}/health`),
     ]);
   }
 }
