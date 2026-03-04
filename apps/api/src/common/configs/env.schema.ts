@@ -9,8 +9,9 @@ export const envSchema = z.object({
   MEMORY_HEAP_THRESHOLD_BYTES: z.coerce.number().default(300 * 1024 * 1024),
   DISK_STORAGE_THRESHOLD_PERCENT: z.coerce.number().default(0.8),
   DATABASE_URL: z.string().url(),
+  LLM_PROVIDER: z.enum(['llama', 'groq']).default('llama'),
   GROQ_API_KEY: z.string().optional(),
-  LLAMACPP_API_URL: z.string().url(),
+  LLAMACPP_API_URL: z.string().url().optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;
