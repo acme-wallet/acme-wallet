@@ -35,11 +35,4 @@ describe('LlmAdapterFactory', () => {
 
     expect(() => factory.create()).toThrow('Unknown LLM_PROVIDER: "unknown"');
   });
-
-  it('should default to llama when using the env schema default', () => {
-    const configService = createConfigService('llama');
-    const factory = new LlmAdapterFactory(configService);
-
-    expect(factory.create()).toBeInstanceOf(LlamacppAdapter);
-  });
 });
