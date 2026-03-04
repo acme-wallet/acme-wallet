@@ -20,3 +20,12 @@ model User {
   name      String
   createdAt DateTime @default(now())
 }
+
+model File {
+  id        String   @id @default(uuid())
+  name      String
+  hash      String   @unique
+  extension String
+  size      Int
+  createdAt DateTime @default(now())
+}
