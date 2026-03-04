@@ -2,19 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { IUseCase } from 'src/common/use-case.interface';
 import { FileEntity } from '../../domain/entities/file.entity';
 import { IFileRepository } from '../../domain/repositories/file.repository';
+import { UploadFileInputDto } from '../../interfaces/dto/upload-file-input.dto';
+import { UploadFileOutputDto } from '../../interfaces/dto/upload-file-output.dto';
 import { IStorageAdapter } from '../ports/storage.adapter.port';
-
-export interface UploadFileInputDto {
-  buffer: Buffer;
-  name: string;
-  hash: string;
-  extension: string;
-  size: number;
-}
-
-export interface UploadFileOutputDto {
-  id: string;
-}
 
 @Injectable()
 export class UploadFileUseCase implements IUseCase<

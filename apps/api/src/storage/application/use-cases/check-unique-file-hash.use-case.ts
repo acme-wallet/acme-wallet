@@ -2,14 +2,8 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { createHash } from 'crypto';
 import { IUseCase } from 'src/common/use-case.interface';
 import { IFileRepository } from '../../domain/repositories/file.repository';
-
-export interface CheckUniqueFileHashInputDto {
-  buffer: Buffer;
-}
-
-export interface CheckUniqueFileHashOutputDto {
-  hash: string;
-}
+import { CheckUniqueFileHashInputDto } from '../../interfaces/dto/check-unique-file-hash-input.dto';
+import { CheckUniqueFileHashOutputDto } from '../../interfaces/dto/check-unique-file-hash-output.dto';
 
 @Injectable()
 export class CheckUniqueFileHashUseCase implements IUseCase<
