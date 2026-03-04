@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto';
 
-export class File {
+export class FileEntity {
   private constructor(
     private readonly _id: string,
     private _name: string,
@@ -13,7 +13,7 @@ export class File {
   static create(name: string, hash: string, extension: string, size: number) {
     const id = randomUUID();
     const createdAt = new Date();
-    return new File(id, name, hash, extension, size, createdAt);
+    return new FileEntity(id, name, hash, extension, size, createdAt);
   }
 
   static restore(
@@ -23,8 +23,8 @@ export class File {
     extension: string,
     size: number,
     createdAt: Date,
-  ): File {
-    return new File(id, name, hash, extension, size, createdAt);
+  ): FileEntity {
+    return new FileEntity(id, name, hash, extension, size, createdAt);
   }
 
   get id() {

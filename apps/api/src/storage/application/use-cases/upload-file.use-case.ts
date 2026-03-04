@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { IUseCase } from 'src/common/use-case.interface';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { File } from '../../domain/entities/file.entity';
+import { FileEntity } from '../../domain/entities/file.entity';
+import { IFileRepository } from '../../domain/repositories/file.repository';
 import { IStorageAdapter } from '../ports/storage.adapter.port';
 
 export interface UploadFileInputDto {
@@ -23,11 +23,11 @@ export class UploadFileUseCase implements IUseCase<
 > {
   constructor(
     private readonly storageAdapter: IStorageAdapter,
-    private readonly prisma: PrismaService,
+    private readonly fileRepository: IFileRepository,
   ) {}
 
   async execute(input: UploadFileInputDto): Promise<UploadFileOutputDto> {
-    const fileEntity = File.create(
+    const fileEntity = FileEntity.create(
       input.name,
       input.hash,
       input.extension,
@@ -37,16 +37,7 @@ export class UploadFileUseCase implements IUseCase<
     const filenameInStorage = `${fileEntity.id}${input.extension}`;
     await this.storageAdapter.uploadFile(input.buffer, filenameInStorage);
 
-    await this.prisma.prisma.file.create({
-      data: {
-        id: fileEntity.id,
-        name: fileEntity.name,
-        hash: fileEntity.hash,
-        extension: fileEntity.extension,
-        size: fileEntity.size,
-        createdAt: fileEntity.createdAt,
-      },
-    });
+    await this.fileRepository.create(fileEntity);
 
     return { id: fileEntity.id };
   }

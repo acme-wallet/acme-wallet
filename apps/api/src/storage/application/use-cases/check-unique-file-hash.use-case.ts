@@ -1,7 +1,7 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { createHash } from 'crypto';
 import { IUseCase } from 'src/common/use-case.interface';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { IFileRepository } from '../../domain/repositories/file.repository';
 
 export interface CheckUniqueFileHashInputDto {
   buffer: Buffer;
@@ -16,16 +16,14 @@ export class CheckUniqueFileHashUseCase implements IUseCase<
   CheckUniqueFileHashInputDto,
   CheckUniqueFileHashOutputDto
 > {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly fileRepository: IFileRepository) {}
 
   async execute(
     input: CheckUniqueFileHashInputDto,
   ): Promise<CheckUniqueFileHashOutputDto> {
     const hash = createHash('sha256').update(input.buffer).digest('hex');
 
-    const existingFile = await this.prisma.prisma.file.findUnique({
-      where: { hash },
-    });
+    const existingFile = await this.fileRepository.findByHash(hash);
 
     if (existingFile) {
       throw new ConflictException('File with this hash already exists');
