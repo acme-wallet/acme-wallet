@@ -32,19 +32,24 @@ export class WalletController {
       },
     }),
   )
-  extract(
+  async extract(
     @UploadedFiles() files?: Express.Multer.File[],
-  ): ExtractWalletSpreadsheetOutputDto {
+  ): Promise<ExtractWalletSpreadsheetOutputDto> {
     const file = files?.[0];
 
     if (!file?.buffer?.length) {
       throw new BadRequestException('File is required');
     }
 
+    const originalName = file.originalname;
+    const extension = originalName.substring(originalName.lastIndexOf('.'));
     const inputDto: ExtractWalletSpreadsheetInputDto = {
       fileBuffer: file.buffer,
+      fileName: originalName,
+      fileExtension: extension,
+      fileSize: file.size,
     };
 
-    return this.extractWalletSpreadsheetUseCase.execute(inputDto);
+    return await this.extractWalletSpreadsheetUseCase.execute(inputDto);
   }
 }

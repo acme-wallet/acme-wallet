@@ -11,6 +11,10 @@ export const envSchema = z.object({
   DATABASE_URL: z.string().url(),
   GROQ_API_KEY: z.string().optional(),
   LLAMACPP_API_URL: z.string().url(),
+  MINIO_ENDPOINT: z.string().default('localhost'),
+  MINIO_PORT: z.coerce.number().default(9000),
+  MINIO_ACCESS_KEY: z.string().default('minioadmin'),
+  MINIO_SECRET_KEY: z.string().default('minioadmin'),
 });
 
 export type Env = z.infer<typeof envSchema>;

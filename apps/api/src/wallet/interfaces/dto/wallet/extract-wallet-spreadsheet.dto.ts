@@ -4,6 +4,9 @@ import type { WalletSpreadsheetRow } from 'src/wallet/application/ports/wallet-s
 
 export class ExtractWalletSpreadsheetRequest {
   fileBuffer!: Buffer;
+  fileName!: string;
+  fileExtension!: string;
+  fileSize!: number;
 }
 
 export type ExtractWalletSpreadsheetInputDto = ExtractWalletSpreadsheetRequest;
