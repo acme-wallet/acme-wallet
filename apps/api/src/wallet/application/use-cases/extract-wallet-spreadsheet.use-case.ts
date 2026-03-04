@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { IUseCase } from 'src/common/use-case.interface';
+import { CheckUniqueFileHashUseCase } from 'src/storage/application/use-cases/check-unique-file-hash.use-case';
+import { UploadFileUseCase } from 'src/storage/application/use-cases/upload-file.use-case';
 import { IWalletSpreadsheetExtractor } from 'src/wallet/application/ports/wallet-spreadsheet-extractor.port';
 import {
   ExtractWalletSpreadsheetInputDto,
@@ -9,19 +11,33 @@ import {
 @Injectable()
 export class ExtractWalletSpreadsheetUseCase implements IUseCase<
   ExtractWalletSpreadsheetInputDto,
-  ExtractWalletSpreadsheetOutputDto
+  Promise<ExtractWalletSpreadsheetOutputDto>
 > {
   private readonly PREVIEW_LIMIT = 5;
   constructor(
     private readonly walletSpreadsheetExtractor: IWalletSpreadsheetExtractor,
+    private readonly checkUniqueFileHashUseCase: CheckUniqueFileHashUseCase,
+    private readonly uploadFileUseCase: UploadFileUseCase,
   ) {}
 
-  execute(
+  async execute(
     input: ExtractWalletSpreadsheetInputDto,
-  ): ExtractWalletSpreadsheetOutputDto {
+  ): Promise<ExtractWalletSpreadsheetOutputDto> {
+    const { hash } = await this.checkUniqueFileHashUseCase.execute({
+      buffer: input.fileBuffer,
+    });
+
     const { sheetName, rows } = this.walletSpreadsheetExtractor.extract(
       input.fileBuffer,
     );
+
+    await this.uploadFileUseCase.execute({
+      buffer: input.fileBuffer,
+      name: input.fileName,
+      hash,
+      extension: input.fileExtension,
+      size: input.fileSize,
+    });
 
     return {
       sheetName,

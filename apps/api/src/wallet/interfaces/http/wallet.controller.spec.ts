@@ -40,7 +40,7 @@ describe('Wallet HTTP API', () => {
 
   describe('POST /wallet/extract', () => {
     it('should return 201 with json preview payload', async () => {
-      extractWalletSpreadsheetUseCase.execute.mockReturnValue({
+      extractWalletSpreadsheetUseCase.execute.mockResolvedValue({
         sheetName: 'Wallet',
         totalRows: 2,
         preview: [
@@ -66,7 +66,7 @@ describe('Wallet HTTP API', () => {
     });
 
     it('should return 201 when uploaded field name is not "file"', async () => {
-      extractWalletSpreadsheetUseCase.execute.mockReturnValue({
+      extractWalletSpreadsheetUseCase.execute.mockResolvedValue({
         sheetName: 'Wallet',
         totalRows: 1,
         preview: [{ Date: '2026-01-01', Amount: 10 }],
@@ -133,9 +133,9 @@ describe('Wallet HTTP API', () => {
     });
 
     it('should return 400 when use case throws an error', async () => {
-      extractWalletSpreadsheetUseCase.execute.mockImplementation(() => {
-        throw new BadRequestException('Invalid spreadsheet');
-      });
+      extractWalletSpreadsheetUseCase.execute.mockRejectedValue(
+        new BadRequestException('Invalid spreadsheet'),
+      );
 
       const response = await request(server)
         .post('/wallet/extract')
